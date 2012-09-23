@@ -1,6 +1,13 @@
 *.class
+*.iml
+*.ipr
+*.iws
 
 # Package Files #
-*.jar
+#*.jar
 *.war
 *.ear
+
+.idea
+out
+dist
