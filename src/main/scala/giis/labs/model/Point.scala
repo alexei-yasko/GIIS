@@ -5,7 +5,9 @@ package giis.labs.model
  */
 class Point(xCoordinate: Int, yCoordinate: Int) {
 
-    def x = xCoordinate
+    val x = xCoordinate
 
-    def y = yCoordinate
+    val y = yCoordinate
+
+    override def toString = "x: " + x + ", y: " + y
 }

@@ -1,5 +1,6 @@
 package giis.labs
 
+import graphics.GraphicsMainFrame
 import swing.SimpleSwingApplication
 import javax.swing.UIManager
 

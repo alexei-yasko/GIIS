@@ -8,7 +8,9 @@ import giis.labs.model.Point
  */
 class Pixel(pixelPoint: Point, pixelColor: Color) {
 
-    def point = pixelPoint
+    val point = pixelPoint
 
-    def color = pixelColor
+    val color = pixelColor
+
+    override def toString = "point: " + pixelPoint.toString + ", color: " + pixelColor
 }
