@@ -2,12 +2,12 @@ package giis.labs.model.shape
 
 import giis.labs.model.{AlgorithmType, Point}
 import java.awt.Color
-import giis.labs.graphics.render.LineRender
+import giis.labs.graphics.render.{RenderFactory, LineRender}
 
 /**
  * @author Q-YAA
  */
-class Line(point1: Point, point2: Point) extends Shape {
+class Line(point1: Point, point2: Point) extends Shape with RenderFactory {
 
     val begin = point1
 

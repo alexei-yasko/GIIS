@@ -9,7 +9,7 @@ import giis.labs.model.Point
 /**
  * @author Q-YAA
  */
-class GridPanel(scene: GraphicsScene) extends Panel {
+class GridPanelComponent(scene: GraphicsScene) extends Panel {
 
     private val AXIS_LINE_THICKNESS = 2f
     private val AXIS_LINE_COLOR = Color.GRAY
@@ -30,6 +30,14 @@ class GridPanel(scene: GraphicsScene) extends Panel {
 
     reactions += {
         case MouseClicked(source, point, modifiers, clicks, triggersPopup) => selectClickedPixel(point)
+    }
+
+    def selectedPointSet: Set[Point] = for (pixel <- selectedPixelSet) yield {
+        pixel.point
+    }
+
+    def removeSelectedPoints(elements: List[Point]) {
+        selectedPixelSet = selectedPixelSet.filter(pixel => !elements.contains(pixel.point))
     }
 
     override protected def paintComponent(graphics: Graphics2D) {

@@ -7,15 +7,18 @@ import giis.labs.model.{AlgorithmTypeList, AlgorithmType, Point}
  */
 object ShapeFactory {
     def createShape(pointList: List[Point], algorithmType: AlgorithmType): Shape = algorithmType match {
-        case AlgorithmTypeList.LineDda => createLine(pointList)
-        case AlgorithmTypeList.LineBrezenhem => createLine(pointList)
+        case AlgorithmTypeList.LineDda => createLine(pointList.toArray)
+        case AlgorithmTypeList.LineBrezenhem => createLine(pointList.toArray)
+        case null => null
     }
 
-    private def createLine(pointList: List[Point]) : Line = {
-        val beginPoint = pointList.head
-        val endPoint = pointList.tail.head
-
-        new Line(beginPoint, endPoint)
+    private def createLine(pointArray: Array[Point]): Line = {
+        if (pointArray.length < 2) {
+            null
+        }
+        else {
+            new Line(pointArray.apply(pointArray.length - 2), pointArray.apply(pointArray.length - 1))
+        }
     }
 
 }
