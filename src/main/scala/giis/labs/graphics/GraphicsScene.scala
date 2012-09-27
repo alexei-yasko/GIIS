@@ -7,7 +7,9 @@ import render.Render
  */
 class GraphicsScene {
 
-    private var selectedPixelBuffer = Set[Pixel]()
+    private var selectedPixelBuffer = List[Pixel]()
+
+    private var maxSelectionBufferSize = 0
 
     private var shapeRenderList: List[Render] = List()
 
@@ -19,25 +21,36 @@ class GraphicsScene {
         shapeRenderList = shapeRenderList ::: renderList
     }
 
-    def getScenePixelSet: Set[Pixel] = {
-        var drawingPixelSet = Set[Pixel]()
+    def getScenePixelList: List[Pixel] = {
+        var drawingPixelList = List[Pixel]()
 
-        shapeRenderList.foreach(render => drawingPixelSet = drawingPixelSet ++ render.draw)
+        shapeRenderList.foreach(render => drawingPixelList = render.draw ::: drawingPixelList)
 
-        drawingPixelSet
+        drawingPixelList
     }
 
     def selectPixel(pixel: Pixel) {
-        selectedPixelBuffer = selectedPixelBuffer + pixel
+
+        if (selectedPixelBuffer.size < maxSelectionBufferSize) {
+            selectedPixelBuffer = pixel :: selectedPixelBuffer
+        }
+        else {
+            selectedPixelBuffer = pixel :: selectedPixelBuffer.reverse.tail
+        }
     }
 
-    def getSelectedPixels: Set[Pixel] = selectedPixelBuffer
+    def getSelectedPixels: List[Pixel] = selectedPixelBuffer
 
     def clearSelectedPixels() {
-        selectedPixelBuffer = Set()
+        selectedPixelBuffer = List()
     }
 
     def clear() {
         shapeRenderList = List()
+        selectedPixelBuffer = List()
+    }
+
+    def setMaxSelectionBufferSize(bufferSize: Int) {
+        maxSelectionBufferSize = bufferSize
     }
 }

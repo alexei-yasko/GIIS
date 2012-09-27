@@ -22,7 +22,7 @@ class GraphicsMainFrame extends MainFrame {
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
     private val gridPanelComponent: GridPanelComponent = new GridPanelComponent(graphicsScene)
 
-    private var shapeType: ShapeType = ShapeTypeList.LineDda
+    private var shapeType: ShapeType = null
 
     private val lineBrezenhemMenuItem = new RadioMenuItem("Brezenhem")
     private val lineDdaMenuItem = new RadioMenuItem("Dda")
@@ -30,8 +30,8 @@ class GraphicsMainFrame extends MainFrame {
     private val shapesMenuGroup = new ButtonGroup(lineDdaMenuItem, lineBrezenhemMenuItem) {
         listenTo(lineBrezenhemMenuItem, lineDdaMenuItem)
         reactions += {
-            case ButtonClicked(`lineDdaMenuItem`) => shapeType = ShapeTypeList.LineDda
-            case ButtonClicked(`lineBrezenhemMenuItem`) => shapeType = ShapeTypeList.LineBrezenhem
+            case ButtonClicked(`lineDdaMenuItem`) => setShapeType(ShapeTypeList.LineDda)
+            case ButtonClicked(`lineBrezenhemMenuItem`) => setShapeType(ShapeTypeList.LineBrezenhem)
         }
     }
 
@@ -54,6 +54,7 @@ class GraphicsMainFrame extends MainFrame {
     size = new Dimension(defaultWidth, defaultHeight)
     preferredSize = new Dimension(defaultWidth, defaultHeight)
     centerOnScreen()
+    setShapeType(ShapeTypeList.LineDda)
     menuBar = new MenuBar {
         contents += new Menu("Shapes") {
             contents += new Menu("Line") {
@@ -104,5 +105,10 @@ class GraphicsMainFrame extends MainFrame {
     private def clearScene() {
         graphicsSceneController.clearScene()
         gridPanelComponent.repaint()
+    }
+
+    private def setShapeType(shapeType: ShapeType) {
+        this.shapeType = shapeType
+        graphicsSceneController.setMaxSelectionBufferSize(shapeType.definingPointQuantity)
     }
 }

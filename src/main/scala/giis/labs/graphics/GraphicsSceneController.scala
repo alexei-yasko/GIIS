@@ -51,7 +51,11 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         scene.clear()
     }
 
-    private def getSelectedPoints: List[Point] = (for (pixel <- scene.getSelectedPixels) yield {
+    def setMaxSelectionBufferSize(bufferSize: Int) {
+        scene.setMaxSelectionBufferSize(bufferSize)
+    }
+
+    private def getSelectedPoints: List[Point] = for (pixel <- scene.getSelectedPixels) yield {
         pixel.point
-    }).toList
+    }
 }

@@ -3,7 +3,7 @@ package giis.labs.graphics
 import swing.Panel
 import javax.swing.BorderFactory
 import java.awt.{BasicStroke, Graphics2D, Color}
-import swing.event.MouseClicked
+import swing.event.{MouseWheelMoved, MouseClicked}
 import giis.labs.model.Point
 
 /**
@@ -20,14 +20,15 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
     private val SELECTED_PIXEL_COLOR = Color.RED
 
     private val DEFAULT_PIXEL_SIZE = 15
-    private val SCALE = 1
+    private var SCALE = 1d
 
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
-    listenTo(mouse.clicks)
+    listenTo(mouse.clicks, mouse.wheel)
 
     reactions += {
         case MouseClicked(source, point, modifiers, clicks, triggersPopup) => selectClickedPixel(point)
+        case MouseWheelMoved(source, point, modifiers, rotation) => scaleGrid(rotation)
     }
 
     override protected def paintComponent(graphics: Graphics2D) {
@@ -36,8 +37,8 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
         drawGrid(graphics)
         drawAxis(graphics)
 
-        drawPixelSet(scene.getScenePixelSet, graphics)
-        drawPixelSet(scene.getSelectedPixels, graphics)
+        drawPixelList(scene.getScenePixelList, graphics)
+        drawPixelList(scene.getSelectedPixels, graphics)
     }
 
     private def drawAxis(graphics: Graphics2D) {
@@ -66,8 +67,8 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
         }
     }
 
-    private def drawPixelSet(pixelsSet: Set[Pixel], graphics: Graphics2D) {
-        pixelsSet.foreach(drawPixel(_, graphics))
+    private def drawPixelList(pixelsList: List[Pixel], graphics: Graphics2D) {
+        pixelsList.foreach(drawPixel(_, graphics))
     }
 
     private def drawPixel(pixel: Pixel, graphics: Graphics2D) {
@@ -83,11 +84,21 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
 
     private def getCenterCoordinateY = size.height / 2 - (size.height / 2 % pixelSize)
 
-    private def pixelSize = DEFAULT_PIXEL_SIZE * SCALE
+    private def pixelSize = (DEFAULT_PIXEL_SIZE * SCALE).toInt
 
     private def selectClickedPixel(pointAwt: java.awt.Point) {
         val pixel = new Pixel(convertToPoint(pointAwt), SELECTED_PIXEL_COLOR)
         scene.selectPixel(pixel)
+
+        repaint()
+    }
+
+    private def scaleGrid(rotation: Int) {
+        SCALE = SCALE - 0.1 * rotation
+
+        if (SCALE <= 1 / DEFAULT_PIXEL_SIZE + 0.1) {
+            SCALE = 1d / DEFAULT_PIXEL_SIZE
+        }
 
         repaint()
     }
