@@ -14,8 +14,8 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
     private val endPoint = shape.getPointList.toArray.apply(1)
 
     def draw: List[Pixel] = shapeType match {
-        case ShapeTypeList.LineDda => ddaRender.reverse
-        case ShapeTypeList.LineBrezenhem => brezenhemRender.reverse
+        case ShapeTypeList.LineDda => ddaRender
+        case ShapeTypeList.LineBrezenhem => brezenhemRender
     }
 
     /**

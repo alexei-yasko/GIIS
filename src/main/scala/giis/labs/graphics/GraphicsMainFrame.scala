@@ -16,6 +16,7 @@ class GraphicsMainFrame extends MainFrame {
     private val drawingButton = new Button("Draw")
     private val startDebugButton = new Button("Debug")
     private val nextDebugStepButton = new Button("Next")
+    private val previousDebugStepButton = new Button("Previous")
     private val clearButton = new Button("Clear")
 
     private val graphicsScene = new GraphicsScene
@@ -40,6 +41,7 @@ class GraphicsMainFrame extends MainFrame {
         contents += drawingButton
         contents += startDebugButton
         contents += nextDebugStepButton
+        contents += previousDebugStepButton
     }
 
     contents = new BorderPanel {
@@ -49,6 +51,7 @@ class GraphicsMainFrame extends MainFrame {
 
     shapesMenuGroup.select(lineDdaMenuItem)
     nextDebugStepButton.enabled_=(b = false)
+    previousDebugStepButton.enabled_=(b = false)
 
     title = "Graphics editor"
     size = new Dimension(defaultWidth, defaultHeight)
@@ -64,13 +67,14 @@ class GraphicsMainFrame extends MainFrame {
         }
     }
 
-    listenTo(drawingButton, startDebugButton, nextDebugStepButton, clearButton)
+    listenTo(drawingButton, startDebugButton, nextDebugStepButton, clearButton, previousDebugStepButton)
 
     reactions += {
         case ButtonClicked(`clearButton`) => clearScene()
         case ButtonClicked(`drawingButton`) => draw()
         case ButtonClicked(`startDebugButton`) => startDebug()
         case ButtonClicked(`nextDebugStepButton`) => nextDebugStep()
+        case ButtonClicked(`previousDebugStepButton`) => previousDebugStep()
     }
 
     private def draw() {
@@ -84,6 +88,7 @@ class GraphicsMainFrame extends MainFrame {
             graphicsSceneController.drawShapeInDebugMode(shapeType, Color.BLACK)
 
             nextDebugStepButton.enabled_=(b = true)
+            previousDebugStepButton.enabled_=(b = true)
             drawingButton.enabled_=(b = false)
         }
     }
@@ -96,9 +101,15 @@ class GraphicsMainFrame extends MainFrame {
 
         if (!graphicsSceneController.isNextDebugStepEnabled) {
             nextDebugStepButton.enabled_=(b = false)
+            previousDebugStepButton.enabled_=(b = false)
             drawingButton.enabled_=(b = true)
         }
 
+        gridPanelComponent.repaint()
+    }
+
+    private def previousDebugStep() {
+        graphicsSceneController.previousDebugStep()
         gridPanelComponent.repaint()
     }
 

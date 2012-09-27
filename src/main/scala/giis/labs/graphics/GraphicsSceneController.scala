@@ -47,6 +47,13 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         }
     }
 
+    def previousDebugStep() {
+
+        if (debugRender.isPreviousStepEnabled) {
+            debugRender.previousStep()
+        }
+    }
+
     def clearScene() {
         scene.clear()
     }

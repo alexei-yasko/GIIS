@@ -11,7 +11,13 @@ class DebugRender(render: Render) extends Render(render.shape, render.color) {
 
     def isNextStepEnabled = stepNumber < render.draw.size
 
+    def isPreviousStepEnabled = stepNumber > 0
+
     def nextStep() {
         stepNumber = stepNumber + 1
+    }
+
+    def previousStep() {
+        stepNumber = stepNumber - 1
     }
 }
