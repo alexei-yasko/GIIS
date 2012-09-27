@@ -24,4 +24,8 @@ class GraphicsScene {
 
         drawingPixelSet
     }
+
+    def clear() {
+        shapeRenderList = List()
+    }
 }

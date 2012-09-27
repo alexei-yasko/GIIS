@@ -20,12 +20,7 @@ class GraphicsMainFrame extends MainFrame {
     private val drawingButton = new Button("Draw")
     private val startDebugButton = new Button("Debug")
     private val nextDebugStepButton = new Button("Next")
-
-    private val buttonPanel = new FlowPanel() {
-        contents += drawingButton
-        contents += startDebugButton
-        contents += nextDebugStepButton
-    }
+    private val clearButton = new Button("Clear")
 
     private val graphicsScene = new GraphicsScene
     private val gridPanel: GridPanelComponent = new GridPanelComponent(graphicsScene)
@@ -43,6 +38,18 @@ class GraphicsMainFrame extends MainFrame {
         }
     }
 
+    private val buttonPanel = new FlowPanel() {
+        contents += clearButton
+        contents += drawingButton
+        contents += startDebugButton
+        contents += nextDebugStepButton
+    }
+
+    contents = new BorderPanel {
+        add(gridPanel, BorderPanel.Position.Center)
+        add(buttonPanel, BorderPanel.Position.South)
+    }
+
     shapesMenuGroup.select(lineDdaMenuItem)
     nextDebugStepButton.enabled_=(false)
 
@@ -51,7 +58,7 @@ class GraphicsMainFrame extends MainFrame {
     preferredSize = new Dimension(defaultWidth, defaultHeight)
     centerOnScreen()
     menuBar = new MenuBar {
-        contents += new Menu("Algorithms") {
+        contents += new Menu("Shapes") {
             contents += new Menu("Line") {
                 contents += lineDdaMenuItem
                 contents += lineBrezenhemMenuItem
@@ -59,17 +66,13 @@ class GraphicsMainFrame extends MainFrame {
         }
     }
 
-    listenTo(drawingButton, startDebugButton, nextDebugStepButton)
+    listenTo(drawingButton, startDebugButton, nextDebugStepButton, clearButton)
 
     reactions += {
+        case ButtonClicked(`clearButton`) => clearScene()
         case ButtonClicked(`drawingButton`) => draw()
         case ButtonClicked(`startDebugButton`) => startDebug()
         case ButtonClicked(`nextDebugStepButton`) => nextDebugStep()
-    }
-
-    contents = new BorderPanel {
-        add(gridPanel, BorderPanel.Position.Center)
-        add(buttonPanel, BorderPanel.Position.South)
     }
 
     private def draw() {
@@ -98,11 +101,17 @@ class GraphicsMainFrame extends MainFrame {
         if (debugRender.isNextStepEnabled) {
             debugRender.nextStep()
         }
-        else {
+
+        if (!debugRender.isNextStepEnabled) {
             gridPanel.removeSelectedPoints(debugRender.shape.getPointList)
             nextDebugStepButton.enabled_=(false)
         }
 
+        gridPanel.repaint()
+    }
+
+    private def clearScene() {
+        graphicsScene.clear()
         gridPanel.repaint()
     }
 }

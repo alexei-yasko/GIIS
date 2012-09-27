@@ -9,7 +9,7 @@ class DebugRender(render: Render) extends Render(render.shape, render.color) {
 
     def draw = render.draw.splitAt(stepNumber)._1
 
-    def isNextStepEnabled = stepNumber + 1 < render.draw.size
+    def isNextStepEnabled = stepNumber < render.draw.size
 
     def nextStep() {
         stepNumber = stepNumber + 1
