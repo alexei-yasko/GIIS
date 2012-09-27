@@ -2,8 +2,6 @@ package giis.labs.graphics
 
 import java.awt.{Color, Dimension}
 import giis.labs.model.{ShapeType, ShapeTypeList}
-import giis.labs.model.shape.ShapeFactory
-import render.DebugRender
 import swing._
 import event.ButtonClicked
 
@@ -15,15 +13,14 @@ class GraphicsMainFrame extends MainFrame {
     private val defaultWidth = 800
     private val defaultHeight = 600
 
-    private var debugRender: DebugRender = null
-
     private val drawingButton = new Button("Draw")
     private val startDebugButton = new Button("Debug")
     private val nextDebugStepButton = new Button("Next")
     private val clearButton = new Button("Clear")
 
     private val graphicsScene = new GraphicsScene
-    private val gridPanel: GridPanelComponent = new GridPanelComponent(graphicsScene)
+    private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
+    private val gridPanelComponent: GridPanelComponent = new GridPanelComponent(graphicsScene)
 
     private var shapeType: ShapeType = ShapeTypeList.LineDda
 
@@ -46,12 +43,12 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     contents = new BorderPanel {
-        add(gridPanel, BorderPanel.Position.Center)
+        add(gridPanelComponent, BorderPanel.Position.Center)
         add(buttonPanel, BorderPanel.Position.South)
     }
 
     shapesMenuGroup.select(lineDdaMenuItem)
-    nextDebugStepButton.enabled_=(false)
+    nextDebugStepButton.enabled_=(b = false)
 
     title = "Graphics editor"
     size = new Dimension(defaultWidth, defaultHeight)
@@ -76,42 +73,36 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     private def draw() {
-        val shape = ShapeFactory.createShape(gridPanel.selectedPointSet.toList, shapeType)
+        graphicsSceneController.drawShape(shapeType, Color.BLACK)
 
-        if (shape != null) {
-            graphicsScene.addShapeRender(shape.createRender(shapeType, Color.BLACK))
-            gridPanel.removeSelectedPoints(shape.getPointList)
-        }
-
-        gridPanel.repaint()
+        gridPanelComponent.repaint()
     }
 
     private def startDebug() {
-        val shape = ShapeFactory.createShape(gridPanel.selectedPointSet.toList, shapeType)
+        if (graphicsSceneController.isDebugEnabled(shapeType)) {
+            graphicsSceneController.drawShapeInDebugMode(shapeType, Color.BLACK)
 
-        if (shape != null) {
-            debugRender = new DebugRender(shape.createRender(shapeType, Color.BLACK))
-            graphicsScene.addShapeRender(debugRender)
-            nextDebugStepButton.enabled_=(true)
+            nextDebugStepButton.enabled_=(b = true)
+            drawingButton.enabled_=(b = false)
         }
     }
 
     private def nextDebugStep() {
 
-        if (debugRender.isNextStepEnabled) {
-            debugRender.nextStep()
+        if (graphicsSceneController.isNextDebugStepEnabled) {
+            graphicsSceneController.nextDebugStep()
         }
 
-        if (!debugRender.isNextStepEnabled) {
-            gridPanel.removeSelectedPoints(debugRender.shape.getPointList)
-            nextDebugStepButton.enabled_=(false)
+        if (!graphicsSceneController.isNextDebugStepEnabled) {
+            nextDebugStepButton.enabled_=(b = false)
+            drawingButton.enabled_=(b = true)
         }
 
-        gridPanel.repaint()
+        gridPanelComponent.repaint()
     }
 
     private def clearScene() {
-        graphicsScene.clear()
-        gridPanel.repaint()
+        graphicsSceneController.clearScene()
+        gridPanelComponent.repaint()
     }
 }

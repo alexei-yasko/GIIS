@@ -22,22 +22,12 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
     private val DEFAULT_PIXEL_SIZE = 15
     private val SCALE = 1
 
-    private var selectedPixelSet = Set[Pixel]()
-
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
     listenTo(mouse.clicks)
 
     reactions += {
         case MouseClicked(source, point, modifiers, clicks, triggersPopup) => selectClickedPixel(point)
-    }
-
-    def selectedPointSet: Set[Point] = for (pixel <- selectedPixelSet) yield {
-        pixel.point
-    }
-
-    def removeSelectedPoints(elements: List[Point]) {
-        selectedPixelSet = selectedPixelSet.filter(pixel => !elements.contains(pixel.point))
     }
 
     override protected def paintComponent(graphics: Graphics2D) {
@@ -47,7 +37,7 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
         drawAxis(graphics)
 
         drawPixelSet(scene.getScenePixelSet, graphics)
-        drawPixelSet(selectedPixelSet, graphics)
+        drawPixelSet(scene.getSelectedPixels, graphics)
     }
 
     private def drawAxis(graphics: Graphics2D) {
@@ -97,7 +87,7 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
 
     private def selectClickedPixel(pointAwt: java.awt.Point) {
         val pixel = new Pixel(convertToPoint(pointAwt), SELECTED_PIXEL_COLOR)
-        selectedPixelSet = selectedPixelSet + pixel
+        scene.selectPixel(pixel)
 
         repaint()
     }

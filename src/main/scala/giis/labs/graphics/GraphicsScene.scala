@@ -7,6 +7,8 @@ import render.Render
  */
 class GraphicsScene {
 
+    private var selectedPixelBuffer = Set[Pixel]()
+
     private var shapeRenderList: List[Render] = List()
 
     def addShapeRender(render: Render) {
@@ -18,11 +20,21 @@ class GraphicsScene {
     }
 
     def getScenePixelSet: Set[Pixel] = {
-        var drawingPixelSet  = Set[Pixel]()
+        var drawingPixelSet = Set[Pixel]()
 
         shapeRenderList.foreach(render => drawingPixelSet = drawingPixelSet ++ render.draw)
 
         drawingPixelSet
+    }
+
+    def selectPixel(pixel: Pixel) {
+        selectedPixelBuffer = selectedPixelBuffer + pixel
+    }
+
+    def getSelectedPixels: Set[Pixel] = selectedPixelBuffer
+
+    def clearSelectedPixels() {
+        selectedPixelBuffer = Set()
     }
 
     def clear() {
