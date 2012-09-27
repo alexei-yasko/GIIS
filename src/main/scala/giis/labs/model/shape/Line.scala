@@ -1,13 +1,13 @@
 package giis.labs.model.shape
 
-import giis.labs.model.{AlgorithmType, Point}
 import java.awt.Color
 import giis.labs.graphics.render.{RenderFactory, LineRender}
+import giis.labs.model.{ShapeType, Point}
 
 /**
  * @author Q-YAA
  */
-class Line(point1: Point, point2: Point) extends Shape with RenderFactory {
+class Line(point1: Point, point2: Point) extends Shape {
 
     val begin = point1
 
@@ -15,7 +15,5 @@ class Line(point1: Point, point2: Point) extends Shape with RenderFactory {
 
     def getPointList = List(begin, end)
 
-    def getType = ShapeTypeList.LineType
-
-    def createRender(algorithmType: AlgorithmType, color: Color) = new LineRender(this, color, algorithmType)
+    def createRender(shapeType: ShapeType, color: Color) = new LineRender(this, color, shapeType)
 }

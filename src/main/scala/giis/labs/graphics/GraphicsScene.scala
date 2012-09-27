@@ -20,7 +20,7 @@ class GraphicsScene {
     def getScenePixelSet: Set[Pixel] = {
         var drawingPixelSet  = Set[Pixel]()
 
-        shapeRenderList.foreach(render => drawingPixelSet = drawingPixelSet ++ render.render)
+        shapeRenderList.foreach(render => drawingPixelSet = drawingPixelSet ++ render.draw)
 
         drawingPixelSet
     }

@@ -10,5 +10,5 @@ import java.awt.Color
 abstract class Render(renderedShape: Shape, shapeColor: Color) {
     def color = shapeColor
     def shape = renderedShape
-    def render: List[Pixel]
+    def draw: List[Pixel]
 }

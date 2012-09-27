@@ -46,8 +46,8 @@ class GridPanelComponent(scene: GraphicsScene) extends Panel {
         drawGrid(graphics)
         drawAxis(graphics)
 
-        drawPixelSet(selectedPixelSet, graphics)
         drawPixelSet(scene.getScenePixelSet, graphics)
+        drawPixelSet(selectedPixelSet, graphics)
     }
 
     private def drawAxis(graphics: Graphics2D) {

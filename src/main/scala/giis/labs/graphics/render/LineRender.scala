@@ -1,21 +1,21 @@
 package giis.labs.graphics.render
 
 import giis.labs.model.shape.Shape
-import giis.labs.model.{Point, AlgorithmTypeList, AlgorithmType}
+import giis.labs.model.{Point, ShapeTypeList, ShapeType}
 import java.awt.Color
 import giis.labs.graphics.Pixel
 
 /**
  * @author Q-YAA
  */
-class LineRender(shape: Shape, color: Color, algorithmType: AlgorithmType) extends Render(shape, color) {
+class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Render(shape, color) {
 
     private val beginPoint = shape.getPointList.toArray.apply(0)
     private val endPoint = shape.getPointList.toArray.apply(1)
 
-    def render: List[Pixel] = algorithmType match {
-        case AlgorithmTypeList.LineDda => ddaRender
-        case AlgorithmTypeList.LineBrezenhem => brezenhemRender
+    def draw: List[Pixel] = shapeType match {
+        case ShapeTypeList.LineDda => ddaRender.reverse
+        case ShapeTypeList.LineBrezenhem => brezenhemRender.reverse
     }
 
     /**
@@ -90,7 +90,7 @@ class LineRender(shape: Shape, color: Color, algorithmType: AlgorithmType) exten
         } else {
             var resultPixelList = List[Pixel]()
 
-            // приращение принимаем равным шагу растра
+            //приращение принимаем равным шагу растра
             val stepX = (x2 - x1) / math.abs(x2 - x1)
             val stepY = (y2 - y1) / math.abs(y2 - y1)
 
@@ -114,11 +114,12 @@ class LineRender(shape: Shape, color: Color, algorithmType: AlgorithmType) exten
                     x = x + stepX
                     error = correctErrorValue(error, lengthX)
                 }
-                else if (error < 0 && isMainAxisX) {
+
+                if (isMainAxisX) {
                     x = x + stepX
                     error = correctErrorValue(error, lengthY)
                 }
-                else if (error < 0 && !isMainAxisX) {
+                else if (!isMainAxisX) {
                     y = y + stepY
                     error = correctErrorValue(error, lengthY)
                 }

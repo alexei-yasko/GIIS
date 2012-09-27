@@ -1,14 +1,15 @@
 package giis.labs.model.shape
 
-import giis.labs.model.{AlgorithmTypeList, AlgorithmType, Point}
+import giis.labs.model.{ShapeTypeList, ShapeType, Point}
 
 /**
  * @author Q-YAA
  */
 object ShapeFactory {
-    def createShape(pointList: List[Point], algorithmType: AlgorithmType): Shape = algorithmType match {
-        case AlgorithmTypeList.LineDda => createLine(pointList.toArray)
-        case AlgorithmTypeList.LineBrezenhem => createLine(pointList.toArray)
+
+    def createShape(pointList: List[Point], shapeType: ShapeType): Shape = shapeType match {
+        case ShapeTypeList.LineDda => createLine(pointList.toArray)
+        case ShapeTypeList.LineBrezenhem => createLine(pointList.toArray)
         case null => null
     }
 

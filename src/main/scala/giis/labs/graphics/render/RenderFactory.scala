@@ -1,11 +1,11 @@
 package giis.labs.graphics.render
 
-import giis.labs.model.AlgorithmType
+import giis.labs.model.ShapeType
 import java.awt.Color
 
 /**
  * @author Q-YAA
  */
 trait RenderFactory {
-    def createRender(algorithmType: AlgorithmType, color: Color): Render
+    def createRender(shapeType: ShapeType, color: Color): Render
 }

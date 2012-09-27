@@ -1,16 +1,12 @@
 package giis.labs.model.shape
 
-import giis.labs.model.{AlgorithmType, Point}
-import giis.labs.graphics.render.Render
-import java.awt.Color
+import giis.labs.model.Point
+import giis.labs.graphics.render.RenderFactory
 
 /**
  * @author Q-YAA
  */
-abstract class Shape {
-    def getType: ShapeType
+abstract class Shape extends RenderFactory {
 
     def getPointList: List[Point]
-
-    def createRender(algorithmType: AlgorithmType, color: Color): Render
 }

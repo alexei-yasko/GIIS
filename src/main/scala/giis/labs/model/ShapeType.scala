@@ -3,17 +3,17 @@ package giis.labs.model
 /**
  * @author Q-YAA
  */
-trait AlgorithmType {
+trait ShapeType {
     def name: String
 }
 
-object AlgorithmTypeList {
+object ShapeTypeList {
 
-    case object LineDda extends AlgorithmType {
+    case object LineDda extends ShapeType {
         val name = "LineDda"
     }
 
-    case object LineBrezenhem extends AlgorithmType {
+    case object LineBrezenhem extends ShapeType {
         val name = "LineBrezenhem"
     }
 }
