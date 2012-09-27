@@ -63,7 +63,6 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
         }
     }
 
-
     private def brezenhemRender: List[Pixel] = {
 
         val x1 = beginPoint.x

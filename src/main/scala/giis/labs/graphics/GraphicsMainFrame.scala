@@ -21,7 +21,7 @@ class GraphicsMainFrame extends MainFrame {
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
-    private val gridPanelComponent: GridPanelComponent = new GridPanelComponent(graphicsScene)
+    private val gridPanelComponent: GridPanelComponent = new GridPanelComponent(graphicsScene, graphicsSceneController)
 
     private var shapeType: ShapeType = null
 
@@ -87,9 +87,9 @@ class GraphicsMainFrame extends MainFrame {
         if (graphicsSceneController.isDebugEnabled(shapeType)) {
             graphicsSceneController.drawShapeInDebugMode(shapeType, Color.BLACK)
 
-            nextDebugStepButton.enabled_=(b = true)
-            previousDebugStepButton.enabled_=(b = true)
-            drawingButton.enabled_=(b = false)
+            nextDebugStepButton.enabled_=(!nextDebugStepButton.enabled)
+            previousDebugStepButton.enabled_=(!previousDebugStepButton.enabled)
+            drawingButton.enabled_=(!drawingButton.enabled)
         }
     }
 
@@ -114,12 +114,12 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     private def clearScene() {
-        graphicsSceneController.clearScene()
+        graphicsScene.clear()
         gridPanelComponent.repaint()
     }
 
     private def setShapeType(shapeType: ShapeType) {
         this.shapeType = shapeType
-        graphicsSceneController.setMaxSelectionBufferSize(shapeType.definingPointQuantity)
+        graphicsScene.setMaxSelectionBufferSize(shapeType.definingPointQuantity)
     }
 }

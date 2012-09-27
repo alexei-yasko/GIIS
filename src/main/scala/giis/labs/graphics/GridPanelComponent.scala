@@ -4,12 +4,12 @@ import swing.Panel
 import javax.swing.BorderFactory
 import java.awt.{BasicStroke, Graphics2D, Color}
 import swing.event.{MouseWheelMoved, MouseClicked}
-import giis.labs.model.Point
+import giis.labs.model.{ShapeType, Point}
 
 /**
  * @author Q-YAA
  */
-class GridPanelComponent(scene: GraphicsScene) extends Panel {
+class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneController) extends Panel {
 
     private val AXIS_LINE_THICKNESS = 2f
     private val AXIS_LINE_COLOR = Color.GRAY

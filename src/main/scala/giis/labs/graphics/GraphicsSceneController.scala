@@ -25,7 +25,9 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
 
     def isDebugEnabled(shapeType: ShapeType): Boolean = ShapeFactory.createShape(getSelectedPoints, shapeType) != null
 
-    def isNextDebugStepEnabled: Boolean = debugRender.isNextStepEnabled
+    def isNextDebugStepEnabled: Boolean = debugRender != null && debugRender.isNextStepEnabled
+
+    def isDebugStart: Boolean = debugRender != null
 
     def drawShapeInDebugMode(shapeType: ShapeType, color: Color) {
         val shape = ShapeFactory.createShape(getSelectedPoints, shapeType)
@@ -52,14 +54,6 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         if (debugRender.isPreviousStepEnabled) {
             debugRender.previousStep()
         }
-    }
-
-    def clearScene() {
-        scene.clear()
-    }
-
-    def setMaxSelectionBufferSize(bufferSize: Int) {
-        scene.setMaxSelectionBufferSize(bufferSize)
     }
 
     private def getSelectedPoints: List[Point] = for (pixel <- scene.getSelectedPixels) yield {
