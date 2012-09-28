@@ -53,4 +53,10 @@ class GraphicsScene {
     def setMaxSelectionBufferSize(bufferSize: Int) {
         maxSelectionBufferSize = bufferSize
     }
+
+    def removeLastShape() {
+        if (shapeRenderList.size > 0) {
+            shapeRenderList = shapeRenderList.tail
+        }
+    }
 }

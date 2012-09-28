@@ -56,6 +56,10 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         }
     }
 
+    def cancelShapeDrawing() {
+        scene.removeLastShape()
+    }
+
     private def getSelectedPoints: List[Point] = for (pixel <- scene.getSelectedPixels) yield {
         pixel.point
     }

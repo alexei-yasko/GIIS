@@ -94,7 +94,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     }
 
     private def scaleGrid(rotation: Int) {
-        SCALE = SCALE - 0.1 * rotation
+        SCALE = SCALE - 0.05 * rotation
 
         if (SCALE <= 1 / DEFAULT_PIXEL_SIZE + 0.1) {
             SCALE = 1d / DEFAULT_PIXEL_SIZE

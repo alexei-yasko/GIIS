@@ -5,6 +5,7 @@ import java.awt.{Color, Dimension}
 import giis.labs.model.{ShapeType, ShapeTypeList}
 import swing._
 import event.ButtonClicked
+import javax.swing.JColorChooser
 
 /**
  * @author Q-YAA
@@ -14,11 +15,15 @@ class GraphicsMainFrame extends MainFrame {
     private val defaultWidth = 800
     private val defaultHeight = 650
 
+    private var color = Color.BLACK
+
     private val drawingButton = new Button("Draw")
     private val startDebugButton = new Button("Debug")
     private val nextDebugStepButton = new Button("Next")
     private val previousDebugStepButton = new Button("Previous")
     private val clearButton = new Button("Clear")
+    private val cancelButton = new Button("Cancel")
+    private val colorChooseButton = new Button("Choose color")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
@@ -38,8 +43,10 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     private val buttonPanel = new FlowPanel() {
+        contents += colorChooseButton
         contents += clearButton
         contents += drawingButton
+        contents += cancelButton
         contents += startDebugButton
         contents += nextDebugStepButton
         contents += previousDebugStepButton
@@ -72,7 +79,15 @@ class GraphicsMainFrame extends MainFrame {
         }
     }
 
-    listenTo(drawingButton, startDebugButton, nextDebugStepButton, clearButton, previousDebugStepButton)
+    listenTo(
+        drawingButton,
+        startDebugButton,
+        nextDebugStepButton,
+        clearButton,
+        previousDebugStepButton,
+        cancelButton,
+        colorChooseButton
+    )
 
     reactions += {
         case ButtonClicked(`clearButton`) => clearScene()
@@ -80,21 +95,27 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`startDebugButton`) => startDebug()
         case ButtonClicked(`nextDebugStepButton`) => nextDebugStep()
         case ButtonClicked(`previousDebugStepButton`) => previousDebugStep()
+        case ButtonClicked(`cancelButton`) => cancelShapeDrawing()
+        case ButtonClicked(`colorChooseButton`) => chooseColor()
+    }
+
+    private def chooseColor() {
+        color = JColorChooser.showDialog(this.peer, "Choose color", color)
     }
 
     private def draw() {
-        graphicsSceneController.drawShape(shapeType, Color.BLACK)
-
-        gridPanelComponent.repaint()
+        graphicsSceneController.drawShape(shapeType, color)
+        repaint()
     }
 
     private def startDebug() {
         if (graphicsSceneController.isDebugEnabled(shapeType)) {
-            graphicsSceneController.drawShapeInDebugMode(shapeType, Color.BLACK)
+            graphicsSceneController.drawShapeInDebugMode(shapeType, color)
 
             nextDebugStepButton.enabled_=(!nextDebugStepButton.enabled)
             previousDebugStepButton.enabled_=(!previousDebugStepButton.enabled)
             drawingButton.enabled_=(!drawingButton.enabled)
+            cancelButton.enabled_=(!cancelButton.enabled)
         }
     }
 
@@ -108,6 +129,7 @@ class GraphicsMainFrame extends MainFrame {
             nextDebugStepButton.enabled_=(b = false)
             previousDebugStepButton.enabled_=(b = false)
             drawingButton.enabled_=(b = true)
+            cancelButton.enabled_=(b = true)
         }
 
         gridPanelComponent.repaint()
@@ -116,6 +138,11 @@ class GraphicsMainFrame extends MainFrame {
     private def previousDebugStep() {
         graphicsSceneController.previousDebugStep()
         gridPanelComponent.repaint()
+    }
+
+    private def cancelShapeDrawing() {
+        graphicsSceneController.cancelShapeDrawing()
+        repaint()
     }
 
     private def clearScene() {
