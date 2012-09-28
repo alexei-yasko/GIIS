@@ -5,6 +5,10 @@ import swing.SimpleSwingApplication
 import javax.swing.UIManager
 
 /**
+ * Application.
+ *
+ * <p>Entry point of the program.</p>
+ *
  * @author Q-YAA
  */
 object Application extends SimpleSwingApplication {
