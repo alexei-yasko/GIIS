@@ -1,6 +1,6 @@
 package giis.labs.model.shape
 
-import giis.labs.model.{ShapeTypeList, ShapeType, Point}
+import giis.labs.model.{ShapeType, Point}
 
 /**
  * @author Q-YAA
@@ -8,8 +8,8 @@ import giis.labs.model.{ShapeTypeList, ShapeType, Point}
 object ShapeFactory {
 
     def createShape(pointList: List[Point], shapeType: ShapeType): Shape = shapeType match {
-        case ShapeTypeList.LineDda => createLine(pointList.toArray)
-        case ShapeTypeList.LineBrezenhem => createLine(pointList.toArray)
+        case Shape.LineDda => createLine(pointList.toArray)
+        case Shape.LineBrezenhem => createLine(pointList.toArray)
         case null => null
     }
 

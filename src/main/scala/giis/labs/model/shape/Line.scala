@@ -1,8 +1,8 @@
 package giis.labs.model.shape
 
-import java.awt.Color
-import giis.labs.graphics.render.{RenderFactory, LineRender}
-import giis.labs.model.{ShapeType, Point}
+import giis.labs.graphics.render.LineRender
+import giis.labs.graphics.DrawingContext
+import giis.labs.model.Point
 
 /**
  * @author Q-YAA
@@ -15,5 +15,5 @@ class Line(point1: Point, point2: Point) extends Shape {
 
     def getPointList = List(begin, end)
 
-    def createRender(shapeType: ShapeType, color: Color) = new LineRender(this, color, shapeType)
+    def createRender(drawingContext: DrawingContext) = new LineRender(this, drawingContext)
 }

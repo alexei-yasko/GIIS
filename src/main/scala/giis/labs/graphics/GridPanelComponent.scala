@@ -4,31 +4,31 @@ import swing.Panel
 import javax.swing.BorderFactory
 import java.awt.{BasicStroke, Graphics2D, Color}
 import swing.event.{MouseWheelMoved, MouseClicked}
-import giis.labs.model.{ShapeType, Point}
+import giis.labs.model.Point
 
 /**
  * @author Q-YAA
  */
 class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneController) extends Panel {
 
-    private val AXIS_LINE_THICKNESS = 2f
-    private val AXIS_LINE_COLOR = Color.GRAY
+    private val axisLineThickness = 2f
+    private val axisLineColor = Color.GRAY
 
-    private val GRID_LINE_THICKNESS = 1f
-    private val GRID_LINE_COLOR = Color.LIGHT_GRAY
+    private val gridLineThickness = 1f
+    private val gridLineColor = Color.LIGHT_GRAY
 
-    private val SELECTED_PIXEL_COLOR = Color.RED
+    private val selectedPixelDrawingContext = DrawingContext.createDrawingContext(Color.RED)
 
-    private val DEFAULT_PIXEL_SIZE = 15
-    private var SCALE = 1d
+    private val defaultPixelSize = 15
+    private var scale = 1d
 
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
     listenTo(mouse.clicks, mouse.wheel)
 
     reactions += {
-        case MouseClicked(source, point, modifiers, clicks, triggersPopup) => selectClickedPixel(point)
-        case MouseWheelMoved(source, point, modifiers, rotation) => scaleGrid(rotation)
+        case MouseClicked(source, point, modifiers, clicks, triggersPopup) => executeAndRepaint(selectClickedPixel(point))
+        case MouseWheelMoved(source, point, modifiers, rotation) => executeAndRepaint(scaleGrid(rotation))
     }
 
     override protected def paintComponent(graphics: Graphics2D) {
@@ -42,8 +42,8 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     }
 
     private def drawAxis(graphics: Graphics2D) {
-        graphics.setColor(AXIS_LINE_COLOR)
-        graphics.setStroke(new BasicStroke(AXIS_LINE_THICKNESS))
+        graphics.setColor(axisLineColor)
+        graphics.setStroke(new BasicStroke(axisLineThickness))
 
         for (i <- 0 to(size.height, pixelSize)) {
             graphics.drawRect(getCenterCoordinateX, i, pixelSize, pixelSize)
@@ -55,8 +55,8 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     }
 
     private def drawGrid(graphics: Graphics2D) {
-        graphics.setColor(GRID_LINE_COLOR)
-        graphics.setStroke(new BasicStroke(GRID_LINE_THICKNESS))
+        graphics.setColor(gridLineColor)
+        graphics.setStroke(new BasicStroke(gridLineThickness))
 
         for (i <- 0 to(size.height, pixelSize)) {
             graphics.drawLine(0, i, size.width, i)
@@ -72,7 +72,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     }
 
     private def drawPixel(pixel: Pixel, graphics: Graphics2D) {
-        graphics.setColor(pixel.color)
+        graphics.setColor(pixel.drawingContext.color)
 
         val x = getCenterCoordinateX + (pixel.point.x) * pixelSize
         val y = getCenterCoordinateY - (pixel.point.y) * pixelSize
@@ -84,22 +84,25 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
 
     private def getCenterCoordinateY = size.height / 2 - (size.height / 2 % pixelSize)
 
-    private def pixelSize = (DEFAULT_PIXEL_SIZE * SCALE).toInt
+    private def pixelSize = (defaultPixelSize * scale).toInt
 
-    private def selectClickedPixel(pointAwt: java.awt.Point) {
-        val pixel = new Pixel(convertToPoint(pointAwt), SELECTED_PIXEL_COLOR)
+    private def selectClickedPixel(pointAwt: java.awt.Point)() {
+        val pixel = new Pixel(convertToPoint(pointAwt), selectedPixelDrawingContext)
         scene.selectPixel(pixel)
 
-        repaint()
+        controller.drawShape(DrawingContext.createDrawingContext)
     }
 
-    private def scaleGrid(rotation: Int) {
-        SCALE = SCALE - 0.05 * rotation
+    private def scaleGrid(rotation: Int)() {
+        scale = scale - 0.05 * rotation
 
-        if (SCALE <= 1 / DEFAULT_PIXEL_SIZE + 0.1) {
-            SCALE = 1d / DEFAULT_PIXEL_SIZE
+        if (scale <= 1 / defaultPixelSize + 0.1) {
+            scale = 1d / defaultPixelSize
         }
+    }
 
+    private def executeAndRepaint(function: () => Unit) {
+        function()
         repaint()
     }
 

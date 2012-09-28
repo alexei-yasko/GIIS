@@ -1,21 +1,20 @@
 package giis.labs.graphics.render
 
 import giis.labs.model.shape.Shape
-import giis.labs.model.{Point, ShapeTypeList, ShapeType}
-import java.awt.Color
-import giis.labs.graphics.Pixel
+import giis.labs.model.Point
+import giis.labs.graphics.{DrawingContext, Pixel}
 
 /**
  * @author Q-YAA
  */
-class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Render(shape, color) {
+class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
     private val beginPoint = shape.getPointList.toArray.apply(0)
     private val endPoint = shape.getPointList.toArray.apply(1)
 
-    def draw: List[Pixel] = shapeType match {
-        case ShapeTypeList.LineDda => ddaRender
-        case ShapeTypeList.LineBrezenhem => brezenhemRender
+    def draw: List[Pixel] = drawingContext.shapeType match {
+        case Shape.LineDda => ddaRender
+        case Shape.LineBrezenhem => brezenhemRender
     }
 
     /**
@@ -54,7 +53,7 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
 
             //вычисляем координаты последующих точек отрезка
             for (i <- 0 to length) {
-                resultPixelList = createPixel(math.round(x).toInt, math.round(y).toInt, color) :: resultPixelList
+                resultPixelList = createPixel(math.round(x).toInt, math.round(y).toInt, drawingContext) :: resultPixelList
                 x = x + dx
                 y = y + dy
             }
@@ -103,7 +102,7 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
             val isMainAxisX = lengthY < lengthX
 
             for (i <- 0 to lengthMax) {
-                resultPixelList = createPixel(x, y, color) :: resultPixelList
+                resultPixelList = createPixel(x, y, drawingContext) :: resultPixelList
 
                 if (error >= 0 && isMainAxisX) {
                     y = y + stepY
@@ -142,10 +141,10 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
         var resultPixelList = List[Pixel]()
 
         if (x2 > x1) {
-            (x1 to x2).foreach(i => resultPixelList = createPixel(i, y, color) :: resultPixelList)
+            (x1 to x2).foreach(i => resultPixelList = createPixel(i, y, drawingContext) :: resultPixelList)
         }
         else {
-            (x1 to(x2, -1)).foreach(i => resultPixelList = createPixel(i, y, color) :: resultPixelList)
+            (x1 to(x2, -1)).foreach(i => resultPixelList = createPixel(i, y, drawingContext) :: resultPixelList)
         }
 
         resultPixelList
@@ -155,10 +154,10 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
         var resultPixelList = List[Pixel]()
 
         if (y2 > y1) {
-            (y1 to y2).foreach(i => resultPixelList = createPixel(x, i, color) :: resultPixelList)
+            (y1 to y2).foreach(i => resultPixelList = createPixel(x, i, drawingContext) :: resultPixelList)
         }
         else {
-            (y1 to(y2, -1)).foreach(i => resultPixelList = createPixel(x, i, color) :: resultPixelList)
+            (y1 to(y2, -1)).foreach(i => resultPixelList = createPixel(x, i, drawingContext) :: resultPixelList)
         }
 
         resultPixelList
@@ -169,20 +168,20 @@ class LineRender(shape: Shape, color: Color, shapeType: ShapeType) extends Rende
         var resultPixelList = List[Pixel]()
 
         if (x2 > x1 && y2 > y1) {
-            (0 to x2 - x1).foreach(i => resultPixelList = createPixel(x1 + i, y1 + i, color) :: resultPixelList)
+            (0 to x2 - x1).foreach(i => resultPixelList = createPixel(x1 + i, y1 + i, drawingContext) :: resultPixelList)
         }
         else if (x2 > x1 && y2 < y1) {
-            (0 to x2 - x1).foreach(i => resultPixelList = createPixel(x1 + i, y1 - i, color) :: resultPixelList)
+            (0 to x2 - x1).foreach(i => resultPixelList = createPixel(x1 + i, y1 - i, drawingContext) :: resultPixelList)
         }
         else if (x2 < x1 && y2 > y1) {
-            (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 + i, color) :: resultPixelList)
+            (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 + i, drawingContext) :: resultPixelList)
         }
         else if (x2 < x1 && y2 < y1) {
-            (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 - i, color) :: resultPixelList)
+            (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 - i, drawingContext) :: resultPixelList)
         }
 
         resultPixelList
     }
 
-    private def createPixel(x: Int, y: Int, color: Color): Pixel = new Pixel(new Point(x, y), color)
+    private def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
 }

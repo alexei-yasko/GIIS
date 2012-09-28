@@ -3,7 +3,7 @@ package giis.labs.graphics.render
 /**
  * @author Q-YAA
  */
-class DebugRender(render: Render) extends Render(render.shape, render.color) {
+class DebugRender(render: Render) extends Render(render.shape, render.drawingContext) {
 
     private var stepNumber = 0
 
