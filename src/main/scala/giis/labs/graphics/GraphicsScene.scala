@@ -35,7 +35,7 @@ class GraphicsScene {
             selectedPixelBuffer = pixel :: selectedPixelBuffer
         }
         else {
-            selectedPixelBuffer = pixel :: selectedPixelBuffer.reverse.tail
+            selectedPixelBuffer = pixel :: selectedPixelBuffer.tail
         }
     }
 

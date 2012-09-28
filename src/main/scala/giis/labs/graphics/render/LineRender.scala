@@ -1,8 +1,8 @@
 package giis.labs.graphics.render
 
 import giis.labs.model.shape.Shape
-import giis.labs.model.Point
 import giis.labs.graphics.{DrawingContext, Pixel}
+import giis.labs.model.Point
 
 /**
  * @author Q-YAA
@@ -63,18 +63,17 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
     }
 
     private def brezenhemRender: List[Pixel] = {
-
         val x1 = beginPoint.x
         val x2 = endPoint.x
         val y1 = beginPoint.y
         val y2 = endPoint.y
 
         //Вычисляем длины проекций на оси координат
-        val lengthX = math.abs(x2 - x1)
-        val lengthY = math.abs(y2 - y1)
+        var dx = math.abs(x2 - x1)
+        var dy = math.abs(y2 - y1)
 
         //Определяем длинну наибольшей проекции на оси координат
-        val lengthMax = math.max(lengthX, lengthY)
+        val lengthMax = math.max(dx, dy)
 
         //отдельно отрисовываем вертикальные, горизонтальные и диогональные линии
         if (x1 == x2) {
@@ -83,7 +82,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
         else if (y1 == y2) {
             drawHorizontalLine(x1, x2, y1)
         }
-        else if (math.abs(lengthX) == math.abs(lengthY)) {
+        else if (math.abs(dx) == math.abs(dy)) {
             drawDiagonalLine(x1, x2, y1, y2)
         } else {
             var resultPixelList = List[Pixel]()
@@ -95,47 +94,45 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
             var x = x1
             var y = y1
 
-            //начальное значение ошибки
-            var error = 2 * lengthY - lengthX
-
             //является ли ось Х основной
-            val isMainAxisX = lengthY < lengthX
+            val isMainAxisX = dy < dx
+
+            //если Y основная ось, меняем прокции местами
+            if (!isMainAxisX) {
+                dx = dx + dy
+                dy = dx - dy
+                dx = dx - dy
+            }
+
+            //начальное значение ошибки
+            var error = 2 * dy - dx
 
             for (i <- 0 to lengthMax) {
                 resultPixelList = createPixel(x, y, drawingContext) :: resultPixelList
 
+                // если значение ошибки неотрицательно, отрезок проходит выше середины пикселя
                 if (error >= 0 && isMainAxisX) {
                     y = y + stepY
-                    error = correctErrorValue(error, lengthX)
+                    error = error - 2 * dx
                 }
                 else if (error >= 0 && !isMainAxisX) {
                     x = x + stepX
-                    error = correctErrorValue(error, lengthX)
+                    error = error - 2 * dx
                 }
 
                 if (isMainAxisX) {
                     x = x + stepX
-                    error = correctErrorValue(error, lengthY)
+                    error = error + 2 * dy
                 }
                 else if (!isMainAxisX) {
                     y = y + stepY
-                    error = correctErrorValue(error, lengthY)
+                    error = error + 2 * dy
                 }
             }
 
             resultPixelList
         }
     }
-
-
-    private def correctErrorValue(error: Int, length: Int): Int =
-        if (error >= 0) {
-            error - 2 * length
-        }
-        else {
-            error + 2 * length
-        }
-
 
     private def drawHorizontalLine(x1: Int, x2: Int, y: Int): List[Pixel] = {
         var resultPixelList = List[Pixel]()
