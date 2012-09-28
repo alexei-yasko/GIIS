@@ -1,5 +1,6 @@
 package giis.labs.graphics
 
+import custom.ToolBar
 import java.awt.{Color, Dimension}
 import giis.labs.model.{ShapeType, ShapeTypeList}
 import swing._
@@ -11,7 +12,7 @@ import event.ButtonClicked
 class GraphicsMainFrame extends MainFrame {
 
     private val defaultWidth = 800
-    private val defaultHeight = 600
+    private val defaultHeight = 650
 
     private val drawingButton = new Button("Draw")
     private val startDebugButton = new Button("Debug")
@@ -44,9 +45,13 @@ class GraphicsMainFrame extends MainFrame {
         contents += previousDebugStepButton
     }
 
+    private val toolBar = new ToolBar {
+        contents += buttonPanel
+    }
+
     contents = new BorderPanel {
         add(gridPanelComponent, BorderPanel.Position.Center)
-        add(buttonPanel, BorderPanel.Position.South)
+        add(toolBar, BorderPanel.Position.North)
     }
 
     shapesMenuGroup.select(lineDdaMenuItem)
