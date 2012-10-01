@@ -21,6 +21,7 @@ object ShapeFactory {
     def createShape(pointList: List[Point], shapeType: ShapeType): Shape = shapeType match {
         case Shape.LineDda => createLine(pointList.toArray)
         case Shape.LineBrezenhem => createLine(pointList.toArray)
+        case Shape.Circle => createCircle(pointList.toArray)
         case null => null
     }
 
@@ -30,6 +31,15 @@ object ShapeFactory {
         }
         else {
             new Line(pointArray.apply(pointArray.length - 2), pointArray.apply(pointArray.length - 1))
+        }
+    }
+
+    private def createCircle(pointArray: Array[Point]): Circle = {
+        if (pointArray.length < 2) {
+            null
+        }
+        else {
+            new Circle(pointArray.apply(pointArray.length - 2), pointArray.apply(pointArray.length - 1))
         }
     }
 

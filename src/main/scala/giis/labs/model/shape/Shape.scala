@@ -22,4 +22,9 @@ object Shape {
         val definingPointQuantity = 2
     }
 
+    case object Circle extends ShapeType {
+      val name = "Circle"
+      val definingPointQuantity = 2
+    }
+
 }
