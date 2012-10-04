@@ -13,7 +13,7 @@ import javax.swing.UIManager
  */
 object Application extends SimpleSwingApplication {
 
-   // UIManager.setLookAndFeel("org.jb2011.lnf.beautyeye.BeautyEyeLookAndFeelCross")
+    UIManager.setLookAndFeel("org.jb2011.lnf.beautyeye.BeautyEyeLookAndFeelCross")
     UIManager.put("RootPane.setupButtonVisible", false)
 
     def top = new GraphicsMainFrame

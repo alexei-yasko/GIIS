@@ -26,7 +26,7 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         var resultPixelList = List[Pixel]()
 
         //Мичнер
-        delta = 3 - 2 * radius;
+        delta = 3 - 2 * radius
         while (x < y) {
 
             resultPixelList = createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
@@ -42,10 +42,10 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
                 delta = delta + 4 * x + 6
             }
             else {
-                delta = delta + 4 * (x - y) + 10;
-                y = y - 1;
+                delta = delta + 4 * (x - y) + 10
+                y = y - 1
             }
-            x = x + 1;
+            x = x + 1
         }
         if (x == y) {
             resultPixelList = createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
