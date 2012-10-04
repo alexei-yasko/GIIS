@@ -22,7 +22,6 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         var x = 0
         var y = radius
         var delta = 2 - 2 * radius
-        var error = 0
         var resultPixelList = List[Pixel]()
 
         //Мичнер
