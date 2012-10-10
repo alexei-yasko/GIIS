@@ -9,10 +9,16 @@ import giis.labs.model.Point
  */
 class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    private val end = shape.getPointList.toArray.apply(0)
-    private val center = shape.getPointList.toArray.apply(1)
-
     def draw: List[Pixel] = {
+        val end = shape.getPointList.toArray.apply(1)
+        val center = shape.getPointList.toArray.apply(0)
+
+        val mainPixelsDrawingContext = DrawingContext.createDrawingContext(mainPixelsColor)
+
+        drawMichner(center, end) ::: createPixelList(shape.getPointList, mainPixelsDrawingContext)
+    }
+
+    def drawMichner(center: Point, end: Point): List[Pixel] = {
 
         val x0 = center.x
         val y0 = center.y
@@ -57,33 +63,32 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
             resultPixelList = createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
         }
         resultPixelList
-
-        //Брезенхем
-        /*        while (y >= 0) {
-            resultPixelList = createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + x, y0 - y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - x, y0 - y, drawingContext) :: resultPixelList
-            error = 2 * (delta + y) - 1
-            if (delta < 0 && error <= 0) {
-                x = x + 1
-                delta += 2 * x + 1
-            }
-            else {
-                error = 2 * (delta - x) - 1
-                if (delta > 0 && error > 0) {
-                    y = y - 1
-                    delta += 1 - 2 * y
-                }
-                else {
-                    x = x + 1
-                    delta += 2 * (x - y)
-                    y = y - 1
-                }
-            }
-        }
-        resultPixelList*/
     }
 
-    private def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
+
+    //Брезенхем
+    /*        while (y >= 0) {
+        resultPixelList = createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
+        resultPixelList = createPixel(x0 + x, y0 - y, drawingContext) :: resultPixelList
+        resultPixelList = createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
+        resultPixelList = createPixel(x0 - x, y0 - y, drawingContext) :: resultPixelList
+        error = 2 * (delta + y) - 1
+        if (delta < 0 && error <= 0) {
+            x = x + 1
+            delta += 2 * x + 1
+        }
+        else {
+            error = 2 * (delta - x) - 1
+            if (delta > 0 && error > 0) {
+                y = y - 1
+                delta += 1 - 2 * y
+            }
+            else {
+                x = x + 1
+                delta += 2 * (x - y)
+                y = y - 1
+            }
+        }
+    }
+    resultPixelList*/
 }

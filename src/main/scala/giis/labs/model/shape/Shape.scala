@@ -8,6 +8,10 @@ import giis.labs.graphics.render.RenderFactory
  */
 abstract class Shape extends RenderFactory {
     def getPointList: List[Point]
+
+    def isPointBelongsTo(point: Point): Boolean = getPointList.contains(point)
+
+    def movePoint(from: Point, to: Point)
 }
 
 object Shape {

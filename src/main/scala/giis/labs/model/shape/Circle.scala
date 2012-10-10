@@ -9,11 +9,21 @@ import giis.labs.graphics.render.CircleRender
  */
 class Circle(point1: Point, point2: Point) extends Shape {
 
-    val center = point1
+    var center = point1
 
-    val end = point2
+    var end = point2
 
     def getPointList = List(center, end)
+
+    def movePoint(from: Point, to: Point) {
+        if (center == from) {
+            end = new Point(end.x + (to.x - center.x), end.y + (to.y - center.y))
+            center = to
+        }
+        if (end == from) {
+            end = to
+        }
+    }
 
     def createRender(drawingContext: DrawingContext) = new CircleRender(this, drawingContext)
 }

@@ -9,12 +9,20 @@ import giis.labs.model.Point
  */
 class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    private val beginPoint = shape.getPointList.toArray.apply(0)
-    private val endPoint = shape.getPointList.toArray.apply(1)
+    def draw: List[Pixel] = {
+        val begin = shape.getPointList.toArray.apply(0)
+        val end = shape.getPointList.toArray.apply(1)
 
-    def draw: List[Pixel] = drawingContext.shapeType match {
-        case Shape.LineDda => ddaRender
-        case Shape.LineBrezenhem => brezenhemRender
+        val pixelList = drawingContext.shapeType match {
+            case Shape.LineDda => ddaRender(begin, end)
+            case Shape.LineBrezenhem => brezenhemRender(begin, end)
+        }
+
+        pixelList.foreach(pixel => if (shape.getPointList.contains(pixel.point)) {
+            pixel.color_=(mainPixelsColor)
+        })
+
+        pixelList
     }
 
     /**
@@ -22,7 +30,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
      *
      * @return List[Pixel] список пикселей отрезка
      */
-    private def ddaRender: List[Pixel] = {
+    private def ddaRender(beginPoint: Point, endPoint: Point): List[Pixel] = {
 
         val x1 = beginPoint.x
         val x2 = endPoint.x
@@ -58,11 +66,11 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
                 y = y + dy
             }
 
-            resultPixelList
+            resultPixelList.reverse
         }
     }
 
-    private def brezenhemRender: List[Pixel] = {
+    private def brezenhemRender(beginPoint: Point, endPoint: Point): List[Pixel] = {
         val x1 = beginPoint.x
         val x2 = endPoint.x
         val y1 = beginPoint.y
@@ -130,7 +138,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
                 }
             }
 
-            resultPixelList
+            resultPixelList.reverse
         }
     }
 
@@ -144,7 +152,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
             (x1 to(x2, -1)).foreach(i => resultPixelList = createPixel(i, y, drawingContext) :: resultPixelList)
         }
 
-        resultPixelList
+        resultPixelList.reverse
     }
 
     private def drawVerticalLine(x: Int, y1: Int, y2: Int): List[Pixel] = {
@@ -157,7 +165,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
             (y1 to(y2, -1)).foreach(i => resultPixelList = createPixel(x, i, drawingContext) :: resultPixelList)
         }
 
-        resultPixelList
+        resultPixelList.reverse
     }
 
 
@@ -177,8 +185,6 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
             (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 - i, drawingContext) :: resultPixelList)
         }
 
-        resultPixelList
+        resultPixelList.reverse
     }
-
-    private def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
 }

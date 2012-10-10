@@ -7,7 +7,20 @@ class DebugRender(render: Render) extends Render(render.shape, render.drawingCon
 
     private var stepNumber = 0
 
-    def draw = render.draw.splitAt(stepNumber)._1
+    private var isDebugFinished = false
+
+    def draw = {
+        if (!isDebugFinished) {
+            render.draw.splitAt(stepNumber)._1
+        }
+        else {
+            render.draw
+        }
+    }
+
+    def finishDebug() {
+        isDebugFinished = true
+    }
 
     def isNextStepEnabled = stepNumber < render.draw.size
 

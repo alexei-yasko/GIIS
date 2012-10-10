@@ -9,11 +9,20 @@ import giis.labs.model.Point
  */
 class Line(point1: Point, point2: Point) extends Shape {
 
-    val begin = point1
+    var begin = point1
 
-    val end = point2
+    var end = point2
 
     def getPointList = List(begin, end)
+
+    def movePoint(from: Point, to: Point) {
+        if (begin == from) {
+            begin = to
+        }
+        else if (end == from) {
+            end = to
+        }
+    }
 
     def createRender(drawingContext: DrawingContext) = new LineRender(this, drawingContext)
 }

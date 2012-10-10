@@ -1,6 +1,7 @@
 package giis.labs.graphics
 
 import render.Render
+import giis.labs.model.Point
 
 /**
  * @author Q-YAA
@@ -57,6 +58,16 @@ class GraphicsScene {
     def removeLastShape() {
         if (shapeRenderList.size > 0) {
             shapeRenderList = shapeRenderList.tail
+        }
+    }
+
+    def movePoint(from: Point, to: Point) {
+        for (render <- shapeRenderList) {
+
+            if (render.shape.isPointBelongsTo(from)) {
+                render.shape.movePoint(from, to)
+                return
+            }
         }
     }
 }

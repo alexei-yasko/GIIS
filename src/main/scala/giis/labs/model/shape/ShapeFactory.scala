@@ -30,7 +30,7 @@ object ShapeFactory {
             null
         }
         else {
-            new Line(pointArray.apply(pointArray.length - 2), pointArray.apply(pointArray.length - 1))
+            new Line(pointArray.apply(pointArray.length - 1), pointArray.apply(pointArray.length - 2))
         }
     }
 
@@ -39,7 +39,7 @@ object ShapeFactory {
             null
         }
         else {
-            new Circle(pointArray.apply(pointArray.length - 2), pointArray.apply(pointArray.length - 1))
+            new Circle(pointArray.apply(pointArray.length - 1), pointArray.apply(pointArray.length - 2))
         }
     }
 

@@ -3,8 +3,11 @@ package giis.labs.graphics
 import swing.Panel
 import javax.swing.BorderFactory
 import java.awt.{BasicStroke, Graphics2D, Color}
-import swing.event.{MouseWheelMoved, MouseClicked}
 import giis.labs.model.Point
+import swing.event._
+import swing.event.MousePressed
+import swing.event.MouseWheelMoved
+import swing.event.MouseClicked
 
 /**
  * @author Q-YAA
@@ -24,11 +27,18 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
 
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
-    listenTo(mouse.clicks, mouse.wheel)
+    listenTo(mouse.clicks, mouse.wheel, mouse.moves)
 
+    var movePointFunction: (java.awt.Point) => () => Unit = null
     reactions += {
         case MouseClicked(source, point, modifiers, clicks, triggersPopup) => executeAndRepaint(selectClickedPixel(point))
         case MouseWheelMoved(source, point, modifiers, rotation) => executeAndRepaint(scaleGrid(rotation))
+        case MousePressed(source, point, modifiers, 1, triggersPopup) => movePointFunction = movePoint(point, _)
+        case MouseDragged(source, point, modifiers) => {
+            executeAndRepaint(movePointFunction(point))
+            movePointFunction = movePoint(point, _)
+        }
+        case MouseReleased(source, point, modifiers, 1, triggersPopup) => executeAndRepaint(movePointFunction(point))
     }
 
     override protected def paintComponent(graphics: Graphics2D) {
@@ -72,7 +82,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     }
 
     private def drawPixel(pixel: Pixel, graphics: Graphics2D) {
-        graphics.setColor(pixel.drawingContext.color)
+        graphics.setColor(pixel.color)
 
         val x = getCenterCoordinateX + (pixel.point.x) * pixelSize
         val y = getCenterCoordinateY - (pixel.point.y) * pixelSize
@@ -123,6 +133,10 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
         } else {
             ((graphicCoordinateX - getCenterCoordinateX) / pixelSize).toInt
         }
+    }
+
+    private def movePoint(from: java.awt.Point, to: java.awt.Point)() {
+        scene.movePoint(convertToPoint(from), convertToPoint(to))
     }
 }
 

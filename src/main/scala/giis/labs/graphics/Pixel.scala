@@ -1,6 +1,7 @@
 package giis.labs.graphics
 
 import giis.labs.model.Point
+import java.awt.Color
 
 /**
  * @author Q-YAA
@@ -9,9 +10,15 @@ class Pixel(pixelPoint: Point, context: DrawingContext) {
 
     val point = pixelPoint
 
-    val drawingContext = context
+    private var pixelColor = context.color
 
-    override def toString = "point {" + pixelPoint.toString + ", " + drawingContext.toString + "}"
+    def color = pixelColor
+
+    def color_=(color: Color) {
+        pixelColor = color
+    }
+
+    override def toString = "point {" + pixelPoint.toString + ", " + pixelColor.toString + "}"
 
     override def hashCode() = point.hashCode()
 

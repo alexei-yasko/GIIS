@@ -44,6 +44,7 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
 
         if (!debugRender.isNextStepEnabled) {
             scene.clearSelectedPixels()
+            debugRender.finishDebug()
         }
     }
 
