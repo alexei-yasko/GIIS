@@ -9,19 +9,18 @@ import giis.labs.graphics.render.CircleRender
  */
 class Circle(point1: Point, point2: Point) extends Shape {
 
-    var center = point1
+    private var center = point1
 
-    var end = point2
+    private var end = point2
 
     def getPointList = List(center, end)
 
     def movePoint(from: Point, to: Point) {
-        if (center == from) {
-            end = new Point(end.x + (to.x - center.x), end.y + (to.y - center.y))
-            center = to
-        }
         if (end == from) {
             end = to
+        } else if (center == from) {
+            end = new Point(end.x + (to.x - center.x), end.y + (to.y - center.y))
+            center = to
         }
     }
 

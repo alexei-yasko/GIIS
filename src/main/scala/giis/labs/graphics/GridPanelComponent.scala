@@ -30,14 +30,19 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     listenTo(mouse.clicks, mouse.wheel, mouse.moves)
 
     var movePointFunction: (java.awt.Point) => () => Unit = null
+
     reactions += {
         case MouseClicked(source, point, modifiers, clicks, triggersPopup) => executeAndRepaint(selectClickedPixel(point))
+
         case MouseWheelMoved(source, point, modifiers, rotation) => executeAndRepaint(scaleGrid(rotation))
+
         case MousePressed(source, point, modifiers, 1, triggersPopup) => movePointFunction = movePoint(point, _)
+
         case MouseDragged(source, point, modifiers) => {
             executeAndRepaint(movePointFunction(point))
             movePointFunction = movePoint(point, _)
         }
+
         case MouseReleased(source, point, modifiers, 1, triggersPopup) => executeAndRepaint(movePointFunction(point))
     }
 

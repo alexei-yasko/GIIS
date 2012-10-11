@@ -19,28 +19,48 @@ object ShapeFactory {
      * @return created shape object
      */
     def createShape(pointList: List[Point], shapeType: ShapeType): Shape = shapeType match {
-        case Shape.LineDda => createLine(pointList.toArray)
-        case Shape.LineBrezenhem => createLine(pointList.toArray)
-        case Shape.Circle => createCircle(pointList.toArray)
+        case Shape.LineDda => createLine(pointList.toArray, shapeType)
+        case Shape.LineBrezenhem => createLine(pointList.toArray, shapeType)
+        case Shape.Circle => createCircle(pointList.toArray, shapeType)
+        case Shape.Bezier => createBezier(pointList.toArray, shapeType)
         case null => null
     }
 
-    private def createLine(pointArray: Array[Point]): Line = {
-        if (pointArray.length < 2) {
+    private def createLine(pointArray: Array[Point], shapeType: ShapeType): Line = {
+        if (pointArray.length < shapeType.definingPointQuantity) {
             null
         }
         else {
-            new Line(pointArray.apply(pointArray.length - 1), pointArray.apply(pointArray.length - 2))
+            new Line(
+                pointArray(pointArray.length - 1),
+                pointArray(pointArray.length - 2)
+            )
         }
     }
 
-    private def createCircle(pointArray: Array[Point]): Circle = {
-        if (pointArray.length < 2) {
+    private def createCircle(pointArray: Array[Point], shapeType: ShapeType): Circle = {
+        if (pointArray.length < shapeType.definingPointQuantity) {
             null
         }
         else {
-            new Circle(pointArray.apply(pointArray.length - 1), pointArray.apply(pointArray.length - 2))
+            new Circle(
+                pointArray(pointArray.length - 1),
+                pointArray(pointArray.length - 2)
+            )
         }
     }
 
+    private def createBezier(pointArray: Array[Point], shapeType: ShapeType): Bezier = {
+        if (pointArray.length < shapeType.definingPointQuantity) {
+            null
+        }
+        else {
+            new Bezier(
+                pointArray(pointArray.length - 1),
+                pointArray(pointArray.length - 2),
+                pointArray(pointArray.length - 3),
+                pointArray(pointArray.length - 4)
+            )
+        }
+    }
 }

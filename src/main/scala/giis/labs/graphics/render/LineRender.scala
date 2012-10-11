@@ -9,7 +9,7 @@ import giis.labs.model.Point
  */
 class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    def draw: List[Pixel] = {
+    protected def drawShape: List[Pixel] = {
         val begin = shape.getPointList.toArray.apply(0)
         val end = shape.getPointList.toArray.apply(1)
 
@@ -17,10 +17,6 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
             case Shape.LineDda => ddaRender(begin, end)
             case Shape.LineBrezenhem => brezenhemRender(begin, end)
         }
-
-        pixelList.foreach(pixel => if (shape.getPointList.contains(pixel.point)) {
-            pixel.color_=(mainPixelsColor)
-        })
 
         pixelList
     }

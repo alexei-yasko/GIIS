@@ -1,0 +1,35 @@
+package giis.labs.model.shape
+
+import giis.labs.model.Point
+import giis.labs.graphics.DrawingContext
+import giis.labs.graphics.render.BezierRender
+
+/**
+ * @author Q-YAA
+ */
+class Bezier(p1: Point, p2: Point, p3: Point, p4: Point) extends Shape {
+
+    private var point1 = p1
+    private var point2 = p2
+    private var point3 = p3
+    private var point4 = p4
+
+    def getPointList = List(point1, point2, point3, point4)
+
+    def movePoint(from: Point, to: Point) {
+        if (point1 == from) {
+            point1 = to
+        }
+        else if (point2 == from) {
+            point2 = to
+        }
+        else if (point3 == from) {
+            point3 = to
+        }
+        else if (point4 == from) {
+            point4 = to
+        }
+    }
+
+    def createRender(drawingContext: DrawingContext) = new BezierRender(this, drawingContext)
+}

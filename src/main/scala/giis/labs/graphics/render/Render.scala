@@ -9,13 +9,16 @@ import giis.labs.model.Point
  * @author Q-YAA
  */
 abstract class Render(renderedShape: Shape, context: DrawingContext) {
-    val mainPixelsColor = Color.GREEN
+
+    private val mainPixelsDrawingContext = DrawingContext.createDrawingContext(Color.GREEN)
 
     def drawingContext = context
 
     def shape = renderedShape
 
-    def draw: List[Pixel]
+    def draw: List[Pixel] = drawShape ::: createPixelList(shape.getPointList, mainPixelsDrawingContext)
+
+    protected def drawShape: List[Pixel]
 
     protected def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
 

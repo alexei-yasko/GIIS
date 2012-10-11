@@ -9,20 +9,13 @@ class DebugRender(render: Render) extends Render(render.shape, render.drawingCon
 
     private var isDebugFinished = false
 
-    def draw = {
-        if (!isDebugFinished) {
-            render.draw.splitAt(stepNumber)._1
-        }
-        else {
-            render.draw
-        }
-    }
+    override def draw = drawShape
 
     def finishDebug() {
         isDebugFinished = true
     }
 
-    def isNextStepEnabled = stepNumber < render.draw.size
+    def isNextStepEnabled = stepNumber < (render.draw.size - shape.getPointList.size)
 
     def isPreviousStepEnabled = stepNumber > 0
 
@@ -32,5 +25,14 @@ class DebugRender(render: Render) extends Render(render.shape, render.drawingCon
 
     def previousStep() {
         stepNumber = stepNumber - 1
+    }
+
+    protected def drawShape = {
+        if (!isDebugFinished) {
+            render.draw.splitAt(stepNumber)._1
+        }
+        else {
+            render.draw.splitAt(render.draw.size - shape.getPointList.size)._1
+        }
     }
 }

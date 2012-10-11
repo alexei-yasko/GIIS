@@ -31,4 +31,8 @@ object Shape {
       val definingPointQuantity = 2
     }
 
+    case object Bezier extends ShapeType {
+        val name = "Bezier"
+        val definingPointQuantity = 4
+    }
 }

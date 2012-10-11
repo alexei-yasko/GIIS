@@ -9,9 +9,9 @@ import giis.labs.model.Point
  */
 class Line(point1: Point, point2: Point) extends Shape {
 
-    var begin = point1
+    private var begin = point1
 
-    var end = point2
+    private var end = point2
 
     def getPointList = List(begin, end)
 

@@ -9,28 +9,25 @@ import giis.labs.model.Point
  */
 class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    def draw: List[Pixel] = {
+    protected def drawShape: List[Pixel] = {
         val end = shape.getPointList.toArray.apply(1)
         val center = shape.getPointList.toArray.apply(0)
 
-        val mainPixelsDrawingContext = DrawingContext.createDrawingContext(mainPixelsColor)
-
-        drawMichner(center, end) ::: createPixelList(shape.getPointList, mainPixelsDrawingContext)
+        drawMichner(center, end)
     }
 
-    def drawMichner(center: Point, end: Point): List[Pixel] = {
+    private def drawMichner(center: Point, end: Point): List[Pixel] = {
 
         val x0 = center.x
         val y0 = center.y
 
-        val radius: Int = scala.math.sqrt(scala.math.pow((end.x - center.x), 2) + scala.math.pow((end.y - center.y), 2)).toInt
+        val radius: Int = math.sqrt(math.pow((end.x - center.x), 2) + math.pow((end.y - center.y), 2)).toInt
 
         var x = 0
         var y = radius
         var delta = 2 - 2 * radius
         var resultPixelList = List[Pixel]()
 
-        //Мичнер
         delta = 3 - 2 * radius
         while (x < y) {
 
