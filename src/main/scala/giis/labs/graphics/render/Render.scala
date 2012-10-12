@@ -16,15 +16,7 @@ abstract class Render(renderedShape: Shape, context: DrawingContext) {
 
     def shape = renderedShape
 
-    def draw: List[Pixel] = drawShape ::: createPixelList(shape.getPointList, mainPixelsDrawingContext)
+    def draw: List[Pixel] = drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext)
 
     protected def drawShape: List[Pixel]
-
-    protected def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
-
-    protected def createPixel(point: Point, drawingContext: DrawingContext): Pixel = new Pixel(point, drawingContext)
-
-    protected def createPixelList(pointList: List[Point], drawingContext: DrawingContext) = for (point <- pointList) yield {
-        createPixel(point, drawingContext)
-    }
 }

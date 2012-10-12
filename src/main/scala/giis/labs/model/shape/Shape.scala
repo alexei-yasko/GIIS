@@ -27,12 +27,17 @@ object Shape {
     }
 
     case object Circle extends ShapeType {
-      val name = "Circle"
-      val definingPointQuantity = 2
+        val name = "Circle"
+        val definingPointQuantity = 2
     }
 
     case object Bezier extends ShapeType {
         val name = "Bezier"
+        val definingPointQuantity = 4
+    }
+
+    case object Ermit extends ShapeType {
+        val name = "Ermit"
         val definingPointQuantity = 4
     }
 }

@@ -27,3 +27,24 @@ class Pixel(pixelPoint: Point, context: DrawingContext) {
         case _ => false
     }
 }
+
+object Pixel {
+
+    def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
+
+    def createPixel(point: Point, drawingContext: DrawingContext): Pixel = new Pixel(point, drawingContext)
+
+    def createPixelList(pointList: List[Point], drawingContext: DrawingContext) = for (point <- pointList) yield {
+        createPixel(point, drawingContext)
+    }
+
+    def appendPixelToListIfItNotInList(pixel: Pixel, pixelList: List[Pixel]): List[Pixel] = {
+        if (!pixelList.contains(pixel)) {
+            pixel :: pixelList
+        }
+        else {
+            pixelList
+        }
+    }
+}
+

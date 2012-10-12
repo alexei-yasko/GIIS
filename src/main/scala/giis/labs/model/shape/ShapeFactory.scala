@@ -19,15 +19,16 @@ object ShapeFactory {
      * @return created shape object
      */
     def createShape(pointList: List[Point], shapeType: ShapeType): Shape = shapeType match {
-        case Shape.LineDda => createLine(pointList.toArray, shapeType)
-        case Shape.LineBrezenhem => createLine(pointList.toArray, shapeType)
-        case Shape.Circle => createCircle(pointList.toArray, shapeType)
-        case Shape.Bezier => createBezier(pointList.toArray, shapeType)
+        case Shape.LineDda => createLine(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.LineBrezenhem => createLine(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.Circle => createCircle(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.Bezier => createBezier(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.Ermit => createErmit(pointList.toArray, shapeType.definingPointQuantity)
         case null => null
     }
 
-    private def createLine(pointArray: Array[Point], shapeType: ShapeType): Line = {
-        if (pointArray.length < shapeType.definingPointQuantity) {
+    private def createLine(pointArray: Array[Point], definingPointQuantity: Int): Line = {
+        if (pointArray.length < definingPointQuantity) {
             null
         }
         else {
@@ -38,8 +39,8 @@ object ShapeFactory {
         }
     }
 
-    private def createCircle(pointArray: Array[Point], shapeType: ShapeType): Circle = {
-        if (pointArray.length < shapeType.definingPointQuantity) {
+    private def createCircle(pointArray: Array[Point], definingPointQuantity: Int): Circle = {
+        if (pointArray.length < definingPointQuantity) {
             null
         }
         else {
@@ -50,12 +51,26 @@ object ShapeFactory {
         }
     }
 
-    private def createBezier(pointArray: Array[Point], shapeType: ShapeType): Bezier = {
-        if (pointArray.length < shapeType.definingPointQuantity) {
+    private def createBezier(pointArray: Array[Point], definingPointQuantity: Int): Bezier = {
+        if (pointArray.length < definingPointQuantity) {
             null
         }
         else {
             new Bezier(
+                pointArray(pointArray.length - 1),
+                pointArray(pointArray.length - 2),
+                pointArray(pointArray.length - 3),
+                pointArray(pointArray.length - 4)
+            )
+        }
+    }
+
+    private def createErmit(pointArray: Array[Point], definingPointQuantity: Int): Ermit = {
+        if (pointArray.length < definingPointQuantity) {
+            null
+        }
+        else {
+            new Ermit(
                 pointArray(pointArray.length - 1),
                 pointArray(pointArray.length - 2),
                 pointArray(pointArray.length - 3),

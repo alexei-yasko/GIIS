@@ -32,18 +32,21 @@ class GraphicsMainFrame extends MainFrame {
     private val lineDdaMenuItem = new RadioMenuItem("Dda")
     private val circleMenuItem = new RadioMenuItem("Circle")
     private val bezierMenuItem = new RadioMenuItem("Bezier")
+    private val ermitMenuItem = new RadioMenuItem("Ermit")
 
     private val shapesMenuGroup = new ButtonGroup(
         lineDdaMenuItem,
         lineBrezenhemMenuItem,
         circleMenuItem,
-        bezierMenuItem
+        bezierMenuItem,
+        ermitMenuItem
     ) {
         listenTo(
             lineBrezenhemMenuItem,
             lineDdaMenuItem,
             circleMenuItem,
-            bezierMenuItem
+            bezierMenuItem,
+            ermitMenuItem
         )
 
         reactions += {
@@ -51,6 +54,7 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`lineBrezenhemMenuItem`) => setShapeType(Shape.LineBrezenhem)
             case ButtonClicked(`circleMenuItem`) => setShapeType(Shape.Circle)
             case ButtonClicked(`bezierMenuItem`) => setShapeType(Shape.Bezier)
+            case ButtonClicked(`ermitMenuItem`) => setShapeType(Shape.Ermit)
         }
     }
 
@@ -90,6 +94,7 @@ class GraphicsMainFrame extends MainFrame {
             contents += new Menu("Curves"){
                 contents += circleMenuItem
                 contents += bezierMenuItem
+                contents += ermitMenuItem
             }
         }
     }

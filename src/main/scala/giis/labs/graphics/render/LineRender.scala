@@ -57,7 +57,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
 
             //вычисляем координаты последующих точек отрезка
             for (i <- 0 to length) {
-                resultPixelList = createPixel(math.round(x).toInt, math.round(y).toInt, drawingContext) :: resultPixelList
+                resultPixelList = Pixel.createPixel(math.round(x).toInt, math.round(y).toInt, drawingContext) :: resultPixelList
                 x = x + dx
                 y = y + dy
             }
@@ -112,7 +112,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
             var error = 2 * dy - dx
 
             for (i <- 0 to lengthMax) {
-                resultPixelList = createPixel(x, y, drawingContext) :: resultPixelList
+                resultPixelList = Pixel.createPixel(x, y, drawingContext) :: resultPixelList
 
                 // если значение ошибки неотрицательно, отрезок проходит выше середины пикселя
                 if (error >= 0 && isMainAxisX) {
@@ -142,10 +142,10 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
         var resultPixelList = List[Pixel]()
 
         if (x2 > x1) {
-            (x1 to x2).foreach(i => resultPixelList = createPixel(i, y, drawingContext) :: resultPixelList)
+            (x1 to x2).foreach(i => resultPixelList = Pixel.createPixel(i, y, drawingContext) :: resultPixelList)
         }
         else {
-            (x1 to(x2, -1)).foreach(i => resultPixelList = createPixel(i, y, drawingContext) :: resultPixelList)
+            (x1 to(x2, -1)).foreach(i => resultPixelList = Pixel.createPixel(i, y, drawingContext) :: resultPixelList)
         }
 
         resultPixelList.reverse
@@ -155,10 +155,10 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
         var resultPixelList = List[Pixel]()
 
         if (y2 > y1) {
-            (y1 to y2).foreach(i => resultPixelList = createPixel(x, i, drawingContext) :: resultPixelList)
+            (y1 to y2).foreach(i => resultPixelList = Pixel.createPixel(x, i, drawingContext) :: resultPixelList)
         }
         else {
-            (y1 to(y2, -1)).foreach(i => resultPixelList = createPixel(x, i, drawingContext) :: resultPixelList)
+            (y1 to(y2, -1)).foreach(i => resultPixelList = Pixel.createPixel(x, i, drawingContext) :: resultPixelList)
         }
 
         resultPixelList.reverse
@@ -169,16 +169,16 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
         var resultPixelList = List[Pixel]()
 
         if (x2 > x1 && y2 > y1) {
-            (0 to x2 - x1).foreach(i => resultPixelList = createPixel(x1 + i, y1 + i, drawingContext) :: resultPixelList)
+            (0 to x2 - x1).foreach(i => resultPixelList = Pixel.createPixel(x1 + i, y1 + i, drawingContext) :: resultPixelList)
         }
         else if (x2 > x1 && y2 < y1) {
-            (0 to x2 - x1).foreach(i => resultPixelList = createPixel(x1 + i, y1 - i, drawingContext) :: resultPixelList)
+            (0 to x2 - x1).foreach(i => resultPixelList = Pixel.createPixel(x1 + i, y1 - i, drawingContext) :: resultPixelList)
         }
         else if (x2 < x1 && y2 > y1) {
-            (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 + i, drawingContext) :: resultPixelList)
+            (0 to x1 - x2).foreach(i => resultPixelList = Pixel.createPixel(x1 - i, y1 + i, drawingContext) :: resultPixelList)
         }
         else if (x2 < x1 && y2 < y1) {
-            (0 to x1 - x2).foreach(i => resultPixelList = createPixel(x1 - i, y1 - i, drawingContext) :: resultPixelList)
+            (0 to x1 - x2).foreach(i => resultPixelList = Pixel.createPixel(x1 - i, y1 - i, drawingContext) :: resultPixelList)
         }
 
         resultPixelList.reverse

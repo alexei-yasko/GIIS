@@ -31,14 +31,14 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         delta = 3 - 2 * radius
         while (x < y) {
 
-            resultPixelList = createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + y, y0 + x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + y, y0 - x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + x, y0 - y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - x, y0 - y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - y, y0 - x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - y, y0 + x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + y, y0 + x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + y, y0 - x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + x, y0 - y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - x, y0 - y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - y, y0 - x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - y, y0 + x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
 
             if (delta < 0) {
                 delta = delta + 4 * x + 6
@@ -50,14 +50,14 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
             x = x + 1
         }
         if (x == y) {
-            resultPixelList = createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + y, y0 + x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + y, y0 - x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 + x, y0 - y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - x, y0 - y, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - y, y0 - x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - y, y0 + x, drawingContext) :: resultPixelList
-            resultPixelList = createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + y, y0 + x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + y, y0 - x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + x, y0 - y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - x, y0 - y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - y, y0 - x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - y, y0 + x, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 - x, y0 + y, drawingContext) :: resultPixelList
         }
         resultPixelList
     }

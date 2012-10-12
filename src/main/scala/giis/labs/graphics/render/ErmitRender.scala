@@ -2,18 +2,19 @@ package giis.labs.graphics.render
 
 import giis.labs.model.shape.Shape
 import giis.labs.graphics.{Pixel, DrawingContext}
-import giis.labs.model.{Matrix, Point}
+import giis.labs.model.{Point, Matrix}
+import scala.Array
 
 /**
  * @author Q-YAA
  */
-class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
+class ErmitRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    private val bezierMatrix = new Matrix(
+    private val ermitMatrix = new Matrix(
         Array[Array[Double]](
-            Array[Double](-1, 3, -3, 1),
-            Array[Double](3, -6, 3, 0),
-            Array[Double](-3, 3, 0, 0),
+            Array[Double](2, -2, 1, 1),
+            Array[Double](-3, 3, -2, -1),
+            Array[Double](0, 0, 1, 0),
             Array[Double](1, 0, 0, 0)
         )
     )
@@ -24,10 +25,10 @@ class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         val point3 = shape.getPointList(2)
         val point4 = shape.getPointList(3)
 
-        drawBezier(point1, point2, point3, point4)
+        drawErmit(point1, point2, point3, point4)
     }
 
-    private def drawBezier(point1: Point, point2: Point, point3: Point, point4: Point): List[Pixel] = {
+    private def drawErmit(point1: Point, point2: Point, point3: Point, point4: Point): List[Pixel] = {
 
         var resultPixelList = List[Pixel]()
 
@@ -52,7 +53,7 @@ class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         val dx: Double = math.abs(maxX - minX)
         val dy: Double = math.abs(maxY - minY)
 
-        val dt: Double = 1 / (3 * (dx + dy + 1))
+        val dt = 1.0 / (3 * (dx + dy + 1))
 
         for (t <- 0d to(1, dt)) {
             val tMatrix = new Matrix(
@@ -61,12 +62,11 @@ class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(
                 )
             )
 
-            val resultMatrixX = tMatrix * (bezierMatrix * pointsMatrixX)
-            val resultMatrixY = tMatrix * (bezierMatrix * pointsMatrixY)
+            val resultMatrixX = tMatrix * (ermitMatrix * pointsMatrixX)
+            val resultMatrixY = tMatrix * (ermitMatrix * pointsMatrixY)
 
-
-            val newPixel = Pixel.createPixel(
-                math.round(resultMatrixX.getValue(0, 0)).toInt, math.round(resultMatrixY.getValue(0, 0)).toInt, drawingContext)
+            val newPixel = Pixel.createPixel(math.round(resultMatrixX.getValue(0, 0)).toInt,
+                math.round(resultMatrixY.getValue(0, 0)).toInt, drawingContext)
 
             resultPixelList = Pixel.appendPixelToListIfItNotInList(newPixel, resultPixelList)
         }
