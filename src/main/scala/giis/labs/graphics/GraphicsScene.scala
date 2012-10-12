@@ -70,4 +70,8 @@ class GraphicsScene {
             }
         }
     }
+
+    def isPointPlacedOnPosition(point: Point): Boolean = {
+        !shapeRenderList.filter(render => render.shape.isPointBelongsTo(point)).isEmpty
+    }
 }

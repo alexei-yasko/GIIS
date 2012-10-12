@@ -24,6 +24,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
 
     private val defaultPixelSize = 15
     private var scale = 1d
+    private var relativeCenterPosition = new Point(0, 0)
 
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
@@ -95,9 +96,9 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
         graphics.fillRect(x, y, pixelSize, pixelSize)
     }
 
-    private def getCenterCoordinateX = size.width / 2 - (size.width / 2 % pixelSize)
+    private def getCenterCoordinateX = size.width / 2 - (size.width / 2 % pixelSize) + relativeCenterPosition.x
 
-    private def getCenterCoordinateY = size.height / 2 - (size.height / 2 % pixelSize)
+    private def getCenterCoordinateY = size.height / 2 - (size.height / 2 % pixelSize) + relativeCenterPosition.y
 
     private def pixelSize = (defaultPixelSize * scale).toInt
 
@@ -141,7 +142,19 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     }
 
     private def movePoint(from: java.awt.Point, to: java.awt.Point)() {
-        scene.movePoint(convertToPoint(from), convertToPoint(to))
+
+        val fromPoint : Point = convertToPoint(from)
+        val toPoint : Point = convertToPoint(to)
+
+        if (scene.isPointPlacedOnPosition(fromPoint)) {
+            scene.movePoint(fromPoint, toPoint)
+        }
+        else {
+            relativeCenterPosition = new Point(
+                relativeCenterPosition.x + pixelSize * (toPoint.x - fromPoint.x),
+                relativeCenterPosition.y + pixelSize * (fromPoint.y - toPoint.y)
+            )
+        }
     }
 }
 
