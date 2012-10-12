@@ -2,7 +2,7 @@ package giis.labs.graphics
 
 import swing.Panel
 import javax.swing.BorderFactory
-import java.awt.{BasicStroke, Graphics2D, Color}
+import java.awt.{Cursor, BasicStroke, Graphics2D, Color}
 import giis.labs.model.Point
 import swing.event._
 import swing.event.MousePressed
@@ -28,6 +28,8 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
 
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
+    cursor = new Cursor(Cursor.CROSSHAIR_CURSOR)
+
     listenTo(mouse.clicks, mouse.wheel, mouse.moves)
 
     var movePointFunction: (java.awt.Point) => () => Unit = null
@@ -37,14 +39,16 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
 
         case MouseWheelMoved(source, point, modifiers, rotation) => executeAndRepaint(scaleGrid(rotation))
 
-        case MousePressed(source, point, modifiers, 1, triggersPopup) => movePointFunction = movePoint(point, _)
+        case MousePressed(source, point, modifiers, 1, triggersPopup) => {
+            movePointFunction = movePoint(point, _)
+        }
 
         case MouseDragged(source, point, modifiers) => {
             executeAndRepaint(movePointFunction(point))
             movePointFunction = movePoint(point, _)
         }
 
-        case MouseReleased(source, point, modifiers, 1, triggersPopup) => executeAndRepaint(movePointFunction(point))
+        case MouseReleased(source, point, modifiers, 1, triggersPopup) => cursor = new Cursor(Cursor.CROSSHAIR_CURSOR)
     }
 
     override protected def paintComponent(graphics: Graphics2D) {
@@ -96,9 +100,9 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
         graphics.fillRect(x, y, pixelSize, pixelSize)
     }
 
-    private def getCenterCoordinateX = size.width / 2 - (size.width / 2 % pixelSize) + relativeCenterPosition.x
+    private def getCenterCoordinateX = size.width / 2 - (size.width / 2 % pixelSize) + relativeCenterPosition.x * pixelSize
 
-    private def getCenterCoordinateY = size.height / 2 - (size.height / 2 % pixelSize) + relativeCenterPosition.y
+    private def getCenterCoordinateY = size.height / 2 - (size.height / 2 % pixelSize) + relativeCenterPosition.y * pixelSize
 
     private def pixelSize = (defaultPixelSize * scale).toInt
 
@@ -147,12 +151,16 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
         val toPoint : Point = convertToPoint(to)
 
         if (scene.isPointPlacedOnPosition(fromPoint)) {
+            cursor = new Cursor(Cursor.HAND_CURSOR)
+
             scene.movePoint(fromPoint, toPoint)
         }
         else {
+            cursor = new Cursor(Cursor.MOVE_CURSOR)
+
             relativeCenterPosition = new Point(
-                relativeCenterPosition.x + pixelSize * (toPoint.x - fromPoint.x),
-                relativeCenterPosition.y + pixelSize * (fromPoint.y - toPoint.y)
+                relativeCenterPosition.x + (toPoint.x - fromPoint.x),
+                relativeCenterPosition.y + (fromPoint.y - toPoint.y)
             )
         }
     }
