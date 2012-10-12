@@ -6,6 +6,8 @@ import giis.labs.model.{Point, Matrix}
 import scala.Array
 
 /**
+ * Render for the ermit spline shape.
+ *
  * @author Q-YAA
  */
 class ErmitRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {

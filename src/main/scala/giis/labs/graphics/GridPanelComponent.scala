@@ -10,6 +10,8 @@ import swing.event.MouseWheelMoved
 import swing.event.MouseClicked
 
 /**
+ * Panel that display the grid with the axis and all shapes.
+ *
  * @author Q-YAA
  */
 class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneController) extends Panel {

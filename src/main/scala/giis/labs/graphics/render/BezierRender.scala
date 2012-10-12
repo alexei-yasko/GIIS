@@ -5,6 +5,8 @@ import giis.labs.graphics.{Pixel, DrawingContext}
 import giis.labs.model.{Matrix, Point}
 
 /**
+ * Render for the bezier spline shape.
+ *
  * @author Q-YAA
  */
 class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {

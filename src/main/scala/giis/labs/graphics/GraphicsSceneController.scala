@@ -5,6 +5,8 @@ import giis.labs.model.Point
 import render.DebugRender
 
 /**
+ * Controller for the {@link GraphicsScene}.
+ *
  * @author Q-YAA
  */
 class GraphicsSceneController(graphicsScene: GraphicsScene) {
@@ -15,6 +17,11 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
 
     private var debugRender: DebugRender = null
 
+    /**
+     * Method that control shape drawing on the scene.
+     *
+     * @param drawingContext drawing context for the shape
+     */
     def drawShape(drawingContext: DrawingContext) {
         val shape = ShapeFactory.createShape(getSelectedPoints, drawingContext.shapeType)
 
@@ -24,6 +31,9 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         }
     }
 
+    /**
+     * Changes controller mode. (Enable debug mode and common mode)
+     */
     def changeMode() {
 
         if (isInDebugMode) {
@@ -34,8 +44,16 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         }
     }
 
-    def isNextDebugStepEnabled: Boolean = debugRender != null && debugRender.isNextStepEnabled
+    /**
+     * Determines if the next step in debug mode enabled.
+     *
+     * @return true if the next step enabled, false in other case
+     */
+    def isNextDebugStepEnabled: Boolean = isInDebugMode && debugRender != null && debugRender.isNextStepEnabled
 
+    /**
+     * Execute next step in the debug mode.
+     */
     def nextDebugStep() {
 
         if (debugRender.isNextStepEnabled) {
@@ -48,6 +66,9 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         }
     }
 
+    /**
+     * Execute previous step in the debug mode.
+     */
     def previousDebugStep() {
 
         if (debugRender.isPreviousStepEnabled) {
@@ -55,6 +76,9 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         }
     }
 
+    /**
+     * Remove last drawn shape from the scene.
+     */
     def cancelShapeDrawing() {
         scene.removeLastShape()
     }

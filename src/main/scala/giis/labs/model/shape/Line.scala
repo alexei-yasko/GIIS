@@ -5,6 +5,8 @@ import giis.labs.graphics.DrawingContext
 import giis.labs.model.Point
 
 /**
+ * Line shape.
+ *
  * @author Q-YAA
  */
 class Line(point1: Point, point2: Point) extends Shape {

@@ -5,6 +5,8 @@ import giis.labs.graphics.DrawingContext
 import giis.labs.graphics.render.CircleRender
 
 /**
+ * Circle shape.
+ *
  * @author AS
  */
 class Circle(point1: Point, point2: Point) extends Shape {

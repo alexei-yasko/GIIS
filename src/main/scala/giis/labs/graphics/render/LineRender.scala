@@ -5,6 +5,8 @@ import giis.labs.graphics.{DrawingContext, Pixel}
 import giis.labs.model.Point
 
 /**
+ * Render for the line shape
+ *
  * @author Q-YAA
  */
 class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {

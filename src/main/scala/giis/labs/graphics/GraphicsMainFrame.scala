@@ -9,6 +9,8 @@ import javax.swing.JColorChooser
 import giis.labs.model.shape.Shape
 
 /**
+ * Main frame of the application.
+ *
  * @author Q-YAA
  */
 class GraphicsMainFrame extends MainFrame {

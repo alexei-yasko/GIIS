@@ -5,6 +5,8 @@ import giis.labs.graphics.DrawingContext
 import giis.labs.graphics.render.BezierRender
 
 /**
+ * Bexier spline shape.
+ *
  * @author Q-YAA
  */
 class Bezier(p1: Point, p2: Point, p3: Point, p4: Point) extends Shape {

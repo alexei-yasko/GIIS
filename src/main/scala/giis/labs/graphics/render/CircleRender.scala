@@ -5,6 +5,8 @@ import giis.labs.graphics.{Pixel, DrawingContext}
 import giis.labs.model.Point
 
 /**
+ * Render for the circle shape.
+ *
  * @author AS
  */
 class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
