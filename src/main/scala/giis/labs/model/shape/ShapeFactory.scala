@@ -24,6 +24,7 @@ object ShapeFactory {
         case Shape.Circle => createCircle(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Bezier => createBezier(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Ermit => createErmit(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.Hyperbola => createHyperbola(pointList.toArray, shapeType.definingPointQuantity)
         case null => null
     }
 
@@ -75,6 +76,18 @@ object ShapeFactory {
                 pointArray(pointArray.length - 2),
                 pointArray(pointArray.length - 3),
                 pointArray(pointArray.length - 4)
+            )
+        }
+    }
+
+    private def createHyperbola(pointArray: Array[Point], definingPointQuantity: Int): Hyperbola = {
+        if (pointArray.length < definingPointQuantity) {
+            null
+        }
+        else {
+            new Hyperbola(
+                pointArray(pointArray.length - 1),
+                pointArray(pointArray.length - 2)
             )
         }
     }

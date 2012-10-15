@@ -63,4 +63,10 @@ object Shape {
         val name = "Ermit"
         val definingPointQuantity = 4
     }
+
+    case object Hyperbola extends ShapeType {
+        val name = "Hyperbola"
+        val definingPointQuantity = 2
+    }
+
 }
