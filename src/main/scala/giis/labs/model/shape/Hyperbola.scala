@@ -9,13 +9,15 @@ import giis.labs.graphics.render.{HyperbolaRender, CircleRender}
  *
  * @author AS
  */
-class Hyperbola(point1: Point, point2: Point) extends Shape {
+class Hyperbola(point1: Point, point2: Point, point3: Point) extends Shape {
 
     private var start = point1
 
     private var end = point2
 
-    def getPointList = List(start, end)
+    private var height = point3
+
+    def getPointList = List(start, end, height)
 
     def movePoint(from: Point, to: Point) {
         if (end == from) {
@@ -23,6 +25,8 @@ class Hyperbola(point1: Point, point2: Point) extends Shape {
         } else if (start == from) {
             end = new Point(end.x + (to.x - start.x), end.y + (to.y - start.y))
             start = to
+        } else if (height == from) {
+            height = to
         }
     }
 

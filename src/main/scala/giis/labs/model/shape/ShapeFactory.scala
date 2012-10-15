@@ -87,7 +87,8 @@ object ShapeFactory {
         else {
             new Hyperbola(
                 pointArray(pointArray.length - 1),
-                pointArray(pointArray.length - 2)
+                pointArray(pointArray.length - 2),
+                pointArray(pointArray.length - 3)
             )
         }
     }

@@ -12,16 +12,17 @@ import giis.labs.model.Point
 class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
     protected def drawShape: List[Pixel] = {
-        val end = shape.getPointList.toArray.apply(1)
         val start = shape.getPointList.toArray.apply(0)
+        val end = shape.getPointList.toArray.apply(1)
+        val height = shape.getPointList.toArray.apply(2)
 
-        drawHyperbola(start, end)
+        drawHyperbola(start, end, height)
     }
 
     /*
     * метод,реализующий отрисовку гиперболы
     */
-    private def drawHyperbola(start: Point, end: Point): List[Pixel] = {
+    private def drawHyperbola(start: Point, end: Point, height: Point): List[Pixel] = {
 
         var resultPixelList = List[Pixel]()
         var finalPixelList = List[Pixel]()
@@ -31,6 +32,7 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
         var bx = end.x
         var ay = start.y
         var by = end.y
+        var hy = height.y - start.y
 
         // параметры а и b из уравнения гиперболы
         var a = math.abs(bx - ax)
@@ -60,9 +62,8 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
         resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
 
         // проверяем знак ошибки
-        var counter = 100
-        while (counter > 0) {
-            counter = counter - 1
+        while (hy > 0) {
+            hy = hy - 1
             // если ошибка положительна, выбираем между вертикальным и диогональным пикселями
             if (delta > 0) {
                 // для определения того, какой из пикселей выбрать вычисляем разность между ними
@@ -116,15 +117,12 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
 
         // отражаем гиперболу в другие плоскости
         finalPixelList = resultPixelList
-        var firstXPoint = resultPixelList.head.point.x
+        resultPixelList.reverse
+        var firstXPoint = end.x
         resultPixelList.foreach {
             pixelok =>
                 var rx = pixelok.point.x
                 var ry = pixelok.point.y
-
-                //                finalPixelList = Pixel.createPixel(limx, -lim, drawingContext) :: finalPixelList
-                //                finalPixelList = Pixel.createPixel(-limx, lim, drawingContext) :: finalPixelList
-                //                finalPixelList = Pixel.createPixel(-limx, -lim, drawingContext) :: finalPixelList
 
                 finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, ry, drawingContext) :: finalPixelList
                 finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, -ry + 2 * ay, drawingContext) :: finalPixelList
