@@ -3,6 +3,7 @@ package giis.labs.graphics
 import giis.labs.model.shape.{Shape, ShapeFactory}
 import giis.labs.model.Point
 import render.DebugRender
+import actors.Actor
 
 /**
  * Controller for the {@link GraphicsScene}.
@@ -54,19 +55,33 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
     def isNextDebugStepEnabled: Boolean = isInDebugMode && debugRender != null && debugRender.isNextStepEnabled
 
     /**
+     * Determines if the previous step in debug mode enabled.
+     *
+     * @return true if the next step enabled, false in other case
+     */
+    def isPreviousDebugStepEnabled: Boolean = isInDebugMode && debugRender != null && debugRender.isPreviousStepEnabled
+
+    /**
      * Execute next step in the debug mode.
      */
     def nextDebugStep() {
 
-        if (debugRender.isNextStepEnabled) {
+        if (isNextDebugStepEnabled) {
             debugRender.nextStep()
         }
 
-        if (!debugRender.isNextStepEnabled) {
-            scene.clearSelectedPixels()
-            debugRender.finishDebug()
-            debugAnimator ! "stop"
+        if (debugRender != null && !isNextDebugStepEnabled) {
+            finishDebug()
         }
+    }
+
+    /**
+     * Method that finish debug for shape.
+     */
+    def finishDebug() {
+        scene.clearSelectedPixels()
+        debugRender.finishDebug()
+        debugAnimator = null
     }
 
     /**
@@ -74,7 +89,7 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
      */
     def previousDebugStep() {
 
-        if (debugRender.isPreviousStepEnabled) {
+        if (isPreviousDebugStepEnabled) {
             debugRender.previousStep()
         }
     }
@@ -86,17 +101,32 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         scene.removeLastShape()
     }
 
+    /**
+     * Method that started animation thread for the debug.
+     *
+     * @param mainFrame main frame object, is need to allow control main frame behavior from the animation thread.
+     */
     def startDebugAnimation(mainFrame: GraphicsMainFrame) {
         debugAnimator = new DebugAnimator(this, mainFrame)
         debugAnimator.start()
     }
 
+    /**
+     * Method that stops animation thread for the debug.
+     */
     def stopDebugAnimation() {
         if (debugAnimator != null) {
             debugAnimator ! "stop"
             debugAnimator = null
         }
     }
+
+    /**
+     * Method that check if debug animation thread running.
+     *
+     * @return true if running, false in the other case
+     */
+    def isAnimationRunning: Boolean = debugAnimator != null && debugAnimator.getState == Actor.State.Runnable
 
     private def drawShapeInCommonMode(shape: Shape, drawingContext: DrawingContext) {
         if (shape != null) {

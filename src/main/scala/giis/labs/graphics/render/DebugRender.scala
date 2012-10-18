@@ -16,7 +16,7 @@ class DebugRender(render: Render) extends Render(render.shape, render.drawingCon
      *
      * @return List[Pixel] result of drawing
      */
-    override def draw = drawShape
+    //override def draw = drawShape
 
     /**
      * Signals that debug finished.

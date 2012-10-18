@@ -8,30 +8,18 @@ import actors.Actor
 class DebugAnimator(controller: GraphicsSceneController, mainFrame: GraphicsMainFrame) extends Actor {
 
     def act() {
-
-        //        react {
-        //            case "startPaint" => {
-        //                while (true) {
-        //                    Thread.sleep(200)
-        //                    if (controller.isNextDebugStepEnabled) {
-        //                        controller.nextDebugStep()
-        //                        mainFrame.repaint()
-        //                    }
-        //                }
-        //            }
-        //            case "stop" => exit()
-        //        }
-
-        receive {
-            case "stop" => exit()
-        }
-
-        while (true) {
-            Thread.sleep(200)
-            if (controller.isNextDebugStepEnabled) {
-                controller.nextDebugStep()
-                mainFrame.repaint()
+        while (controller.isNextDebugStepEnabled) {
+            receiveWithin(1) {
+                case "stop" => exit()
+                case _ =>
             }
+
+            Thread.sleep(100)
+            controller.nextDebugStep()
+            mainFrame.repaint()
         }
+
+        controller.finishDebug()
+        mainFrame.changeDebugMode()
     }
 }
