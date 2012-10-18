@@ -17,6 +17,8 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
 
     private var debugRender: DebugRender = null
 
+    private var debugAnimator: DebugAnimator = null
+
     /**
      * Method that control shape drawing on the scene.
      *
@@ -63,6 +65,7 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         if (!debugRender.isNextStepEnabled) {
             scene.clearSelectedPixels()
             debugRender.finishDebug()
+            debugAnimator ! "stop"
         }
     }
 
@@ -81,6 +84,18 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
      */
     def cancelShapeDrawing() {
         scene.removeLastShape()
+    }
+
+    def startDebugAnimation(mainFrame: GraphicsMainFrame) {
+        debugAnimator = new DebugAnimator(this, mainFrame)
+        debugAnimator.start()
+    }
+
+    def stopDebugAnimation() {
+        if (debugAnimator != null) {
+            debugAnimator ! "stop"
+            debugAnimator = null
+        }
     }
 
     private def drawShapeInCommonMode(shape: Shape, drawingContext: DrawingContext) {

@@ -5,7 +5,7 @@ import giis.labs.graphics.{Pixel, DrawingContext}
 import giis.labs.model.Point
 
 /**
- * Render for the circle shape.
+ * Render for the hyperbola shape.
  *
  * @author AS
  */
@@ -28,15 +28,15 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
         var finalPixelList = List[Pixel]()
 
         // координаты точек, заданных пользователем
-        var ax = start.x
-        var bx = end.x
-        var ay = start.y
-        var by = end.y
+        val ax = start.x
+        val bx = end.x
+        val ay = start.y
+        val by = end.y
         var hy = height.y - start.y
 
         // параметры а и b из уравнения гиперболы
-        var a = math.abs(bx - ax)
-        var b = math.abs(by - ay)
+        val a = math.abs(bx - ax)
+        val b = math.abs(by - ay)
 
         // координаты начальной точки
         var x = 0
@@ -118,11 +118,11 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
         // отражаем гиперболу в другие плоскости
         finalPixelList = resultPixelList
         resultPixelList.reverse
-        var firstXPoint = end.x
+        val firstXPoint = end.x
         resultPixelList.foreach {
             pixelok =>
-                var rx = pixelok.point.x
-                var ry = pixelok.point.y
+                val rx = pixelok.point.x
+                val ry = pixelok.point.y
 
                 finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, ry, drawingContext) :: finalPixelList
                 finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, -ry + 2 * ay, drawingContext) :: finalPixelList

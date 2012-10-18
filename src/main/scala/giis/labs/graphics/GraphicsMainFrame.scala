@@ -21,6 +21,9 @@ class GraphicsMainFrame extends MainFrame {
     private val startDebugButton = new Button("Debug")
     private val nextDebugStepButton = new Button("Next")
     private val previousDebugStepButton = new Button("Previous")
+
+    private val startStopDebugAnimationButton = new ToggleButton("Start")
+
     private val clearButton = new Button("Clear")
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
@@ -69,6 +72,9 @@ class GraphicsMainFrame extends MainFrame {
         contents += clearButton
         contents += cancelButton
         contents += startDebugButton
+
+        contents += startStopDebugAnimationButton
+
         contents += nextDebugStepButton
         contents += previousDebugStepButton
     }
@@ -85,6 +91,7 @@ class GraphicsMainFrame extends MainFrame {
     shapesMenuGroup.select(lineDdaMenuItem)
     nextDebugStepButton.enabled_=(b = false)
     previousDebugStepButton.enabled_=(b = false)
+    startStopDebugAnimationButton.enabled_=(b = false)
 
     title = "Graphics editor"
     size = new Dimension(defaultWidth, defaultHeight)
@@ -107,9 +114,12 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     listenTo(
-        startDebugButton,
-        nextDebugStepButton,
         clearButton,
+        startDebugButton,
+
+        startStopDebugAnimationButton,
+
+        nextDebugStepButton,
         previousDebugStepButton,
         cancelButton,
         colorChooseButton
@@ -118,6 +128,9 @@ class GraphicsMainFrame extends MainFrame {
     reactions += {
         case ButtonClicked(`clearButton`) => executeAndRepaint(clearScene)
         case ButtonClicked(`startDebugButton`) => changeDebugMode()
+
+        case ButtonClicked(`startStopDebugAnimationButton`) => startStopDebugAnimation()
+
         case ButtonClicked(`nextDebugStepButton`) => executeAndRepaint(nextDebugStep)
         case ButtonClicked(`previousDebugStepButton`) => executeAndRepaint(previousDebugStep)
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
@@ -131,6 +144,7 @@ class GraphicsMainFrame extends MainFrame {
 
     private def changeDebugMode() {
         graphicsSceneController.changeMode()
+        startStopDebugAnimationButton.enabled_=(!startStopDebugAnimationButton.enabled)
         nextDebugStepButton.enabled_=(!nextDebugStepButton.enabled)
         previousDebugStepButton.enabled_=(!previousDebugStepButton.enabled)
         cancelButton.enabled_=(!cancelButton.enabled)
@@ -145,6 +159,7 @@ class GraphicsMainFrame extends MainFrame {
         if (!graphicsSceneController.isNextDebugStepEnabled) {
             graphicsSceneController.changeMode()
 
+            startStopDebugAnimationButton.enabled_=(b = false)
             nextDebugStepButton.enabled_=(b = false)
             previousDebugStepButton.enabled_=(b = false)
             cancelButton.enabled_=(b = true)
@@ -171,5 +186,16 @@ class GraphicsMainFrame extends MainFrame {
     private def setShapeType(shapeType: ShapeType) {
         DrawingContext.shapeType_=(shapeType)
         graphicsScene.setMaxSelectionBufferSize(shapeType.definingPointQuantity)
+    }
+
+    private def startStopDebugAnimation() {
+        if (startStopDebugAnimationButton.selected) {
+            graphicsSceneController.startDebugAnimation(this)
+            startStopDebugAnimationButton.text_=("Stop")
+        } else {
+            graphicsSceneController.startDebugAnimation(this)
+            startStopDebugAnimationButton.text_=("Start")
+        }
+
     }
 }
