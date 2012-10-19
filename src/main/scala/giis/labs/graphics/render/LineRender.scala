@@ -11,7 +11,7 @@ import giis.labs.model.Point
  */
 class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    protected def drawShape: List[Pixel] = {
+    def drawShape: List[Pixel] = {
         val begin = shape.getPointList.toArray.apply(0)
         val end = shape.getPointList.toArray.apply(1)
 

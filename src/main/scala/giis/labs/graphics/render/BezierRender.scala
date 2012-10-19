@@ -20,7 +20,7 @@ class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         )
     )
 
-    protected def drawShape: List[Pixel] = {
+    def drawShape: List[Pixel] = {
         val point1 = shape.getPointList(0)
         val point2 = shape.getPointList(1)
         val point3 = shape.getPointList(2)

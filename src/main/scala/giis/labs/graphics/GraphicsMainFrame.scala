@@ -50,6 +50,7 @@ class GraphicsMainFrame extends MainFrame {
     private val bezierMenuItem = new RadioMenuItem("Bezier")
     private val ermitMenuItem = new RadioMenuItem("Ermit")
     private val hyperbolaMenuItem = new RadioMenuItem("Hyperbola")
+    private val polygonMenuItem = new RadioMenuItem("Polygon")
 
     private val shapesMenuGroup = new ButtonGroup(
         lineDdaMenuItem,
@@ -57,7 +58,8 @@ class GraphicsMainFrame extends MainFrame {
         circleMenuItem,
         bezierMenuItem,
         ermitMenuItem,
-        hyperbolaMenuItem
+        hyperbolaMenuItem,
+        polygonMenuItem
     ) {
         listenTo(
             lineBrezenhemMenuItem,
@@ -65,7 +67,8 @@ class GraphicsMainFrame extends MainFrame {
             circleMenuItem,
             bezierMenuItem,
             ermitMenuItem,
-            hyperbolaMenuItem
+            hyperbolaMenuItem,
+            polygonMenuItem
         )
 
         reactions += {
@@ -75,6 +78,7 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`bezierMenuItem`) => setShapeType(Shape.Bezier)
             case ButtonClicked(`ermitMenuItem`) => setShapeType(Shape.Ermit)
             case ButtonClicked(`hyperbolaMenuItem`) => setShapeType(Shape.Hyperbola)
+            case ButtonClicked(`polygonMenuItem`) => setShapeType(Shape.Polygon)
         }
     }
 
@@ -120,6 +124,9 @@ class GraphicsMainFrame extends MainFrame {
                 contents += bezierMenuItem
                 contents += ermitMenuItem
                 contents += hyperbolaMenuItem
+            }
+            contents += new Menu("Polygon") {
+                contents += polygonMenuItem
             }
         }
     }

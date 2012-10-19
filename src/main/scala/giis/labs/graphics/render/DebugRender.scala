@@ -53,7 +53,7 @@ class DebugRender(render: Render) extends Render(render.shape, render.drawingCon
         stepNumber = stepNumber - 1
     }
 
-    protected def drawShape = {
+    def drawShape = {
         if (!isDebugFinished) {
             render.draw.splitAt(stepNumber)._1
         }

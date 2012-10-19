@@ -49,11 +49,13 @@ class GraphicsScene {
     /**
      * Set the pixel selected.
      *
+     * <p>If maxSelectionBufferSize equals -1 then selectionBufferSize not limited.</p>
+     *
      * @param pixel pixel to select
      */
     def selectPixel(pixel: Pixel) {
 
-        if (selectedPixelBuffer.size < maxSelectionBufferSize) {
+        if (maxSelectionBufferSize == -1 || selectedPixelBuffer.size < maxSelectionBufferSize) {
             selectedPixelBuffer = pixel :: selectedPixelBuffer
         }
         else {

@@ -40,5 +40,5 @@ abstract class Render(renderedShape: Shape, context: DrawingContext) {
      *
      * @return List[Pixel] result of drawing
      */
-    protected def drawShape: List[Pixel]
+    def drawShape: List[Pixel]
 }

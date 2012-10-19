@@ -36,6 +36,8 @@ abstract class Shape extends RenderFactory {
 
 /**
  * Companion object for the shape class. Contains all types of the possible shapes.
+ *
+ * <p>If definingPointQuantity equals -1 then they not limited.</p>
  */
 object Shape {
 
@@ -67,6 +69,11 @@ object Shape {
     case object Hyperbola extends ShapeType {
         val name = "Hyperbola"
         val definingPointQuantity = 3
+    }
+
+    case object Polygon extends ShapeType {
+        val name = "Polygon"
+        val definingPointQuantity = -1
     }
 
 }

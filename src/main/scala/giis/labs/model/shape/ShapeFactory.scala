@@ -25,6 +25,7 @@ object ShapeFactory {
         case Shape.Bezier => createBezier(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Ermit => createErmit(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Hyperbola => createHyperbola(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.Polygon => createPolygon(pointList.toArray)
         case null => null
     }
 
@@ -90,6 +91,21 @@ object ShapeFactory {
                 pointArray(pointArray.length - 2),
                 pointArray(pointArray.length - 3)
             )
+        }
+    }
+
+    private def createPolygon(pointArray: Array[Point]): Polygon = {
+        if (pointArray.length < 3 || pointArray(0) != pointArray(pointArray.length - 1)) {
+            null
+        }
+        else {
+            var lineList = List[Line]()
+            for (i <- 1 until pointArray.length) {
+                val line = createLine(Array(pointArray(i - 1), pointArray(i)), 2)
+                lineList = line :: lineList
+            }
+
+            new Polygon(lineList)
         }
     }
 }

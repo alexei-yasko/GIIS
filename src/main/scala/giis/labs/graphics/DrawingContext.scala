@@ -79,6 +79,14 @@ object DrawingContext {
      * @return drawing context object
      */
     def createDrawingContext(color: Color): DrawingContext = new DrawingContext(color, currentShapeType)
+
+    /**
+     * Create drawing context object from current settings and given color.
+     *
+     * @param shapeType shape type for the drawing context
+     * @return drawing context object
+     */
+    def createDrawingContext(shapeType: ShapeType): DrawingContext = new DrawingContext(currentColor, shapeType)
 }
 
 

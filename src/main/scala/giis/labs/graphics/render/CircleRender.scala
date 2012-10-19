@@ -11,7 +11,7 @@ import giis.labs.model.Point
  */
 class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
-    protected def drawShape: List[Pixel] = {
+    def drawShape: List[Pixel] = {
         val end = shape.getPointList.toArray.apply(1)
         val center = shape.getPointList.toArray.apply(0)
 

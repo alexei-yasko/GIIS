@@ -28,9 +28,12 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
     def drawShape(drawingContext: DrawingContext) {
         val shape = ShapeFactory.createShape(getSelectedPoints, drawingContext.shapeType)
 
-        isInDebugMode match {
-            case true => drawShapeInDebugMode(shape, drawingContext)
-            case false => drawShapeInCommonMode(shape, drawingContext)
+        if (shape != null) {
+
+            isInDebugMode match {
+                case true => drawShapeInDebugMode(shape, drawingContext)
+                case false => drawShapeInCommonMode(shape, drawingContext)
+            }
         }
     }
 
@@ -129,18 +132,13 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
     def isAnimationRunning: Boolean = debugAnimator != null && debugAnimator.getState == Actor.State.Runnable
 
     private def drawShapeInCommonMode(shape: Shape, drawingContext: DrawingContext) {
-        if (shape != null) {
-            scene.addShapeRender(shape.createRender(drawingContext))
-            scene.clearSelectedPixels()
-        }
+        scene.addShapeRender(shape.createRender(drawingContext))
+        scene.clearSelectedPixels()
     }
 
     private def drawShapeInDebugMode(shape: Shape, drawingContext: DrawingContext) {
-
-        if (shape != null) {
-            debugRender = new DebugRender(shape.createRender(drawingContext))
-            scene.addShapeRender(debugRender)
-        }
+        debugRender = new DebugRender(shape.createRender(drawingContext))
+        scene.addShapeRender(debugRender)
     }
 
     private def getSelectedPoints: List[Point] = for (pixel <- scene.getSelectedPixels) yield {
