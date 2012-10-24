@@ -1,6 +1,6 @@
 package giis.labs.graphics.render
 
-import giis.labs.model.shape.{Polygon, Shape}
+import giis.labs.model.shape.{Line, Shape}
 import giis.labs.graphics.{Pixel, DrawingContext}
 
 /**
@@ -15,12 +15,20 @@ class PolygonRender(shape: Shape, drawingContext: DrawingContext) extends Render
      */
     def drawShape = {
         var resultPixelList = List[Pixel]()
-        val polygon = shape.asInstanceOf[Polygon]
 
-        for (polygonLine <- polygon.getPolygonLines) {
-            val linePixels = polygonLine.createRender(DrawingContext.createDrawingContext).drawShape
-            resultPixelList = resultPixelList ::: linePixels
+        val pointArray = shape.getPointList.toArray
+
+        for (i <- 1 until pointArray.length) {
+            val line = new Line(pointArray(i - 1), pointArray(i)) {
+                def shapeType = Shape.LineBrezenhem
+            }
+            resultPixelList = resultPixelList ::: new LineRender(line, DrawingContext.createDrawingContext).drawShape
         }
+
+        val line = new Line(pointArray.last, pointArray.head) {
+            def shapeType = Shape.LineBrezenhem
+        }
+        resultPixelList = resultPixelList ::: new LineRender(line, DrawingContext.createDrawingContext).drawShape
 
         resultPixelList
     }

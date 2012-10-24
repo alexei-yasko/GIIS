@@ -34,7 +34,7 @@ object ShapeFactory {
             null
         }
         else {
-            new Line(pointArray(pointArray.length - 1),pointArray(pointArray.length - 2)) {
+            new Line(pointArray(pointArray.length - 1), pointArray(pointArray.length - 2)) {
                 def shapeType = drawingShapeType
             }
         }
@@ -94,17 +94,11 @@ object ShapeFactory {
     }
 
     private def createPolygon(pointArray: Array[Point]): Polygon = {
-        if (pointArray.length < 3 || pointArray(0) != pointArray(pointArray.length - 1)) {
+        if (pointArray.length < 4 || pointArray(0) != pointArray(pointArray.length - 1)) {
             null
         }
         else {
-            var lineList = List[Line]()
-            for (i <- 1 until pointArray.length) {
-                val line = createLine(Shape.LineBrezenhem, Array(pointArray(i - 1), pointArray(i)), 2)
-                lineList = line :: lineList
-            }
-
-            new Polygon(lineList)
+            new Polygon(pointArray.reverse.splitAt(pointArray.length - 1)._1)
         }
     }
 }
