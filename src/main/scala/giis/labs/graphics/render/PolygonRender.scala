@@ -18,11 +18,10 @@ class PolygonRender(shape: Shape, drawingContext: DrawingContext) extends Render
         val polygon = shape.asInstanceOf[Polygon]
 
         for (polygonLine <- polygon.getPolygonLines) {
-            val linePixels = polygonLine.createRender(DrawingContext.createDrawingContext(Shape.LineBrezenhem)).drawShape
+            val linePixels = polygonLine.createRender(DrawingContext.createDrawingContext).drawShape
             resultPixelList = resultPixelList ::: linePixels
         }
 
         resultPixelList
     }
-
 }

@@ -2,14 +2,14 @@ package giis.labs.model.shape
 
 import giis.labs.graphics.render.LineRender
 import giis.labs.graphics.DrawingContext
-import giis.labs.model.Point
+import giis.labs.model.{ShapeType, Point}
 
 /**
  * Line shape.
  *
  * @author Q-YAA
  */
-class Line(point1: Point, point2: Point) extends Shape {
+abstract class Line(point1: Point, point2: Point) extends Shape {
 
     private var begin = point1
 
@@ -28,3 +28,5 @@ class Line(point1: Point, point2: Point) extends Shape {
 
     def createRender(drawingContext: DrawingContext) = new LineRender(this, drawingContext)
 }
+
+

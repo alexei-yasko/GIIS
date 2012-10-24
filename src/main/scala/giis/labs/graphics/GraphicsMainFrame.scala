@@ -202,7 +202,7 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     private def setShapeType(shapeType: ShapeType) {
-        DrawingContext.shapeType_=(shapeType)
+        gridPanelComponent.drawingShapeType_=(shapeType)
         graphicsScene.setMaxSelectionBufferSize(shapeType.definingPointQuantity)
     }
 

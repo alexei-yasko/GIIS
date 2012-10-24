@@ -1,27 +1,20 @@
 package giis.labs.graphics
 
 import java.awt.Color
-import giis.labs.model.ShapeType
-import giis.labs.model.shape.Shape
 
 /**
  * Class that encapsulate all drawing settings.
  *
  * @author Q-YAA
  */
-protected class DrawingContext(drawingColor: Color, drawingShapeType: ShapeType) {
+protected class DrawingContext(drawingColor: Color) {
 
     /**
      * Color of drawing pixel.
      */
     val color = drawingColor
 
-    /**
-     * Current type of the shape to drawing.
-     */
-    val shapeType = drawingShapeType
-
-    override def toString = "drawing context { " + color + ", " + shapeType + " }"
+    override def toString = "drawing context { " + color + " }"
 }
 
 /**
@@ -30,8 +23,6 @@ protected class DrawingContext(drawingColor: Color, drawingShapeType: ShapeType)
 object DrawingContext {
 
     private var currentColor = Color.BLACK
-
-    private var currentShapeType: ShapeType = Shape.LineDda
 
     /**
      * Set color for the drawing context.
@@ -43,15 +34,6 @@ object DrawingContext {
     }
 
     /**
-     * Set current drawing shape type for the drawing context.
-     *
-     * @param shapeType type of the drawing shape
-     */
-    def shapeType_=(shapeType: ShapeType) {
-        currentShapeType = shapeType
-    }
-
-    /**
      * Returns current color.
      *
      * @return current color
@@ -59,18 +41,11 @@ object DrawingContext {
     def color = currentColor
 
     /**
-     * Returns current shape type.
-     *
-     * @return current shape type
-     */
-    def shapeType = currentShapeType
-
-    /**
      * Creates drawing context object from current settings.
      *
      * @return drawing context object
      */
-    def createDrawingContext: DrawingContext = new DrawingContext(currentColor, currentShapeType)
+    def createDrawingContext: DrawingContext = new DrawingContext(currentColor)
 
     /**
      * Create drawing context object from current settings and given color.
@@ -78,15 +53,7 @@ object DrawingContext {
      * @param color color for the drawing context
      * @return drawing context object
      */
-    def createDrawingContext(color: Color): DrawingContext = new DrawingContext(color, currentShapeType)
-
-    /**
-     * Create drawing context object from current settings and given color.
-     *
-     * @param shapeType shape type for the drawing context
-     * @return drawing context object
-     */
-    def createDrawingContext(shapeType: ShapeType): DrawingContext = new DrawingContext(currentColor, shapeType)
+    def createDrawingContext(color: Color): DrawingContext = new DrawingContext(color)
 }
 
 

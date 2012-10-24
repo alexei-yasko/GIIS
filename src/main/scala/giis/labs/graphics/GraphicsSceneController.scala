@@ -1,7 +1,7 @@
 package giis.labs.graphics
 
 import giis.labs.model.shape.{Shape, ShapeFactory}
-import giis.labs.model.Point
+import giis.labs.model.{ShapeType, Point}
 import render.DebugRender
 import actors.Actor
 
@@ -23,10 +23,11 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
     /**
      * Method that control shape drawing on the scene.
      *
+     * @param shapeType type of the drawing shape
      * @param drawingContext drawing context for the shape
      */
-    def drawShape(drawingContext: DrawingContext) {
-        val shape = ShapeFactory.createShape(getSelectedPoints, drawingContext.shapeType)
+    def drawShape(shapeType: ShapeType, drawingContext: DrawingContext) {
+        val shape = ShapeFactory.createShape(getSelectedPoints, shapeType)
 
         if (shape != null) {
 

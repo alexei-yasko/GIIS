@@ -31,4 +31,11 @@ class Hyperbola(point1: Point, point2: Point, point3: Point) extends Shape {
     }
 
     def createRender(drawingContext: DrawingContext) = new HyperbolaRender(this, drawingContext)
+
+    /**
+     * Get type of the shape object.
+     *
+     * @return ShapeType type of the shape object
+     */
+    def shapeType = Shape.Hyperbola
 }

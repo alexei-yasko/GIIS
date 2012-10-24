@@ -50,4 +50,6 @@ class Polygon(lines: List[Line]) extends Shape {
      * @return all lines of polygon
      */
     def getPolygonLines = lines
+
+    def shapeType = Shape.Polygon
 }

@@ -19,8 +19,8 @@ object ShapeFactory {
      * @return created shape object
      */
     def createShape(pointList: List[Point], shapeType: ShapeType): Shape = shapeType match {
-        case Shape.LineDda => createLine(pointList.toArray, shapeType.definingPointQuantity)
-        case Shape.LineBrezenhem => createLine(pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.LineDda => createLine(Shape.LineDda, pointList.toArray, shapeType.definingPointQuantity)
+        case Shape.LineBrezenhem => createLine(Shape.LineBrezenhem, pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Circle => createCircle(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Bezier => createBezier(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Ermit => createErmit(pointList.toArray, shapeType.definingPointQuantity)
@@ -29,15 +29,14 @@ object ShapeFactory {
         case null => null
     }
 
-    private def createLine(pointArray: Array[Point], definingPointQuantity: Int): Line = {
+    private def createLine(drawingShapeType: ShapeType, pointArray: Array[Point], definingPointQuantity: Int): Line = {
         if (pointArray.length < definingPointQuantity) {
             null
         }
         else {
-            new Line(
-                pointArray(pointArray.length - 1),
-                pointArray(pointArray.length - 2)
-            )
+            new Line(pointArray(pointArray.length - 1),pointArray(pointArray.length - 2)) {
+                def shapeType = drawingShapeType
+            }
         }
     }
 
@@ -101,7 +100,7 @@ object ShapeFactory {
         else {
             var lineList = List[Line]()
             for (i <- 1 until pointArray.length) {
-                val line = createLine(Array(pointArray(i - 1), pointArray(i)), 2)
+                val line = createLine(Shape.LineBrezenhem, Array(pointArray(i - 1), pointArray(i)), 2)
                 lineList = line :: lineList
             }
 

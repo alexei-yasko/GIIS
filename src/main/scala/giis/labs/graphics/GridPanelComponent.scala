@@ -3,11 +3,12 @@ package giis.labs.graphics
 import swing.Panel
 import javax.swing.BorderFactory
 import java.awt.{Cursor, BasicStroke, Graphics2D, Color}
-import giis.labs.model.Point
+import giis.labs.model.{ShapeType, Point}
 import swing.event._
 import swing.event.MousePressed
 import swing.event.MouseWheelMoved
 import swing.event.MouseClicked
+import giis.labs.model.shape.Shape
 
 /**
  * Panel that display the grid with the axis and all shapes.
@@ -27,6 +28,8 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     private val defaultPixelSize = 15
     private var scale = 1d
     private var relativeCenterPosition = new Point(0, 0)
+
+    private var shapeType: ShapeType = Shape.Bezier
 
     border = BorderFactory.createLineBorder(Color.LIGHT_GRAY, 2)
 
@@ -51,6 +54,10 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
         }
 
         case MouseReleased(source, point, modifiers, 1, triggersPopup) => cursor = new Cursor(Cursor.CROSSHAIR_CURSOR)
+    }
+
+    def drawingShapeType_=(shapeType: ShapeType) {
+        this.shapeType = shapeType
     }
 
     override protected def paintComponent(graphics: Graphics2D) {
@@ -112,7 +119,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
         val pixel = new Pixel(convertToPoint(pointAwt), selectedPixelDrawingContext)
         scene.selectPixel(pixel)
 
-        controller.drawShape(DrawingContext.createDrawingContext)
+        controller.drawShape(shapeType, DrawingContext.createDrawingContext)
     }
 
     private def scaleGrid(rotation: Int)() {

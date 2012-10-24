@@ -15,7 +15,7 @@ class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(sh
         val begin = shape.getPointList.toArray.apply(0)
         val end = shape.getPointList.toArray.apply(1)
 
-        val pixelList = drawingContext.shapeType match {
+        val pixelList = shape.shapeType match {
             case Shape.LineDda => ddaRender(begin, end)
             case Shape.LineBrezenhem => brezenhemRender(begin, end)
         }

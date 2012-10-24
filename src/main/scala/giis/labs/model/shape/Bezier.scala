@@ -34,4 +34,11 @@ class Bezier(p1: Point, p2: Point, p3: Point, p4: Point) extends Shape {
     }
 
     def createRender(drawingContext: DrawingContext) = new BezierRender(this, drawingContext)
+
+    /**
+     * Get type of the shape object.
+     *
+     * @return ShapeType type of the shape object
+     */
+    def shapeType = Shape.Bezier
 }

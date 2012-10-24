@@ -32,6 +32,13 @@ abstract class Shape extends RenderFactory {
      * @param to new position
      */
     def movePoint(from: Point, to: Point)
+
+    /**
+     * Get type of the shape object.
+     *
+     * @return ShapeType type of the shape object
+     */
+    def shapeType: ShapeType
 }
 
 /**
