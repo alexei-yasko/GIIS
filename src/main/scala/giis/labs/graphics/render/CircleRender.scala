@@ -35,7 +35,7 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
         delta = 3 - 2 * radius
         while (x < y) {
 
-            resultPixelList = Pixel.createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + x, y0 + y, drawingContext.color) :: resultPixelList
 
             if (delta < 0) {
                 delta = delta + 4 * x + 6
@@ -47,7 +47,7 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
             x = x + 1
         }
         if (x == y) {
-            resultPixelList = Pixel.createPixel(x0 + x, y0 + y, drawingContext) :: resultPixelList
+            resultPixelList = Pixel.createPixel(x0 + x, y0 + y, drawingContext.color) :: resultPixelList
         }
 
         finalPixelList = resultPixelList
@@ -55,13 +55,13 @@ class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(
             pixelok =>
                 x = pixelok.point.x - x0
                 y = pixelok.point.y - y0
-                finalPixelList = Pixel.createPixel(x0 + y, y0 + x, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(x0 + y, y0 - x, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(x0 + x, y0 - y, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(x0 - x, y0 - y, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(x0 - y, y0 - x, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(x0 - y, y0 + x, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(x0 - x, y0 + y, drawingContext) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 + y, y0 + x, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 + y, y0 - x, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 + x, y0 - y, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 - x, y0 - y, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 - y, y0 - x, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 - y, y0 + x, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(x0 - x, y0 + y, drawingContext.color) :: finalPixelList
         }
 
         finalPixelList.reverse

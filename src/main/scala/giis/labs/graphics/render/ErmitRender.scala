@@ -68,7 +68,7 @@ class ErmitRender(shape: Shape, drawingContext: DrawingContext) extends Render(s
             val resultMatrixY = tMatrix * (ermitMatrix * pointsMatrixY)
 
             val newPixel = Pixel.createPixel(math.round(resultMatrixX.getValue(0, 0)).toInt,
-                math.round(resultMatrixY.getValue(0, 0)).toInt, drawingContext)
+                math.round(resultMatrixY.getValue(0, 0)).toInt, drawingContext.color)
 
             resultPixelList = Pixel.appendPixelToListIfItNotInList(newPixel, resultPixelList)
         }

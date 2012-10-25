@@ -33,7 +33,7 @@ abstract class Render(renderedShape: Shape, context: DrawingContext) {
      *
      * @return List[Pixel] result of drawing
      */
-    def draw: List[Pixel] = drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext)
+    def draw: List[Pixel] = drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext.color)
 
     /**
      * Template method for the shape drawing. Concrete renders must override this method.

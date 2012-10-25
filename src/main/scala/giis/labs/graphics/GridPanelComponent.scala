@@ -116,7 +116,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     private def pixelSize = (defaultPixelSize * scale).toInt
 
     private def selectClickedPixel(pointAwt: java.awt.Point)() {
-        val pixel = new Pixel(convertToPoint(pointAwt), selectedPixelDrawingContext)
+        val pixel = new Pixel(convertToPoint(pointAwt), selectedPixelDrawingContext.color)
         scene.selectPixel(pixel)
 
         controller.drawShape(shapeType, DrawingContext.createDrawingContext)

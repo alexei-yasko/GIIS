@@ -21,9 +21,17 @@ abstract class Shape extends RenderFactory {
      * Determines belong the given point to the shape or not.
      *
      * @param point point to determine
-     * @return true if the point belong to the shape, false in other case
+     * @return true if the point belong to the shape, false in the other case
      */
-    def isPointBelongsTo(point: Point): Boolean = getPointList.contains(point)
+    def isPointBelongsTo(point: Point) = getPointList.contains(point)
+
+    /**
+     * Determines the given point inside the shape or not.
+     *
+     * @param point point to determine
+     * @return true if the point inside the shape, false in the other case
+     */
+    def isPointInsideShape(point: Point): Boolean = false
 
     /**
      * Move point from one position to another.
@@ -81,6 +89,11 @@ object Shape {
     case object Polygon extends ShapeType {
         val name = "Polygon"
         val definingPointQuantity = -1
+    }
+
+    case object FillPolygonByLine extends ShapeType {
+        val name = "FillPolygonByLine"
+        val definingPointQuantity = 1
     }
 
 }

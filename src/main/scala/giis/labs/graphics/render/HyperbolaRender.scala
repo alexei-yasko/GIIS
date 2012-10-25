@@ -59,7 +59,7 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
         var delta = b * b - 2 * a * a * b - a * a
         var sigma = 0
 
-        resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
+        resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext.color) :: resultPixelList
 
         // проверяем знак ошибки
         while (hy > 0) {
@@ -74,14 +74,14 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
                     y = y + 1
                     //  пересчитываем ошибку
                     delta = delta + b * b * (2 * x + 1) - a * a * (2 * y + 1)
-                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
+                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext.color) :: resultPixelList
                 }
                 // если разность положительна, выбираем вертикальный пиксель
                 else {
                     y = y + 1
                     // пересчитываем ошибку
                     delta = delta - a * a * (2 * y + 1)
-                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
+                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext.color) :: resultPixelList
                 }
 
             }
@@ -95,14 +95,14 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
                     y = y + 1
                     //  пересчитываем ошибку
                     delta = delta + b * b * (2 * x + 1) - a * a * (2 * y + 1)
-                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
+                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext.color) :: resultPixelList
                 }
                 // если разность меньше нуля, выбираем горизонтальный пиксель
                 else {
                     x = x + 1
                     // пересчитываем ошибку
                     delta = delta + b * b * (2 * x + 1)
-                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
+                    resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext.color) :: resultPixelList
                 }
             }
             // если ошибка равна нулю, то выбираем диогональный пиксель
@@ -111,7 +111,7 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
                 y = y + 1
                 //  пересчитываем ошибку
                 delta = delta + b * b * (2 * x + 1) - a * a * (2 * y + 1)
-                resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext) :: resultPixelList
+                resultPixelList = Pixel.createPixel(x + limx, y + lim, drawingContext.color) :: resultPixelList
             }
         }
 
@@ -124,9 +124,9 @@ class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Rend
                 val rx = pixelok.point.x
                 val ry = pixelok.point.y
 
-                finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, ry, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, -ry + 2 * ay, drawingContext) :: finalPixelList
-                finalPixelList = Pixel.createPixel(rx, -ry + 2 * ay, drawingContext) :: finalPixelList
+                finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, ry, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(-rx + 2 * firstXPoint, -ry + 2 * ay, drawingContext.color) :: finalPixelList
+                finalPixelList = Pixel.createPixel(rx, -ry + 2 * ay, drawingContext.color) :: finalPixelList
         }
         finalPixelList
     }

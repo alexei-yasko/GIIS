@@ -2,6 +2,7 @@ package giis.labs.graphics
 
 import render.Render
 import giis.labs.model.Point
+import giis.labs.model.shape.Shape
 
 /**
  * Class that represent graphic scene for shape dawning.
@@ -127,5 +128,19 @@ class GraphicsScene {
      */
     def isPointPlacedOnPosition(point: Point): Boolean = {
         !shapeRenderList.filter(render => render.shape.isPointBelongsTo(point)).isEmpty
+    }
+
+    /**
+     * Return the shape render that contains given point.
+     *
+     * @param point given point
+     * @return shape render
+     */
+    def getShapeRenderThatContainsPoint(point: Point): Render = {
+        for (render <- shapeRenderList if render.shape.isPointInsideShape(point)) {
+            return render
+        }
+
+        null
     }
 }

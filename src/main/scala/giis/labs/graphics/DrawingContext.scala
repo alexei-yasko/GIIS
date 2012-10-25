@@ -7,14 +7,16 @@ import java.awt.Color
  *
  * @author Q-YAA
  */
-protected class DrawingContext(drawingColor: Color) {
+protected class DrawingContext(drawingColor: Color, drawingFillColor: Color) {
 
     /**
      * Color of drawing pixel.
      */
     val color = drawingColor
 
-    override def toString = "drawing context { " + color + " }"
+    val fillColor = drawingFillColor
+
+    override def toString = "drawing context { " + color + ", " + fillColor + " }"
 }
 
 /**
@@ -23,6 +25,8 @@ protected class DrawingContext(drawingColor: Color) {
 object DrawingContext {
 
     private var currentColor = Color.BLACK
+
+    private var currentFillColor = Color.BLUE
 
     /**
      * Set color for the drawing context.
@@ -41,11 +45,27 @@ object DrawingContext {
     def color = currentColor
 
     /**
+     * Set fill color for the drawing context.
+     *
+     * @param color color to set
+     */
+    def fillColor_=(color: Color) {
+        currentFillColor = color
+    }
+
+    /**
+     * Returns fill current color.
+     *
+     * @return current color
+     */
+    def fillColor = currentFillColor
+
+    /**
      * Creates drawing context object from current settings.
      *
      * @return drawing context object
      */
-    def createDrawingContext: DrawingContext = new DrawingContext(currentColor)
+    def createDrawingContext: DrawingContext = new DrawingContext(currentColor, currentFillColor)
 
     /**
      * Create drawing context object from current settings and given color.
@@ -53,7 +73,7 @@ object DrawingContext {
      * @param color color for the drawing context
      * @return drawing context object
      */
-    def createDrawingContext(color: Color): DrawingContext = new DrawingContext(color)
+    def createDrawingContext(color: Color): DrawingContext = new DrawingContext(color, currentFillColor)
 }
 
 

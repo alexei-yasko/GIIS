@@ -8,14 +8,14 @@ import java.awt.Color
  *
  * @author Q-YAA
  */
-class Pixel(pixelPoint: Point, context: DrawingContext) {
+class Pixel(pixelPoint: Point, pColor: Color) {
 
     /**
      * Point of the pixel placement.
      */
     val point = pixelPoint
 
-    private var pixelColor = context.color
+    private var pixelColor = pColor
 
     /**
      * Get pixel color.
@@ -53,29 +53,29 @@ object Pixel {
      *
      * @param x x coordinate
      * @param y y coordinate
-     * @param drawingContext drawing context for the pixel
+     * @param color pixel color
      * @return created pixel
      */
-    def createPixel(x: Int, y: Int, drawingContext: DrawingContext): Pixel = new Pixel(new Point(x, y), drawingContext)
+    def createPixel(x: Int, y: Int, color: Color): Pixel = new Pixel(new Point(x, y), color)
 
     /**
      * Creates pixel from the point and drawing context.
      *
      * @param point placement point
-     * @param drawingContext drawing context for the pixel
+     * @param color pixel color
      * @return created pixel
      */
-    def createPixel(point: Point, drawingContext: DrawingContext): Pixel = new Pixel(point, drawingContext)
+    def createPixel(point: Point, color: Color): Pixel = new Pixel(point, color)
 
     /**
      * Creates pixel list from the point list and drawing context.
      *
      * @param pointList list of the points
-     * @param drawingContext drawing context for the pixel list
+     * @param color pixel color
      * @return created pixel list
      */
-    def createPixelList(pointList: List[Point], drawingContext: DrawingContext) = for (point <- pointList) yield {
-        createPixel(point, drawingContext)
+    def createPixelList(pointList: List[Point], color: Color) = for (point <- pointList) yield {
+        createPixel(point, color)
     }
 
     /**

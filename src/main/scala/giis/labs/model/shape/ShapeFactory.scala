@@ -1,6 +1,8 @@
 package giis.labs.model.shape
 
 import giis.labs.model.{ShapeType, Point}
+import giis.labs.graphics.render.{LineRender, Render}
+import giis.labs.graphics.DrawingContext
 
 /**
  * Shape factory object.
@@ -26,7 +28,12 @@ object ShapeFactory {
         case Shape.Ermit => createErmit(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Hyperbola => createHyperbola(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Polygon => createPolygon(pointList.toArray)
-        case null => null
+        case _ => null
+    }
+
+    def createFillShape(shapeType: ShapeType, pointList: List[Point], render: Render): Shape = shapeType match {
+        case Shape.FillPolygonByLine => createFillPolygon(shapeType, pointList.toArray, render)
+        case _ => null
     }
 
     private def createLine(drawingShapeType: ShapeType, pointArray: Array[Point], definingPointQuantity: Int): Line = {
@@ -98,7 +105,29 @@ object ShapeFactory {
             null
         }
         else {
-            new Polygon(pointArray.reverse.splitAt(pointArray.length - 1)._1)
+
+            var edgeList = List[Line]()
+
+            for (i <- 1 until pointArray.length) {
+                val edge = new Line(pointArray(i - 1), pointArray(i)) {
+                    def shapeType = Shape.LineBrezenhem
+                }
+                edgeList = edge :: edgeList
+            }
+
+            new Polygon(pointArray.reverse.splitAt(pointArray.length - 1)._1, edgeList.toArray)
         }
+    }
+
+    private def createFillPolygon(fillType: ShapeType, pointArray: Array[Point], shapeRender: Render): FillPolygon = {
+        if (pointArray.length < 1 || shapeRender == null) {
+            null
+        }
+        else {
+            new FillPolygon(pointArray.head, shapeRender) {
+                def shapeType = fillType
+            }
+        }
+
     }
 }

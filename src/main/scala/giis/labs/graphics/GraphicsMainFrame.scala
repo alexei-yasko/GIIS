@@ -38,6 +38,7 @@ class GraphicsMainFrame extends MainFrame {
     private val clearButton = new Button("Clear")
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
+    private val fillColorChooseButton = new Button("Choose fill color")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
@@ -51,6 +52,7 @@ class GraphicsMainFrame extends MainFrame {
     private val ermitMenuItem = new RadioMenuItem("Ermit")
     private val hyperbolaMenuItem = new RadioMenuItem("Hyperbola")
     private val polygonMenuItem = new RadioMenuItem("Polygon")
+    private val fillPolygonByLineMenuItem = new RadioMenuItem("Fill polygon by line")
 
     private val shapesMenuGroup = new ButtonGroup(
         lineDdaMenuItem,
@@ -59,7 +61,8 @@ class GraphicsMainFrame extends MainFrame {
         bezierMenuItem,
         ermitMenuItem,
         hyperbolaMenuItem,
-        polygonMenuItem
+        polygonMenuItem,
+        fillPolygonByLineMenuItem
     ) {
         listenTo(
             lineBrezenhemMenuItem,
@@ -68,7 +71,8 @@ class GraphicsMainFrame extends MainFrame {
             bezierMenuItem,
             ermitMenuItem,
             hyperbolaMenuItem,
-            polygonMenuItem
+            polygonMenuItem,
+            fillPolygonByLineMenuItem
         )
 
         reactions += {
@@ -79,10 +83,12 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`ermitMenuItem`) => setShapeType(Shape.Ermit)
             case ButtonClicked(`hyperbolaMenuItem`) => setShapeType(Shape.Hyperbola)
             case ButtonClicked(`polygonMenuItem`) => setShapeType(Shape.Polygon)
+            case ButtonClicked(`fillPolygonByLineMenuItem`) => setShapeType(Shape.FillPolygonByLine)
         }
     }
 
     private val buttonPanel = new FlowPanel() {
+        contents += fillColorChooseButton
         contents += colorChooseButton
         contents += clearButton
         contents += cancelButton
@@ -127,6 +133,7 @@ class GraphicsMainFrame extends MainFrame {
             }
             contents += new Menu("Polygon") {
                 contents += polygonMenuItem
+                contents += fillPolygonByLineMenuItem
             }
         }
     }
@@ -140,7 +147,8 @@ class GraphicsMainFrame extends MainFrame {
         nextDebugStepButton,
         previousDebugStepButton,
         cancelButton,
-        colorChooseButton
+        colorChooseButton,
+        fillColorChooseButton
     )
 
     reactions += {
@@ -153,6 +161,7 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`previousDebugStepButton`) => executeAndRepaint(previousDebugStep)
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
         case ButtonClicked(`colorChooseButton`) => executeAndRepaint(chooseColor)
+        case ButtonClicked(`fillColorChooseButton`) => executeAndRepaint(chooseFillColor)
     }
 
     def changeDebugMode() {
@@ -167,6 +176,11 @@ class GraphicsMainFrame extends MainFrame {
     private def chooseColor() {
         val color = JColorChooser.showDialog(this.peer, "Choose color", DrawingContext.color)
         DrawingContext.color_=(color)
+    }
+
+    private def chooseFillColor() {
+        val color = JColorChooser.showDialog(this.peer, "Choose fill color", DrawingContext.color)
+        DrawingContext.fillColor_=(color)
     }
 
     private def nextDebugStep() {

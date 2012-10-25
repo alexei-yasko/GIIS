@@ -67,8 +67,11 @@ class BezierRender(shape: Shape, drawingContext: DrawingContext) extends Render(
             val resultMatrixY = tMatrix * (bezierMatrix * pointsMatrixY)
 
 
-            val newPixel = Pixel.createPixel(
-                math.round(resultMatrixX.getValue(0, 0)).toInt, math.round(resultMatrixY.getValue(0, 0)).toInt, drawingContext)
+            val newPixel = Pixel.createPixel(math.round(
+                resultMatrixX.getValue(0, 0)).toInt,
+                math.round(resultMatrixY.getValue(0, 0)).toInt,
+                drawingContext.color
+            )
 
             resultPixelList = Pixel.appendPixelToListIfItNotInList(newPixel, resultPixelList)
         }

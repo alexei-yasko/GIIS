@@ -4,6 +4,7 @@ import giis.labs.model.shape.{Shape, ShapeFactory}
 import giis.labs.model.{ShapeType, Point}
 import render.DebugRender
 import actors.Actor
+import giis.labs.model.shape.Shape.FillPolygonByLine
 
 /**
  * Controller for the {@link GraphicsScene}.
@@ -27,7 +28,13 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
      * @param drawingContext drawing context for the shape
      */
     def drawShape(shapeType: ShapeType, drawingContext: DrawingContext) {
-        val shape = ShapeFactory.createShape(getSelectedPoints, shapeType)
+        val shape = shapeType match {
+
+            case FillPolygonByLine => ShapeFactory.createFillShape(
+                shapeType, getSelectedPoints, scene.getShapeRenderThatContainsPoint(getSelectedPoints.head))
+
+            case _ => ShapeFactory.createShape(getSelectedPoints, shapeType)
+        }
 
         if (shape != null) {
 
