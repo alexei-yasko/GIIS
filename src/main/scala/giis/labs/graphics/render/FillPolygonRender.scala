@@ -124,13 +124,13 @@ class FillPolygonRender(
     }
 
     private def intersection(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int, x4: Int, y4: Int): Point = {
-        val d = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
+        val d: Double = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
         if (d == 0) {
             return null
         }
 
-        val xi = math.round(((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d)
-        val yi = math.round(((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d)
+        val xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d + 0.5
+        val yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d + 0.5
 
         if (xi > math.max(x1, x2) || xi < math.min(x1, x2) || xi > math.max(x3, x4) || xi < math.min(x3, x4)) {
             return null
@@ -140,7 +140,7 @@ class FillPolygonRender(
             return null
         }
 
-        new Point(xi, yi)
+        new Point(xi.toInt, yi.toInt)
     }
 
     private def isVertexInLocalMinOrMax(vertex: Point, edgeList: List[Line]): Boolean = {
