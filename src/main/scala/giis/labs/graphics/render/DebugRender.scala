@@ -7,6 +7,8 @@ package giis.labs.graphics.render
  */
 class DebugRender(render: Render) extends Render(render.shape, render.drawingContext) {
 
+    //private var pixels = render.draw
+
     private var stepNumber = 0
 
     private var isDebugFinished = false
