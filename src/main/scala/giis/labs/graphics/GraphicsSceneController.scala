@@ -31,7 +31,7 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
         val shape = shapeType match {
 
             case FillPolygonByLine => ShapeFactory.createFillShape(
-                shapeType, getSelectedPoints, scene.getShapeRenderThatContainsPoint(getSelectedPoints.head))
+                shapeType, getSelectedPoints, scene.getShapeThatContainsPoint(getSelectedPoints.head))
 
             case _ => ShapeFactory.createShape(getSelectedPoints, shapeType)
         }

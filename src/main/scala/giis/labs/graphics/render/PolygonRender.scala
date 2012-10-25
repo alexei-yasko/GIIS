@@ -17,7 +17,7 @@ class PolygonRender(polygon: Polygon, drawingContext: DrawingContext) extends Re
         var resultPixelList = List[Pixel]()
 
         for (edge <- polygon.getEdgeList) {
-            resultPixelList = resultPixelList ::: edge.createRender(drawingContext).draw
+            resultPixelList = resultPixelList ::: edge.createRender(drawingContext).drawShape.reverse
         }
 
         resultPixelList

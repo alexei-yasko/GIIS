@@ -2,12 +2,12 @@ package giis.labs.model.shape
 
 import giis.labs.graphics.DrawingContext
 import giis.labs.model.Point
-import giis.labs.graphics.render.{FillPolygonRender, Render}
+import giis.labs.graphics.render.FillPolygonRender
 
 /**
  * @author Q-YAA
  */
-abstract class FillPolygon(point: Point, shapeRender: Render) extends Shape {
+abstract class FillPolygon(point: Point, shape: Polygon) extends Shape {
 
     private var basePoint = point
 
@@ -36,5 +36,5 @@ abstract class FillPolygon(point: Point, shapeRender: Render) extends Shape {
      * @param drawingContext drawing context object
      * @return created shape render
      */
-    def createRender(drawingContext: DrawingContext) = new FillPolygonRender(this, drawingContext, shapeRender)
+    def createRender(drawingContext: DrawingContext) = new FillPolygonRender(this, drawingContext, shape)
 }

@@ -131,14 +131,14 @@ class GraphicsScene {
     }
 
     /**
-     * Return the shape render that contains given point.
+     * Return the shape that contains given point.
      *
      * @param point given point
-     * @return shape render
+     * @return shape
      */
-    def getShapeRenderThatContainsPoint(point: Point): Render = {
+    def getShapeThatContainsPoint(point: Point): Shape = {
         for (render <- shapeRenderList if render.shape.isPointInsideShape(point)) {
-            return render
+            return render.shape
         }
 
         null

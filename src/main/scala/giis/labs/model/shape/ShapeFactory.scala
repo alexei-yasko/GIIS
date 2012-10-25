@@ -1,8 +1,7 @@
 package giis.labs.model.shape
 
 import giis.labs.model.{ShapeType, Point}
-import giis.labs.graphics.render.{LineRender, Render}
-import giis.labs.graphics.DrawingContext
+import giis.labs.model.shape.Shape.Polygon
 
 /**
  * Shape factory object.
@@ -31,8 +30,8 @@ object ShapeFactory {
         case _ => null
     }
 
-    def createFillShape(shapeType: ShapeType, pointList: List[Point], render: Render): Shape = shapeType match {
-        case Shape.FillPolygonByLine => createFillPolygon(shapeType, pointList.toArray, render)
+    def createFillShape(shapeType: ShapeType, pointList: List[Point], shape: Shape): Shape = shapeType match {
+        case Shape.FillPolygonByLine => createFillPolygon(shapeType, pointList.toArray, shape)
         case _ => null
     }
 
@@ -119,12 +118,12 @@ object ShapeFactory {
         }
     }
 
-    private def createFillPolygon(fillType: ShapeType, pointArray: Array[Point], shapeRender: Render): FillPolygon = {
-        if (pointArray.length < 1 || shapeRender == null) {
+    private def createFillPolygon(fillType: ShapeType, pointArray: Array[Point], shape: Shape): FillPolygon = {
+        if (pointArray.length < 1 || shape == null || !shape.isInstanceOf[Polygon]) {
             null
         }
         else {
-            new FillPolygon(pointArray.head, shapeRender) {
+            new FillPolygon(pointArray.head, shape.asInstanceOf[Polygon]) {
                 def shapeType = fillType
             }
         }
