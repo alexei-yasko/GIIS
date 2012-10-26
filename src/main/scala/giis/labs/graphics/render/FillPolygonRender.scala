@@ -1,6 +1,6 @@
 package giis.labs.graphics.render
 
-import giis.labs.model.shape.{Line, Polygon, Shape, FillPolygon}
+import giis.labs.model.shape.{Line, Shape, Polygon, FillPolygon}
 import giis.labs.graphics.{Pixel, DrawingContext}
 import giis.labs.model.Point
 
@@ -12,6 +12,25 @@ import giis.labs.model.Point
 class FillPolygonRender(
     fillPolygon: FillPolygon, drawingContext: DrawingContext, polygon: Polygon) extends Render(fillPolygon, drawingContext) {
 
+    private val isCacheOn = false
+    private var drawingCache: List[Pixel] = null
+
+    /**
+     * Draw shape that represented by the shape render.
+     *
+     * @return List[Pixel] result of drawing
+     */
+    override def draw: List[Pixel] = isCacheOn match {
+        case true => if (drawingCache == null || polygon.isStateUpdated) {
+            polygon.changeUpdateState
+            drawingCache = drawShape
+            drawingCache
+        } else {
+            drawingCache
+        }
+        case false => drawShape
+    }
+
     /**
      * Template method for the shape drawing. Concrete renders must override this method.
      *
@@ -19,6 +38,14 @@ class FillPolygonRender(
      */
     def drawShape = fillPolygon.shapeType match {
         case Shape.FillPolygonByLine => fillByLine
+    }
+
+
+    /**
+     * Update shape render state. It simply indicates that the model changed.
+     */
+    override def update() {
+        drawingCache = drawShape
     }
 
     /**

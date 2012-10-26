@@ -9,6 +9,8 @@ import giis.labs.graphics.render.{LineRender, PolygonRender}
  */
 class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
 
+    private var isUpdated = false
+
     /**
      * Returns point list that define the shape.
      *
@@ -61,4 +63,10 @@ class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
     def createRender(drawingContext: DrawingContext) = new PolygonRender(this, drawingContext)
 
     def shapeType = Shape.Polygon
+
+    def isStateUpdated = isUpdated
+
+    def changeUpdateState {
+        isUpdated = !isUpdated
+    }
 }

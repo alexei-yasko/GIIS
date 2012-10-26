@@ -115,6 +115,9 @@ class GraphicsScene {
 
             if (render.shape.isPointBelongsTo(from)) {
                 render.shape.movePoint(from, to)
+
+                render.update()
+
                 return
             }
         }
@@ -142,5 +145,9 @@ class GraphicsScene {
         }
 
         null
+    }
+
+    private def updateAll() {
+        shapeRenderList.foreach(render => render.update())
     }
 }
