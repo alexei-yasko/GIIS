@@ -5,6 +5,8 @@ import giis.labs.graphics.{Pixel, DrawingContext}
 import giis.labs.model.Point
 
 /**
+ * Render for polygon fill
+ *
  * @author Q-YAA
  */
 class FillPolygonRender(
@@ -19,6 +21,11 @@ class FillPolygonRender(
         case Shape.FillPolygonByLine => fillByLine
     }
 
+    /**
+     * Fill polygon by the line
+     *
+     * @return result pixels
+     */
     private def fillByLine: List[Pixel] = {
         val sortedByY = polygon.getPointList.sortBy[Int](p => p.y)
         val sortedByX = polygon.getPointList.sortBy[Int](p => p.x)
@@ -28,119 +35,158 @@ class FillPolygonRender(
         val maxY = sortedByY.reverse.head.y
         val minY = sortedByY.head.y
 
-        var rowIntersections = List[(Point, Boolean)]()
+        var rowIntersections = List[(Point, Point, Boolean)]()
         for (i <- minY to maxY) {
-            rowIntersections = rowIntersections ::: findRowIntersections(i, minX, maxX)
+            rowIntersections = rowIntersections ::: findRowAndEdgesIntersections(i, minX, maxX)
         }
 
         val sortedIntervalList =
-            rowIntersections.sortWith((p1, p2) => p1._1.y < p2._1.y || (p1._1.y == p2._1.y && p1._1.x <= p2._1.x))
+            rowIntersections.sortWith((p1, p2) => (p1._1.y < p2._1.y || (p1._1.y == p2._1.y && p1._1.x <= p2._1.x)) &&
+                (p1._2.y < p2._2.y || (p1._2.y == p2._2.y && p1._2.x <= p2._2.x)))
 
-        //System.out.println(sortedIntervalList)
-        //System.out.println("\n\n")
+        System.out.println(sortedIntervalList)
+        System.out.println("\n\n\n")
 
-        val filteredIntervalList = removeWastePointsFromIntervalList(sortedIntervalList)
+        val filteredIntervalList = filterRepeatedVertexPoints(sortedIntervalList)
 
         drawIntervalList(filteredIntervalList)
     }
 
-    private def drawIntervalList(intervalList: List[Point]): List[Pixel] = {
+    private def drawIntervalList(intervalList: List[(Point, Point)]): List[Pixel] = {
         var resultPixelList = List[Pixel]()
 
-        for (i <- 0 until intervalList.length / 2) {
-            val firstIntervalPoint = intervalList(i * 2)
-            val secondIntervalPoint = intervalList(i * 2 + 1)
+        var i = 1d
+        while (i < (intervalList.length) / 2) {
+            var firstIntervalPoint = intervalList((i * 2).toInt)
+            var secondIntervalPoint = intervalList((i * 2 + 1).toInt)
 
-            //System.out.println(firstIntervalPoint + "   " + secondIntervalPoint)
+            // Skip wrong points in the interval
+            if (firstIntervalPoint._2.y > secondIntervalPoint._1.y) {
+                firstIntervalPoint = secondIntervalPoint
+                secondIntervalPoint = intervalList((i * 2 + 2).toInt)
+                i += 0.5
+            }
 
-            for (j <- (firstIntervalPoint.x + 1) until secondIntervalPoint.x) {
-                val newPixel = Pixel.createPixel(j, firstIntervalPoint.y, drawingContext.fillColor)
+            if (firstIntervalPoint._2.y < secondIntervalPoint._1.y) {
+                secondIntervalPoint = firstIntervalPoint
+                firstIntervalPoint = intervalList((i * 2 - 1).toInt)
+                i -= 0.5
+            }
 
-                if (!polygon.createRender(drawingContext).drawShape.exists(p => p.point == newPixel.point)) {
+            System.out.println(firstIntervalPoint + "   " + secondIntervalPoint)
+
+            val from = firstIntervalPoint._2
+            val to = secondIntervalPoint._1
+
+            // Draw points that belongs to the found interval
+            val polygonPixels = polygon.createRender(drawingContext).drawShape
+            for (j <- (from.x + 1) until to.x) {
+                val newPixel = Pixel.createPixel(j, from.y, drawingContext.fillColor)
+
+                if (!polygonPixels.exists(p => p.point == newPixel.point)) {
                     resultPixelList = newPixel :: resultPixelList
                 }
             }
+
+            i += 1
         }
 
-        //System.out.println("\n\n")
+        System.out.println("\n\n\n")
 
         resultPixelList.reverse
     }
 
-    private def removeWastePointsFromIntervalList(sortedIntervalList: List[(Point, Boolean)]): List[Point] = {
-        var resultIntervalList = List[Point]()
+    private def filterRepeatedVertexPoints(sortedIntervalList: List[(Point, Point, Boolean)]): List[(Point, Point)] = {
+        var resultIntervalList = List[(Point, Point)]()
 
-        for (i <- 1 until sortedIntervalList.length) {
+        var i = 1
+        while (i < sortedIntervalList.length) {
             val firstElement = sortedIntervalList(i - 1)
             val secondElement = sortedIntervalList(i)
 
-            if (firstElement._1 == secondElement._1 && firstElement._2) {
-                //resultIntervalList = resultIntervalList ::: List[Point](firstElement._1)
+            // check if interval elements partially equals
+            val check = firstElement._1 == secondElement._1 || firstElement._1 == secondElement._2 ||
+                firstElement._2 == secondElement._2 || firstElement._2 == secondElement._1
+
+            // if interval elements partially equals,
+            // and they belongs to the vertex but doesn't placed in the local minimum or maximum, leave only the left element
+            if (check && firstElement._3) {
+                resultIntervalList = resultIntervalList ::: List[(Point, Point)]((firstElement._1, firstElement._2))
+                i += 1
             }
             else {
-                resultIntervalList = resultIntervalList ::: List[Point](firstElement._1)
+                resultIntervalList = resultIntervalList ::: List[(Point, Point)]((firstElement._1, firstElement._2))
             }
+
+            i += 1
         }
 
         resultIntervalList
     }
 
-    private def findRowIntersections(row: Int, minX: Int, maxX: Int): List[(Point, Boolean)] = {
-        var intersectionList = List[(Point, Boolean)]()
+    private def findRowAndEdgesIntersections(row: Int, minX: Int, maxX: Int): List[(Point, Point, Boolean)] = {
+        // (firstPoint, secondPoint, isMinOrMax)
+        // firstPoint - this is beginning of the set of intersection points
+        //
+        // secondPoint - this is end of the set of intersection points
+        //
+        // isMinOrMax - this is flag that shows if intersection points contains vertex
+        // that placed in local minimum or maximum (true - if contains or points doesn't belong to the vertex,
+        // false - in the other case)
+
+        var intersectionList = List[(Point, Point, Boolean)]()
 
         for (edge <- polygon.getEdgeList if edge.getPointList(0).y != edge.getPointList(1).y) {
-
-            var intersectionPoint: Point = null
-            val edgePixels: List[Pixel] = edge.createRender(drawingContext).drawShape
-
             val p1 = edge.getPointList(0)
             val p2 = edge.getPointList(1)
 
-            intersectionPoint = intersection(minX, row, maxX, row, p1.x, p1.y, p2.x, p2.y)
-            //            val x = p1.x + ((p2.x - p1.x) * (row - p1.y)) / (p2.y - p1.y)
-            //            if (!(x > maxX || x < minX || x > math.max(p1.x, p2.x) || x < math.min(p1.x, p2.x))) {
-            //                intersectionPoint = new Point(x, row)
-            //            }
+            val intersectionPoints = intersection(edge, row, minX, maxX)
 
-            //            for (i <- minX to maxX if edgePixels.exists(p => p.point.y == row && p.point.x == i) && intersectionPoint == null) {
-            //                intersectionPoint = new Point(i, row)
-            //            }
+            // check if some of the intersection points belongs to the vertex
+            val isSomePointVertex = intersectionPoints != null &&
+                (isVertex(intersectionPoints._1, polygon) || isVertex(intersectionPoints._2, polygon))
 
-            val isVertex = intersectionPoint != null && polygon.getPointList.contains(intersectionPoint)
-            val isVertexInLocalMinOrMax = isVertex && this.isVertexInLocalMinOrMax(intersectionPoint, polygon.getEdgeList)
+            // check if intersection points placed in local minimum or maximum
+            val isFirstVertexInLocalMinOrMax = intersectionPoints != null &&
+                isVertex(intersectionPoints._1, polygon) && isVertexInLocalMinOrMax(intersectionPoints._1, polygon.getEdgeList)
 
-            if (isVertexInLocalMinOrMax) {
-                intersectionList = (intersectionPoint, false) :: intersectionList
+            val isSecondVertexInLocalMinOrMax = intersectionPoints != null &&
+                isVertex(intersectionPoints._2, polygon) && isVertexInLocalMinOrMax(intersectionPoints._2, polygon.getEdgeList)
+
+            val isSomePointInLocalMinOrMax = isFirstVertexInLocalMinOrMax || isSecondVertexInLocalMinOrMax
+
+            // create intersections interval elements
+            if (isSomePointInLocalMinOrMax) {
+                intersectionList = (intersectionPoints._1, intersectionPoints._2, false) :: intersectionList
             }
-            else if (isVertex) {
-                intersectionList = (intersectionPoint, true) :: intersectionList
+            else if (isSomePointVertex) {
+                intersectionList = (intersectionPoints._1, intersectionPoints._2, true) :: intersectionList
             }
-            else if (intersectionPoint != null) {
-                intersectionList = (intersectionPoint, false) :: intersectionList
+            else if (intersectionPoints != null) {
+                intersectionList = (intersectionPoints._1, intersectionPoints._2, false) :: intersectionList
             }
         }
 
         intersectionList
     }
 
-    private def intersection(x1: Int, y1: Int, x2: Int, y2: Int, x3: Int, y3: Int, x4: Int, y4: Int): Point = {
-        val d: Double = (x1 - x2) * (y3 - y4) - (y1 - y2) * (x3 - x4)
-        if (d == 0) {
-            return null
+    private def isVertex(point: Point, polygon: Polygon): Boolean = {
+        polygon.getPointList.contains(point)
+    }
+
+    private def intersection(edge: Line, row: Int, minX: Int, maxX: Int): (Point, Point) = {
+        val intersectionPixels = edge.createRender(drawingContext).drawShape
+            .filter(p => p.point.y == row && p.point.x >= minX && p.point.x <= maxX)
+
+        if (intersectionPixels.length > 1) {
+            (intersectionPixels.head.point, intersectionPixels.reverse.head.point)
         }
-
-        val xi = ((x3 - x4) * (x1 * y2 - y1 * x2) - (x1 - x2) * (x3 * y4 - y3 * x4)) / d + 0.5
-        val yi = ((y3 - y4) * (x1 * y2 - y1 * x2) - (y1 - y2) * (x3 * y4 - y3 * x4)) / d + 0.5
-
-        if (xi > math.max(x1, x2) || xi < math.min(x1, x2) || xi > math.max(x3, x4) || xi < math.min(x3, x4)) {
-            return null
+        else if (intersectionPixels.length == 1) {
+            (intersectionPixels.head.point, intersectionPixels.head.point)
         }
-
-        if (yi > math.max(y1, y2) || yi < math.min(y1, y2) || yi > math.max(y3, y4) || yi < math.min(y3, y4)) {
-            return null
+        else {
+            null
         }
-
-        new Point(xi.toInt, yi.toInt)
     }
 
     private def isVertexInLocalMinOrMax(vertex: Point, edgeList: List[Line]): Boolean = {
