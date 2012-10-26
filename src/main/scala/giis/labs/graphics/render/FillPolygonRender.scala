@@ -56,7 +56,7 @@ class FillPolygonRender(
         var resultPixelList = List[Pixel]()
 
         var i = 1d
-        while (i < (intervalList.length) / 2) {
+        while (i < (intervalList.length - 1) / 2) {
             var firstIntervalPoint = intervalList((i * 2).toInt)
             var secondIntervalPoint = intervalList((i * 2 + 1).toInt)
 
