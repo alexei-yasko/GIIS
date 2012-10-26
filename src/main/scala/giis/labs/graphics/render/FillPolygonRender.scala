@@ -40,12 +40,7 @@ class FillPolygonRender(
             rowIntersections = rowIntersections ::: findRowAndEdgesIntersections(i, minX, maxX)
         }
 
-        val sortedIntervalList =
-            rowIntersections.sortWith((p1, p2) => (p1._1.y < p2._1.y || (p1._1.y == p2._1.y && p1._1.x <= p2._1.x)) &&
-                (p1._2.y < p2._2.y || (p1._2.y == p2._2.y && p1._2.x <= p2._2.x)))
-
-        System.out.println(sortedIntervalList)
-        System.out.println("\n\n\n")
+        val sortedIntervalList = sortIntersections(rowIntersections)
 
         val filteredIntervalList = filterRepeatedVertexPoints(sortedIntervalList)
 
@@ -91,13 +86,20 @@ class FillPolygonRender(
             i += 1
         }
 
-        System.out.println("\n\n\n")
-
         resultPixelList.reverse
+    }
+
+    private def sortIntersections(intersection: List[(Point, Point, Boolean)]): List[(Point, Point, Boolean)] = {
+        intersection.sortWith(
+            (p1, p2) => (p1._1.y < p2._1.y || (p1._1.y == p2._1.y && p1._1.x <= p2._1.x))
+        )
     }
 
     private def filterRepeatedVertexPoints(sortedIntervalList: List[(Point, Point, Boolean)]): List[(Point, Point)] = {
         var resultIntervalList = List[(Point, Point)]()
+
+        System.out.println(sortedIntervalList)
+        System.out.println("\n\n\n")
 
         var i = 1
         while (i < sortedIntervalList.length) {
@@ -110,7 +112,7 @@ class FillPolygonRender(
 
             // if interval elements partially equals,
             // and they belongs to the vertex but doesn't placed in the local minimum or maximum, leave only the left element
-            if (check && firstElement._3) {
+            if ((check && firstElement._3)) {
                 resultIntervalList = resultIntervalList ::: List[(Point, Point)]((firstElement._1, firstElement._2))
                 i += 1
             }
@@ -121,7 +123,7 @@ class FillPolygonRender(
             i += 1
         }
 
-        resultIntervalList
+        resultIntervalList ::: List[(Point, Point)]((sortedIntervalList.reverse.head._1, sortedIntervalList.reverse.head._2))
     }
 
     private def findRowAndEdgesIntersections(row: Int, minX: Int, maxX: Int): List[(Point, Point, Boolean)] = {
@@ -136,7 +138,7 @@ class FillPolygonRender(
 
         var intersectionList = List[(Point, Point, Boolean)]()
 
-        for (edge <- polygon.getEdgeList if edge.getPointList(0).y != edge.getPointList(1).y) {
+        for (edge <- polygon.getEdgeList) {
             val p1 = edge.getPointList(0)
             val p2 = edge.getPointList(1)
 
@@ -191,6 +193,10 @@ class FillPolygonRender(
 
     private def isVertexInLocalMinOrMax(vertex: Point, edgeList: List[Line]): Boolean = {
         val connectedEdges = edgeList.filter(edge => edge.getPointList.contains(vertex))
+
+        if (connectedEdges.length < 2) {
+            return false
+        }
 
         val firstEdgeVertex = getOtherVertex(vertex, connectedEdges(0))
         val secondEdgeVertex = getOtherVertex(vertex, connectedEdges(1))
