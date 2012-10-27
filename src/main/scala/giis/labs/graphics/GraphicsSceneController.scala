@@ -1,7 +1,7 @@
 package giis.labs.graphics
 
 import giis.labs.model.shape.{Shape, ShapeFactory}
-import giis.labs.model.{ShapeType, Point}
+import giis.labs.model.{FillShapeType, ShapeType, Point}
 import render.DebugRender
 import actors.Actor
 import giis.labs.model.shape.Shape.FillPolygonByLine
@@ -29,8 +29,7 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
      */
     def drawShape(shapeType: ShapeType, drawingContext: DrawingContext) {
         val shape = shapeType match {
-
-            case FillPolygonByLine => ShapeFactory.createFillShape(
+            case _: FillShapeType => ShapeFactory.createFillShape(
                 shapeType, getSelectedPoints, scene.getShapeThatContainsPoint(getSelectedPoints.head))
 
             case _ => ShapeFactory.createShape(getSelectedPoints, shapeType)

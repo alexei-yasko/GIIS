@@ -12,7 +12,7 @@ import giis.labs.model.Point
  */
 abstract class Render(renderedShape: Shape, context: DrawingContext) {
 
-    private val mainPixelsDrawingContext = DrawingContext.createDrawingContext(Color.GREEN)
+    val mainPixelsDrawingContext = DrawingContext.createDrawingContext(Color.GREEN)
 
     /**
      * Returns drawing context of the shape render.

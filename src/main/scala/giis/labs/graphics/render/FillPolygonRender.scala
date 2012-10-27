@@ -3,6 +3,8 @@ package giis.labs.graphics.render
 import giis.labs.model.shape.{Line, Shape, Polygon, FillPolygon}
 import giis.labs.graphics.{Pixel, DrawingContext}
 import giis.labs.model.Point
+import collection.mutable.ArrayBuffer
+import collection.mutable
 
 /**
  * Render for polygon fill
@@ -23,12 +25,12 @@ class FillPolygonRender(
     override def draw: List[Pixel] = isCacheOn match {
         case true => if (drawingCache == null || polygon.isStateUpdated) {
             polygon.changeUpdateState
-            drawingCache = drawShape
+            drawingCache = drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext.color)
             drawingCache
         } else {
             drawingCache
         }
-        case false => drawShape
+        case false => drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext.color)
     }
 
     /**
@@ -36,16 +38,72 @@ class FillPolygonRender(
      *
      * @return List[Pixel] result of drawing
      */
-    def drawShape = fillPolygon.shapeType match {
-        case Shape.FillPolygonByLine => fillByLine
+    def drawShape: List[Pixel] = {
+        try {
+            fillPolygon.shapeType match {
+                case Shape.FillPolygonByLine => fillByLine
+                case Shape.FloodFillPolygon => floodFill
+            }
+        }
+        catch {
+            case ex: ArrayIndexOutOfBoundsException => List[Pixel]()
+        }
     }
-
 
     /**
      * Update shape render state. It simply indicates that the model changed.
      */
     override def update() {
         drawingCache = drawShape
+    }
+
+    private def floodFill: List[Pixel] = {
+        val sortedByY = polygon.getPointList.sortBy[Int](p => p.y)
+        val sortedByX = polygon.getPointList.sortBy[Int](p => p.x)
+
+        val maxX = sortedByX.reverse.head.x
+        val minX = sortedByX.head.x
+        val maxY = sortedByY.reverse.head.y
+        val minY = sortedByY.head.y
+
+        val resultMatrix = Array.ofDim[Boolean](maxY - minY + 1, maxX - minX + 1)
+
+        val floodPoint = shape.getPointList.head
+
+        val polygonPixels = polygon.createRender(drawingContext).drawShape
+
+        val resultPixels = ArrayBuffer[Pixel]()
+        val floodStack = mutable.Stack[Point]()
+        floodStack.push(floodPoint)
+
+        while (!floodStack.isEmpty) {
+            val currentPoint = floodStack.pop()
+
+            resultMatrix(currentPoint.y - minY)(currentPoint.x - minX) = true
+            resultPixels.append(Pixel.createPixel(currentPoint, drawingContext.fillColor))
+
+            checkAndPushPoint(
+                new Point(currentPoint.x + 1, currentPoint.y), floodStack, polygonPixels, resultMatrix, minX, minY)
+            checkAndPushPoint(
+                new Point(currentPoint.x, currentPoint.y + 1), floodStack, polygonPixels, resultMatrix, minX, minY)
+            checkAndPushPoint(
+                new Point(currentPoint.x - 1, currentPoint.y), floodStack, polygonPixels, resultMatrix, minX, minY)
+            checkAndPushPoint(
+                new Point(currentPoint.x, currentPoint.y - 1), floodStack, polygonPixels, resultMatrix, minX, minY)
+        }
+
+        resultPixels.toList
+    }
+
+    private def checkAndPushPoint(
+        point: Point, floodStack: mutable.Stack[Point], polygonPixels: List[Pixel], resultMatrix: Array[Array[Boolean]],
+        minX: Int, minY: Int) {
+
+        if (resultMatrix(point.y - minY)(point.x - minX) != true && polygonPixels.find(p => p.point == point).isEmpty &&
+            !floodStack.contains(point)) {
+
+            floodStack.push(point)
+        }
     }
 
     /**
