@@ -77,11 +77,14 @@ class FillPolygonRender(
             resultPixels.append(Pixel.createPixel(currentPoint, drawingContext.fillColor))
 
             checkAndPushPoint(
-                new Point(currentPoint.x + 1, currentPoint.y), floodStack, polygonPixels, resultMatrix, minX, minY)
-            checkAndPushPoint(
                 new Point(currentPoint.x, currentPoint.y + 1), floodStack, polygonPixels, resultMatrix, minX, minY)
+
+            checkAndPushPoint(
+                new Point(currentPoint.x + 1, currentPoint.y), floodStack, polygonPixels, resultMatrix, minX, minY)
+
             checkAndPushPoint(
                 new Point(currentPoint.x - 1, currentPoint.y), floodStack, polygonPixels, resultMatrix, minX, minY)
+
             checkAndPushPoint(
                 new Point(currentPoint.x, currentPoint.y - 1), floodStack, polygonPixels, resultMatrix, minX, minY)
         }
