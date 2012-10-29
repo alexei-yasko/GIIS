@@ -106,16 +106,14 @@ object ShapeFactory {
         }
         else {
 
-            var edgeList = List[Line]()
+            val edgeArray = Array.ofDim[(Int, Int)](pointArray.length - 1)
 
-            for (i <- 1 until pointArray.length) {
-                val edge = new Line(pointArray(i - 1), pointArray(i)) {
-                    def shapeType = Shape.LineBrezenhem
-                }
-                edgeList = edge :: edgeList
+            for (i <- 1 until pointArray.length - 1) {
+                edgeArray(i - 1) = (i - 1, i)
             }
+            edgeArray(pointArray.length - 2) = (pointArray.length - 2, 0)
 
-            new Polygon(pointArray.reverse.splitAt(pointArray.length - 1)._1, edgeList.toArray)
+            new Polygon(pointArray.reverse.splitAt(pointArray.length - 1)._1, edgeArray)
         }
     }
 

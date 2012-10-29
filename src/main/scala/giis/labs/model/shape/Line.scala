@@ -17,7 +17,7 @@ abstract class Line(point1: Point, point2: Point) extends Shape {
 
     def getPointList = List(begin, end)
 
-    def movePoint(from: Point, to: Point) {
+    override def movePoint(from: Point, to: Point) {
         if (begin == from) {
             begin = to
         }

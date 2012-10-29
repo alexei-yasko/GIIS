@@ -24,10 +24,12 @@ abstract class FillPolygon(point: Point, shape: Polygon) extends Shape {
      * @param from origin position
      * @param to new position
      */
-    def movePoint(from: Point, to: Point) {
+    override def movePoint(from: Point, to: Point) {
         if (basePoint == from) {
             basePoint = to
         }
+
+        super.movePoint(from, to)
     }
 
     /**

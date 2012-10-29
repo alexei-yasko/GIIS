@@ -14,7 +14,7 @@ import collection.mutable
 class FillPolygonRender(
     fillPolygon: FillPolygon, drawingContext: DrawingContext, polygon: Polygon) extends Render(fillPolygon, drawingContext) {
 
-    private val isCacheOn = false
+    private val isCacheOn = true
     private var drawingCache: List[Pixel] = null
 
     /**
@@ -23,8 +23,9 @@ class FillPolygonRender(
      * @return List[Pixel] result of drawing
      */
     override def draw: List[Pixel] = isCacheOn match {
-        case true => if (drawingCache == null || polygon.isStateUpdated) {
+        case true => if (drawingCache == null || polygon.isStateUpdated || shape.isStateUpdated) {
             polygon.changeUpdateState
+            shape.changeUpdateState
             drawingCache = drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext.color)
             drawingCache
         } else {
@@ -48,13 +49,6 @@ class FillPolygonRender(
         catch {
             case ex: ArrayIndexOutOfBoundsException => List[Pixel]()
         }
-    }
-
-    /**
-     * Update shape render state. It simply indicates that the model changed.
-     */
-    override def update() {
-        drawingCache = drawShape
     }
 
     private def floodFill: List[Pixel] = {
@@ -153,8 +147,6 @@ class FillPolygonRender(
                 i -= 0.5
             }
 
-            System.out.println(firstIntervalPoint + "   " + secondIntervalPoint)
-
             val from = firstIntervalPoint._2
             val to = secondIntervalPoint._1
 
@@ -182,9 +174,6 @@ class FillPolygonRender(
 
     private def filterRepeatedVertexPoints(sortedIntervalList: List[(Point, Point, Boolean)]): List[(Point, Point)] = {
         var resultIntervalList = List[(Point, Point)]()
-
-        System.out.println(sortedIntervalList)
-        System.out.println("\n\n\n")
 
         var i = 1
         while (i < sortedIntervalList.length) {

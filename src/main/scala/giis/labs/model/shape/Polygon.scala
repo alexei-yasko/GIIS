@@ -7,9 +7,7 @@ import giis.labs.graphics.render.{LineRender, PolygonRender}
 /**
  * @author Q-YAA
  */
-class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
-
-    private var isUpdated = false
+class Polygon(vertexes: Array[Point], edges: Array[(Int, Int)]) extends Shape {
 
     /**
      * Returns point list that define the shape.
@@ -18,7 +16,11 @@ class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
      */
     def getPointList = vertexes.toList
 
-    def getEdgeList: List[Line] = edges.toList
+    def getEdgeList: List[Line] = (for (edge <- edges) yield {
+        new Line(vertexes(edge._1), vertexes(edge._2)) {
+            def shapeType = Shape.LineBrezenhem
+        }
+    }).toList
 
     /**
      * Move point from one position to another.
@@ -26,11 +28,7 @@ class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
      * @param from origin position
      * @param to new position
      */
-    def movePoint(from: Point, to: Point) {
-
-        for (edge <- edges if edge.isPointBelongsTo(from)) {
-            edge.movePoint(from, to)
-        }
+    override def movePoint(from: Point, to: Point) {
 
         for (i <- 0 until vertexes.length) {
             if (vertexes(i) == from) {
@@ -38,6 +36,8 @@ class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
                 return
             }
         }
+
+        super.movePoint(from, to)
     }
 
     /**
@@ -63,10 +63,4 @@ class Polygon(vertexes: Array[Point], edges: Array[Line]) extends Shape {
     def createRender(drawingContext: DrawingContext) = new PolygonRender(this, drawingContext)
 
     def shapeType = Shape.Polygon
-
-    def isStateUpdated = isUpdated
-
-    def changeUpdateState {
-        isUpdated = !isUpdated
-    }
 }

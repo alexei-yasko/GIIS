@@ -10,6 +10,8 @@ import giis.labs.graphics.render.RenderFactory
  */
 abstract class Shape extends RenderFactory {
 
+    private var isUpdated = false
+
     /**
      * Returns point list that define the shape.
      *
@@ -39,7 +41,9 @@ abstract class Shape extends RenderFactory {
      * @param from origin position
      * @param to new position
      */
-    def movePoint(from: Point, to: Point)
+    def movePoint(from: Point, to: Point) {
+        isUpdated = true
+    }
 
     /**
      * Get type of the shape object.
@@ -47,6 +51,20 @@ abstract class Shape extends RenderFactory {
      * @return ShapeType type of the shape object
      */
     def shapeType: ShapeType
+
+    /**
+     * Determine if the shape state updated.
+     *
+     * @return true - if updated, false in the other case
+     */
+    def isStateUpdated = isUpdated
+
+    /**
+     * Change state of the shape. (If they was updated, then they will not updated and visa versa.)
+     */
+    def changeUpdateState {
+        isUpdated = !isUpdated
+    }
 }
 
 /**

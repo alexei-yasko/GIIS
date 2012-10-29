@@ -17,7 +17,7 @@ class Circle(point1: Point, point2: Point) extends Shape {
 
     def getPointList = List(center, end)
 
-    def movePoint(from: Point, to: Point) {
+    override def movePoint(from: Point, to: Point) {
         if (end == from) {
             end = to
         } else if (center == from) {

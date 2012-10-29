@@ -19,7 +19,7 @@ class Hyperbola(point1: Point, point2: Point, point3: Point) extends Shape {
 
     def getPointList = List(start, end, height)
 
-    def movePoint(from: Point, to: Point) {
+    override def movePoint(from: Point, to: Point) {
         if (end == from) {
             end = to
         } else if (start == from) {

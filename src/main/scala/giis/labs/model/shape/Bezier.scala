@@ -18,7 +18,7 @@ class Bezier(p1: Point, p2: Point, p3: Point, p4: Point) extends Shape {
 
     def getPointList = List(point1, point2, point3, point4)
 
-    def movePoint(from: Point, to: Point) {
+    override def movePoint(from: Point, to: Point) {
         if (point1 == from) {
             point1 = to
         }
