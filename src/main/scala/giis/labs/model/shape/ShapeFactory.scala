@@ -32,6 +32,7 @@ object ShapeFactory {
 
     def createFillShape(shapeType: ShapeType, pointList: List[Point], shape: Shape): Shape = shapeType match {
         case Shape.FillPolygonByLine => createFillPolygon(shapeType, pointList.toArray, shape)
+        case Shape.FloodFillPolygon => createFillPolygon(shapeType, pointList.toArray, shape)
         case _ => null
     }
 

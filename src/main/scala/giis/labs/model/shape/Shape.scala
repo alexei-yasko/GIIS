@@ -1,6 +1,6 @@
 package giis.labs.model.shape
 
-import giis.labs.model.{ShapeType, Point}
+import giis.labs.model.{FillShapeType, ShapeType, Point}
 import giis.labs.graphics.render.RenderFactory
 
 /**
@@ -91,9 +91,13 @@ object Shape {
         val definingPointQuantity = -1
     }
 
-    case object FillPolygonByLine extends ShapeType {
+    case object FillPolygonByLine extends FillShapeType {
         val name = "FillPolygonByLine"
         val definingPointQuantity = 1
     }
 
+    case object FloodFillPolygon extends FillShapeType {
+        val name = "FloodFillPolygon"
+        val definingPointQuantity = 1
+    }
 }

@@ -53,6 +53,7 @@ class GraphicsMainFrame extends MainFrame {
     private val hyperbolaMenuItem = new RadioMenuItem("Hyperbola")
     private val polygonMenuItem = new RadioMenuItem("Polygon")
     private val fillPolygonByLineMenuItem = new RadioMenuItem("Fill polygon by line")
+    private val floodFillPolygonMenuItem = new RadioMenuItem("Flood fill polygon")
 
     private val shapesMenuGroup = new ButtonGroup(
         lineDdaMenuItem,
@@ -62,7 +63,8 @@ class GraphicsMainFrame extends MainFrame {
         ermitMenuItem,
         hyperbolaMenuItem,
         polygonMenuItem,
-        fillPolygonByLineMenuItem
+        fillPolygonByLineMenuItem,
+        floodFillPolygonMenuItem
     ) {
         listenTo(
             lineBrezenhemMenuItem,
@@ -72,7 +74,8 @@ class GraphicsMainFrame extends MainFrame {
             ermitMenuItem,
             hyperbolaMenuItem,
             polygonMenuItem,
-            fillPolygonByLineMenuItem
+            fillPolygonByLineMenuItem,
+            floodFillPolygonMenuItem
         )
 
         reactions += {
@@ -84,6 +87,7 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`hyperbolaMenuItem`) => setShapeType(Shape.Hyperbola)
             case ButtonClicked(`polygonMenuItem`) => setShapeType(Shape.Polygon)
             case ButtonClicked(`fillPolygonByLineMenuItem`) => setShapeType(Shape.FillPolygonByLine)
+            case ButtonClicked(`floodFillPolygonMenuItem`) => setShapeType(Shape.FloodFillPolygon)
         }
     }
 
@@ -134,6 +138,7 @@ class GraphicsMainFrame extends MainFrame {
             contents += new Menu("Polygon") {
                 contents += polygonMenuItem
                 contents += fillPolygonByLineMenuItem
+                contents += floodFillPolygonMenuItem
             }
         }
     }

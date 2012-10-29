@@ -12,7 +12,7 @@ import giis.labs.model.Point
  */
 abstract class Render(renderedShape: Shape, context: DrawingContext) {
 
-    private val mainPixelsDrawingContext = DrawingContext.createDrawingContext(Color.GREEN)
+    val mainPixelsDrawingContext = DrawingContext.createDrawingContext(Color.GREEN)
 
     /**
      * Returns drawing context of the shape render.
@@ -41,4 +41,10 @@ abstract class Render(renderedShape: Shape, context: DrawingContext) {
      * @return List[Pixel] result of drawing
      */
     def drawShape: List[Pixel]
+
+    /**
+     * Update shape render state. It simply indicates that the model changed.
+     */
+    def update() {
+    }
 }
