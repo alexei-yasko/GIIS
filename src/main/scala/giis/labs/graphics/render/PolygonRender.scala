@@ -22,12 +22,4 @@ class PolygonRender(polygon: Polygon, drawingContext: DrawingContext) extends Re
 
         resultPixelList
     }
-
-
-    /**
-     * Update shape render state. It simply indicates that the model changed.
-     */
-    override def update() {
-        polygon.changeUpdateState
-    }
 }

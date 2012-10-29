@@ -27,9 +27,9 @@ abstract class FillPolygon(point: Point, shape: Polygon) extends Shape {
     override def movePoint(from: Point, to: Point) {
         if (basePoint == from) {
             basePoint = to
-        }
 
-        super.movePoint(from, to)
+            super.movePoint(from, to)
+        }
     }
 
     /**

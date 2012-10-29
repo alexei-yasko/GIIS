@@ -41,10 +41,4 @@ abstract class Render(renderedShape: Shape, context: DrawingContext) {
      * @return List[Pixel] result of drawing
      */
     def drawShape: List[Pixel]
-
-    /**
-     * Update shape render state. It simply indicates that the model changed.
-     */
-    def update() {
-    }
 }

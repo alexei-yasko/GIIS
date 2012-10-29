@@ -33,11 +33,12 @@ class Polygon(vertexes: Array[Point], edges: Array[(Int, Int)]) extends Shape {
         for (i <- 0 until vertexes.length) {
             if (vertexes(i) == from) {
                 vertexes(i) = to
+
+                super.movePoint(from, to)
+
                 return
             }
         }
-
-        super.movePoint(from, to)
     }
 
     /**

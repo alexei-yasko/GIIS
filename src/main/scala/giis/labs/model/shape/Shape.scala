@@ -62,8 +62,8 @@ abstract class Shape extends RenderFactory {
     /**
      * Change state of the shape. (If they was updated, then they will not updated and visa versa.)
      */
-    def changeUpdateState {
-        isUpdated = !isUpdated
+    def changeUpdateState(state: Boolean) {
+        isUpdated = state
     }
 }
 

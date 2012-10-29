@@ -24,8 +24,8 @@ class FillPolygonRender(
      */
     override def draw: List[Pixel] = isCacheOn match {
         case true => if (drawingCache == null || polygon.isStateUpdated || shape.isStateUpdated) {
-            polygon.changeUpdateState
-            shape.changeUpdateState
+            polygon.changeUpdateState(state = false)
+            shape.changeUpdateState(state = false)
             drawingCache = drawShape ::: Pixel.createPixelList(shape.getPointList, mainPixelsDrawingContext.color)
             drawingCache
         } else {
