@@ -2,7 +2,7 @@ package giis.labs.graphics
 
 import custom.ToolBar
 import java.awt.Dimension
-import giis.labs.model.ShapeType
+import giis.labs.model.{Matrix, ShapeType}
 import swing._
 import swing.event.ButtonClicked
 import javax.swing.{ImageIcon, JColorChooser}
@@ -39,6 +39,7 @@ class GraphicsMainFrame extends MainFrame {
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
     private val fillColorChooseButton = new Button("Choose fill color")
+    private val transformButton = new Button("Transform")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
@@ -54,8 +55,10 @@ class GraphicsMainFrame extends MainFrame {
     private val polygonMenuItem = new RadioMenuItem("Polygon")
     private val fillPolygonByLineMenuItem = new RadioMenuItem("Fill polygon by line")
     private val floodFillPolygonMenuItem = new RadioMenuItem("Flood fill polygon")
+    private val nothingMenuItem = new RadioMenuItem("Nothing")
 
     private val shapesMenuGroup = new ButtonGroup(
+        nothingMenuItem,
         lineDdaMenuItem,
         lineBrezenhemMenuItem,
         circleMenuItem,
@@ -67,6 +70,7 @@ class GraphicsMainFrame extends MainFrame {
         floodFillPolygonMenuItem
     ) {
         listenTo(
+            nothingMenuItem,
             lineBrezenhemMenuItem,
             lineDdaMenuItem,
             circleMenuItem,
@@ -79,6 +83,7 @@ class GraphicsMainFrame extends MainFrame {
         )
 
         reactions += {
+            case ButtonClicked(`nothingMenuItem`) => setShapeType(Shape.Nothing)
             case ButtonClicked(`lineDdaMenuItem`) => setShapeType(Shape.LineDda)
             case ButtonClicked(`lineBrezenhemMenuItem`) => setShapeType(Shape.LineBrezenhem)
             case ButtonClicked(`circleMenuItem`) => setShapeType(Shape.Circle)
@@ -102,6 +107,8 @@ class GraphicsMainFrame extends MainFrame {
 
         contents += previousDebugStepButton
         contents += nextDebugStepButton
+
+        contents += transformButton
     }
 
     private val toolBar = new ToolBar {
@@ -113,7 +120,7 @@ class GraphicsMainFrame extends MainFrame {
         add(toolBar, BorderPanel.Position.North)
     }
 
-    shapesMenuGroup.select(lineDdaMenuItem)
+    shapesMenuGroup.select(nothingMenuItem)
     nextDebugStepButton.enabled_=(b = false)
     previousDebugStepButton.enabled_=(b = false)
     startStopDebugAnimationButton.enabled_=(b = false)
@@ -122,9 +129,12 @@ class GraphicsMainFrame extends MainFrame {
     size = new Dimension(defaultWidth, defaultHeight)
     preferredSize = new Dimension(defaultWidth, defaultHeight)
     centerOnScreen()
-    setShapeType(Shape.LineDda)
+    setShapeType(Shape.Nothing)
     menuBar = new MenuBar {
         contents += new Menu("Shapes") {
+            contents += new Menu("Nothing"){
+                contents += nothingMenuItem
+            }
             contents += new Menu("Line") {
                 contents += lineDdaMenuItem
                 contents += lineBrezenhemMenuItem
@@ -153,7 +163,9 @@ class GraphicsMainFrame extends MainFrame {
         previousDebugStepButton,
         cancelButton,
         colorChooseButton,
-        fillColorChooseButton
+        fillColorChooseButton,
+
+        transformButton
     )
 
     reactions += {
@@ -167,6 +179,7 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
         case ButtonClicked(`colorChooseButton`) => executeAndRepaint(chooseColor)
         case ButtonClicked(`fillColorChooseButton`) => executeAndRepaint(chooseFillColor)
+        case ButtonClicked(`transformButton`) => executeAndRepaint(transformIt)
     }
 
     def changeDebugMode() {
@@ -186,6 +199,10 @@ class GraphicsMainFrame extends MainFrame {
     private def chooseFillColor() {
         val color = JColorChooser.showDialog(this.peer, "Choose fill color", DrawingContext.color)
         DrawingContext.fillColor_=(color)
+    }
+
+    private def transformIt() {
+        graphicsScene.transformation()
     }
 
     private def nextDebugStep() {

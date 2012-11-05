@@ -65,6 +65,14 @@ abstract class Shape extends RenderFactory {
     def changeUpdateState(state: Boolean) {
         isUpdated = state
     }
+
+    /**
+     * Sets the points to shape.
+     *
+     * @param points
+     */
+    def setPoints(points: List[Point]) {
+    }
 }
 
 /**
@@ -73,6 +81,11 @@ abstract class Shape extends RenderFactory {
  * <p>If definingPointQuantity equals -1 then they not limited.</p>
  */
 object Shape {
+
+    case object Nothing extends ShapeType {
+        val name = "Nothing"
+        val definingPointQuantity = 1
+    }
 
     case object LineDda extends ShapeType {
         val name = "LineDda"
@@ -118,4 +131,5 @@ object Shape {
         val name = "FloodFillPolygon"
         val definingPointQuantity = 1
     }
+
 }

@@ -1,8 +1,9 @@
 package giis.labs.graphics
 
-import render.Render
-import giis.labs.model.Point
-import giis.labs.model.shape.Shape
+import render.{LineRender, Render}
+import giis.labs.model.{Matrix, Point}
+import giis.labs.model.shape.{ShapeFactory, Shape}
+import java.awt.Color
 
 /**
  * Class that represent graphic scene for shape dawning.
@@ -142,5 +143,49 @@ class GraphicsScene {
         }
 
         null
+    }
+
+    def transformation() {
+        var point = getSelectedPixels.head.point
+        var shape = getShapeThatContainsPoint(point)
+
+        val matrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](1, 0, 0),
+                Array[Double](0, 1, 0),
+                Array[Double](5, 0, 1)
+            )
+        )
+
+        var list = shape.getPointList
+        var resultPoints = List[Point]()
+
+        list.foreach {
+            shapePoint =>
+                val shapePointMatrix = new Matrix(
+                    Array[Array[Double]](
+                        Array[Double](shapePoint.x, shapePoint.y, 1)
+                    )
+                )
+                var resultMatrix = shapePointMatrix * matrix
+                var x = resultMatrix.getValue(0, 0)
+                var y = resultMatrix.getValue(0, 1)
+                resultPoints = new Point(x.toInt, y.toInt) :: resultPoints
+        }
+
+        val selectedPointMatrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](point.x, point.y, 1)
+            )
+        )
+        var resultMatrix = selectedPointMatrix * matrix
+        var x = resultMatrix.getValue(0, 0)
+        var y = resultMatrix.getValue(0, 1)
+
+        var pixel = new Pixel(new Point(x.toInt, y.toInt), Color.RED)
+        selectPixel(pixel)
+
+        shape.setPoints(resultPoints)
+        shape.changeUpdateState(true)
     }
 }

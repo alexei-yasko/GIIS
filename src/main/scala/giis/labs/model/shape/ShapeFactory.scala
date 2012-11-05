@@ -27,6 +27,7 @@ object ShapeFactory {
         case Shape.Ermit => createErmit(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Hyperbola => createHyperbola(pointList.toArray, shapeType.definingPointQuantity)
         case Shape.Polygon => createPolygon(pointList.toArray)
+        case Shape.Nothing => null
         case _ => null
     }
 
