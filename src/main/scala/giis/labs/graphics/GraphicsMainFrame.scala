@@ -2,9 +2,9 @@ package giis.labs.graphics
 
 import custom.ToolBar
 import java.awt.Dimension
-import giis.labs.model.{Matrix, ShapeType}
+import giis.labs.model.ShapeType
 import swing._
-import swing.event.ButtonClicked
+import event.{Key, KeyPressed, ButtonClicked}
 import javax.swing.{ImageIcon, JColorChooser}
 import giis.labs.model.shape.Shape
 
@@ -39,7 +39,6 @@ class GraphicsMainFrame extends MainFrame {
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
     private val fillColorChooseButton = new Button("Choose fill color")
-    private val transformButton = new Button("Transform")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
@@ -107,8 +106,6 @@ class GraphicsMainFrame extends MainFrame {
 
         contents += previousDebugStepButton
         contents += nextDebugStepButton
-
-        contents += transformButton
     }
 
     private val toolBar = new ToolBar {
@@ -130,9 +127,10 @@ class GraphicsMainFrame extends MainFrame {
     preferredSize = new Dimension(defaultWidth, defaultHeight)
     centerOnScreen()
     setShapeType(Shape.Nothing)
+
     menuBar = new MenuBar {
         contents += new Menu("Shapes") {
-            contents += new Menu("Nothing"){
+            contents += new Menu("Nothing") {
                 contents += nothingMenuItem
             }
             contents += new Menu("Line") {
@@ -163,9 +161,7 @@ class GraphicsMainFrame extends MainFrame {
         previousDebugStepButton,
         cancelButton,
         colorChooseButton,
-        fillColorChooseButton,
-
-        transformButton
+        fillColorChooseButton
     )
 
     reactions += {
@@ -179,7 +175,6 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
         case ButtonClicked(`colorChooseButton`) => executeAndRepaint(chooseColor)
         case ButtonClicked(`fillColorChooseButton`) => executeAndRepaint(chooseFillColor)
-        case ButtonClicked(`transformButton`) => executeAndRepaint(transformIt)
     }
 
     def changeDebugMode() {
@@ -199,10 +194,6 @@ class GraphicsMainFrame extends MainFrame {
     private def chooseFillColor() {
         val color = JColorChooser.showDialog(this.peer, "Choose fill color", DrawingContext.color)
         DrawingContext.fillColor_=(color)
-    }
-
-    private def transformIt() {
-        graphicsScene.transformation()
     }
 
     private def nextDebugStep() {

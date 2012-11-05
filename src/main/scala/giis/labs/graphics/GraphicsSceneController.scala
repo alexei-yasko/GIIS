@@ -1,10 +1,10 @@
 package giis.labs.graphics
 
 import giis.labs.model.shape.{Shape, ShapeFactory}
-import giis.labs.model.{FillShapeType, ShapeType, Point}
+import giis.labs.model.{Matrix, FillShapeType, ShapeType, Point}
 import render.DebugRender
 import actors.Actor
-import giis.labs.model.shape.Shape.FillPolygonByLine
+import java.awt.Color
 
 /**
  * Controller for the {@link GraphicsScene}.
@@ -150,5 +150,98 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
 
     private def getSelectedPoints: List[Point] = for (pixel <- scene.getSelectedPixels) yield {
         pixel.point
+    }
+
+    def moveRight() {
+        val matrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](1, 0, 0),
+                Array[Double](0, 1, 0),
+                Array[Double](1, 0, 1)
+            )
+        )
+        transform(matrix)
+    }
+
+    def moveLeft() {
+        val matrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](1, 0, 0),
+                Array[Double](0, 1, 0),
+                Array[Double](-1, 0, 1)
+            )
+        )
+        transform(matrix)
+    }
+
+    def moveUp() {
+        val matrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](1, 0, 0),
+                Array[Double](0, 1, 0),
+                Array[Double](0, 1, 1)
+            )
+        )
+        transform(matrix)
+    }
+
+    def moveDown() {
+        val matrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](1, 0, 0),
+                Array[Double](0, 1, 0),
+                Array[Double](0, -1, 1)
+            )
+        )
+        transform(matrix)
+    }
+
+    def rotateLeft() {
+        val angle = math.Pi / 18
+        val matrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](math.cos(angle), math.sin(angle), 0),
+                Array[Double](-math.sin(angle), math.cos(angle), 0),
+                Array[Double](0, 0, 1)
+            )
+        )
+        transform(matrix)
+    }
+
+    def transform(matrix: Matrix) {
+        var point = getSelectedPoints.head
+        var shape = graphicsScene.getShapeThatContainsPoint(point)
+        if (shape == null) return
+
+        var list = shape.getPointList
+        var resultPoints = List[Point]()
+
+        list.foreach {
+            shapePoint =>
+                val shapePointMatrix = new Matrix(
+                    Array[Array[Double]](
+                        Array[Double](shapePoint.x, shapePoint.y, 1)
+                    )
+                )
+                var resultMatrix = shapePointMatrix * matrix
+                var x = resultMatrix.getValue(0, 0)
+                var y = resultMatrix.getValue(0, 1)
+                resultPoints = new Point(x.toInt, y.toInt) :: resultPoints
+        }
+
+        val selectedPointMatrix = new Matrix(
+            Array[Array[Double]](
+                Array[Double](point.x, point.y, 1)
+            )
+        )
+        var resultMatrix = selectedPointMatrix * matrix
+        var x = resultMatrix.getValue(0, 0)
+        var y = resultMatrix.getValue(0, 1)
+
+        var pixel = new Pixel(new Point(x.toInt, y.toInt), Color.RED)
+        graphicsScene.selectPixel(pixel)
+
+        shape.setPoints(resultPoints)
+        shape.changeUpdateState(true)
     }
 }

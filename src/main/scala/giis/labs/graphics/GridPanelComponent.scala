@@ -36,10 +36,17 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     cursor = new Cursor(Cursor.CROSSHAIR_CURSOR)
 
     listenTo(mouse.clicks, mouse.wheel, mouse.moves)
+    listenTo(this.keys)
 
     var movePointFunction: (java.awt.Point) => () => Unit = null
 
     reactions += {
+        case KeyPressed(_, Key.Right, _, _) => executeAndRepaint(moveRight)
+        case KeyPressed(_, Key.Left, _, _) => executeAndRepaint(moveLeft)
+        case KeyPressed(_, Key.Up, _, _) => executeAndRepaint(moveUp)
+        case KeyPressed(_, Key.Down, _, _) => executeAndRepaint(moveDown)
+        case KeyPressed(_, Key.A, _, _) => executeAndRepaint(rotateLeft)
+
         case MouseClicked(source, point, modifiers, clicks, triggersPopup) => executeAndRepaint(selectClickedPixel(point))
 
         case MouseWheelMoved(source, point, modifiers, rotation) => executeAndRepaint(scaleGrid(rotation))
@@ -116,6 +123,7 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
     private def pixelSize = (defaultPixelSize * scale).toInt
 
     private def selectClickedPixel(pointAwt: java.awt.Point)() {
+        requestFocus()
         val pixel = new Pixel(convertToPoint(pointAwt), selectedPixelDrawingContext.color)
         scene.selectPixel(pixel)
 
@@ -156,8 +164,8 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
 
     private def movePoint(from: java.awt.Point, to: java.awt.Point)() {
 
-        val fromPoint : Point = convertToPoint(from)
-        val toPoint : Point = convertToPoint(to)
+        val fromPoint: Point = convertToPoint(from)
+        val toPoint: Point = convertToPoint(to)
 
         if (scene.isPointPlacedOnPosition(fromPoint)) {
             cursor = new Cursor(Cursor.HAND_CURSOR)
@@ -172,6 +180,26 @@ class GridPanelComponent(scene: GraphicsScene, controller: GraphicsSceneControll
                 relativeCenterPosition.y + (fromPoint.y - toPoint.y)
             )
         }
+    }
+
+    private def moveRight() {
+        controller.moveRight()
+    }
+
+    private def moveLeft() {
+        controller.moveLeft()
+    }
+
+    private def moveUp() {
+        controller.moveUp()
+    }
+
+    private def moveDown() {
+        controller.moveDown()
+    }
+
+    private def rotateLeft() {
+        controller.rotateLeft()
     }
 }
 
