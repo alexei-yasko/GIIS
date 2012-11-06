@@ -35,10 +35,12 @@ class GraphicsMainFrame extends MainFrame {
     startStopDebugAnimationButton.icon_=(startIcon)
     startStopDebugAnimationButton.preferredSize_=(new Dimension(35, 35))
 
+    private val nothingButton = new Button("Pointer")
     private val clearButton = new Button("Clear")
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
     private val fillColorChooseButton = new Button("Choose fill color")
+    private val cutButton = new Button("Cut")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
@@ -54,10 +56,8 @@ class GraphicsMainFrame extends MainFrame {
     private val polygonMenuItem = new RadioMenuItem("Polygon")
     private val fillPolygonByLineMenuItem = new RadioMenuItem("Fill polygon by line")
     private val floodFillPolygonMenuItem = new RadioMenuItem("Flood fill polygon")
-    private val nothingMenuItem = new RadioMenuItem("Nothing")
 
     private val shapesMenuGroup = new ButtonGroup(
-        nothingMenuItem,
         lineDdaMenuItem,
         lineBrezenhemMenuItem,
         circleMenuItem,
@@ -69,7 +69,6 @@ class GraphicsMainFrame extends MainFrame {
         floodFillPolygonMenuItem
     ) {
         listenTo(
-            nothingMenuItem,
             lineBrezenhemMenuItem,
             lineDdaMenuItem,
             circleMenuItem,
@@ -82,7 +81,6 @@ class GraphicsMainFrame extends MainFrame {
         )
 
         reactions += {
-            case ButtonClicked(`nothingMenuItem`) => setShapeType(Shape.Nothing)
             case ButtonClicked(`lineDdaMenuItem`) => setShapeType(Shape.LineDda)
             case ButtonClicked(`lineBrezenhemMenuItem`) => setShapeType(Shape.LineBrezenhem)
             case ButtonClicked(`circleMenuItem`) => setShapeType(Shape.Circle)
@@ -96,6 +94,8 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     private val buttonPanel = new FlowPanel() {
+        contents += nothingButton
+
         contents += fillColorChooseButton
         contents += colorChooseButton
         contents += clearButton
@@ -106,6 +106,8 @@ class GraphicsMainFrame extends MainFrame {
 
         contents += previousDebugStepButton
         contents += nextDebugStepButton
+
+        contents += cutButton
     }
 
     private val toolBar = new ToolBar {
@@ -117,7 +119,6 @@ class GraphicsMainFrame extends MainFrame {
         add(toolBar, BorderPanel.Position.North)
     }
 
-    shapesMenuGroup.select(nothingMenuItem)
     nextDebugStepButton.enabled_=(b = false)
     previousDebugStepButton.enabled_=(b = false)
     startStopDebugAnimationButton.enabled_=(b = false)
@@ -130,9 +131,6 @@ class GraphicsMainFrame extends MainFrame {
 
     menuBar = new MenuBar {
         contents += new Menu("Shapes") {
-            contents += new Menu("Nothing") {
-                contents += nothingMenuItem
-            }
             contents += new Menu("Line") {
                 contents += lineDdaMenuItem
                 contents += lineBrezenhemMenuItem
@@ -152,6 +150,8 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     listenTo(
+        nothingButton,
+
         clearButton,
         startDebugButton,
 
@@ -161,10 +161,14 @@ class GraphicsMainFrame extends MainFrame {
         previousDebugStepButton,
         cancelButton,
         colorChooseButton,
-        fillColorChooseButton
+        fillColorChooseButton,
+
+        cutButton
     )
 
     reactions += {
+        case ButtonClicked(`nothingButton`) => setShapeType(Shape.Nothing)
+
         case ButtonClicked(`clearButton`) => executeAndRepaint(clearScene)
         case ButtonClicked(`startDebugButton`) => changeDebugMode()
 
@@ -175,6 +179,8 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
         case ButtonClicked(`colorChooseButton`) => executeAndRepaint(chooseColor)
         case ButtonClicked(`fillColorChooseButton`) => executeAndRepaint(chooseFillColor)
+
+        case ButtonClicked(`cutButton`) => executeAndRepaint(chooseFillColor)
     }
 
     def changeDebugMode() {
@@ -242,5 +248,9 @@ class GraphicsMainFrame extends MainFrame {
             graphicsSceneController.startDebugAnimation(this)
             startStopDebugAnimationButton.icon_=(stopIcon)
         }
+    }
+
+    private def cut() {
+        graphicsSceneController.cut
     }
 }

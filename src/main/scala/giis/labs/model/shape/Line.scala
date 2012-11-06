@@ -26,15 +26,6 @@ abstract class Line(point1: Point, point2: Point) extends Shape {
         }
     }
 
-    override def isPointInsideShape(point: Point) = {
-        point.x == begin.x && point.y == begin.y || point.x == end.x && point.y == end.y
-    }
-
-    override def setPoints(points: List[Point]) {
-        begin = points.head
-        end = points.tail.head
-    }
-
     def createRender(drawingContext: DrawingContext) = new LineRender(this, drawingContext)
 }
 

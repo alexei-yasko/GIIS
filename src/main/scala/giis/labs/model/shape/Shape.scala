@@ -65,14 +65,6 @@ abstract class Shape extends RenderFactory {
     def changeUpdateState(state: Boolean) {
         isUpdated = state
     }
-
-    /**
-     * Sets the points to shape.
-     *
-     * @param points
-     */
-    def setPoints(points: List[Point]) {
-    }
 }
 
 /**
