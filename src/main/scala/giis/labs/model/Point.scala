@@ -17,7 +17,7 @@ class Point(xCoordinate: Int, yCoordinate: Int) {
      */
     val y = yCoordinate
 
-    override def toString = "x: " + x + ", y: " + y
+    override def toString = "Point {x: " + x + ", y: " + y + "}"
 
     override def hashCode = 41 * (41 + x) + y
 

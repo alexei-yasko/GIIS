@@ -6,7 +6,7 @@ import giis.labs.model.ShapeType
 import swing._
 import event.{Key, KeyPressed, ButtonClicked}
 import javax.swing.{ImageIcon, JColorChooser}
-import giis.labs.model.shape.Shape
+import giis.labs.model.shape.{Rect3D, Shape}
 
 /**
  * Main frame of the application.
@@ -56,6 +56,7 @@ class GraphicsMainFrame extends MainFrame {
     private val polygonMenuItem = new RadioMenuItem("Polygon")
     private val fillPolygonByLineMenuItem = new RadioMenuItem("Fill polygon by line")
     private val floodFillPolygonMenuItem = new RadioMenuItem("Flood fill polygon")
+    private val rect3DMenuItem = new RadioMenuItem("Rect 3D")
 
     private val shapesMenuGroup = new ButtonGroup(
         lineDdaMenuItem,
@@ -66,7 +67,8 @@ class GraphicsMainFrame extends MainFrame {
         hyperbolaMenuItem,
         polygonMenuItem,
         fillPolygonByLineMenuItem,
-        floodFillPolygonMenuItem
+        floodFillPolygonMenuItem,
+        rect3DMenuItem
     ) {
         listenTo(
             lineBrezenhemMenuItem,
@@ -77,7 +79,8 @@ class GraphicsMainFrame extends MainFrame {
             hyperbolaMenuItem,
             polygonMenuItem,
             fillPolygonByLineMenuItem,
-            floodFillPolygonMenuItem
+            floodFillPolygonMenuItem,
+            rect3DMenuItem
         )
 
         reactions += {
@@ -90,6 +93,7 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`polygonMenuItem`) => setShapeType(Shape.Polygon)
             case ButtonClicked(`fillPolygonByLineMenuItem`) => setShapeType(Shape.FillPolygonByLine)
             case ButtonClicked(`floodFillPolygonMenuItem`) => setShapeType(Shape.FloodFillPolygon)
+            case ButtonClicked(`rect3DMenuItem`) => load3DRectOnScene("rect3D.xml")
         }
     }
 
@@ -145,6 +149,9 @@ class GraphicsMainFrame extends MainFrame {
                 contents += polygonMenuItem
                 contents += fillPolygonByLineMenuItem
                 contents += floodFillPolygonMenuItem
+            }
+            contents += new Menu("Shapes 3D") {
+                contents += rect3DMenuItem
             }
         }
     }
@@ -252,5 +259,9 @@ class GraphicsMainFrame extends MainFrame {
 
     private def cut() {
         graphicsSceneController.cut
+    }
+
+    private def load3DRectOnScene(fileName: String) {
+        val rect3D = Rect3D.load(fileName)
     }
 }
