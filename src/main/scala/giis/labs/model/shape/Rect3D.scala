@@ -70,15 +70,11 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
     }
 
     def rotate(angle: Double, axis: AxisType) {
-//        for (i <- 0 until vertexes.length) {
-//            vertexes(i) = Utils3D.rotatePoint(vertexes(i), angle, axis)
-//        }
         axis match {
             case Axis.Ox => rotateAngleX = rotateAngleX + angle
             case Axis.Oy => rotateAngleY += angle
             case Axis.Oz => rotateAngleZ += angle
         }
-
     }
 }
 
