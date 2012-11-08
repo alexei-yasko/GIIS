@@ -7,6 +7,7 @@ import swing._
 import event.{Key, KeyPressed, ButtonClicked}
 import javax.swing.{ImageIcon, JColorChooser}
 import giis.labs.model.shape.{Rect3D, Shape}
+import sys.process.processInternal
 
 /**
  * Main frame of the application.
@@ -95,7 +96,7 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`polygonMenuItem`) => setShapeType(Shape.Polygon)
             case ButtonClicked(`fillPolygonByLineMenuItem`) => setShapeType(Shape.FillPolygonByLine)
             case ButtonClicked(`floodFillPolygonMenuItem`) => setShapeType(Shape.FloodFillPolygon)
-            case ButtonClicked(`rect3DMenuItem`) => executeAndRepaint(load3DRectOnScene("rect3D.xml"))
+            case ButtonClicked(`rect3DMenuItem`) => executeAndRepaint(load3DRectOnScene("rect3D1.xml"))
         }
     }
 
@@ -183,9 +184,23 @@ class GraphicsMainFrame extends MainFrame {
     listenTo(gridPanelComponent.keys)
 
     reactions += {
+        case KeyPressed(_, Key.X, Key.Modifier.Control, _) => executeAndRepaint(scaleRect3D(0.1, 0, 0))
+        case KeyPressed(_, Key.Y, Key.Modifier.Control, _) => executeAndRepaint(scaleRect3D(0, 0.1, 0))
+        case KeyPressed(_, Key.Z, Key.Modifier.Control, _) => executeAndRepaint(scaleRect3D(0, 0, 0.1))
+        case KeyPressed(_, Key.X, Key.Modifier.Shift, _) => executeAndRepaint(scaleRect3D(-0.1, 0, 0))
+        case KeyPressed(_, Key.Y, Key.Modifier.Shift, _) => executeAndRepaint(scaleRect3D(0, -0.1, 0))
+        case KeyPressed(_, Key.Z, Key.Modifier.Shift, _) => executeAndRepaint(scaleRect3D(0, 0, -0.1))
+
         case KeyPressed(_, Key.X, _, _) => executeAndRepaint(rotateRect3D(Axis.Ox))
         case KeyPressed(_, Key.Y, _, _) => executeAndRepaint(rotateRect3D(Axis.Oy))
         case KeyPressed(_, Key.Z, _, _) => executeAndRepaint(rotateRect3D(Axis.Oz))
+
+        case KeyPressed(_, Key.Right, _, _) => executeAndRepaint(moveRect3D(1, 0, 0))
+        case KeyPressed(_, Key.Left, _, _) => executeAndRepaint(moveRect3D(-1, 0, 0))
+        case KeyPressed(_, Key.Up, _, _) => executeAndRepaint(moveRect3D(0, 1, 0))
+        case KeyPressed(_, Key.Down, _, _) => executeAndRepaint(moveRect3D(0, -1, 0))
+
+        case KeyPressed(_, Key.P, _, _) => executeAndRepaint(projectRect3D)
     }
 
     def changeDebugMode() {
@@ -266,6 +281,33 @@ class GraphicsMainFrame extends MainFrame {
         if (lastShape != null && lastShape.isInstanceOf[Rect3D]) {
             val rect3D = lastShape.asInstanceOf[Rect3D]
             rect3D.rotate(10, axis)
+        }
+    }
+
+    private def moveRect3D(dx: Int, dy: Int, dz: Int)() {
+        val lastShape = graphicsScene.getLastShape
+
+        if (lastShape != null && lastShape.isInstanceOf[Rect3D]) {
+            val rect3D = lastShape.asInstanceOf[Rect3D]
+            rect3D.move(dx, dy, dz)
+        }
+    }
+
+    private def scaleRect3D(scaleDx: Double, scaleDy: Double, scaleDz: Double)() {
+        val lastShape = graphicsScene.getLastShape
+
+        if (lastShape != null && lastShape.isInstanceOf[Rect3D]) {
+            val rect3D = lastShape.asInstanceOf[Rect3D]
+            rect3D.scale(scaleDx, scaleDy, scaleDz)
+        }
+    }
+
+    private def projectRect3D() {
+        val lastShape = graphicsScene.getLastShape
+
+        if (lastShape != null && lastShape.isInstanceOf[Rect3D]) {
+            val rect3D = lastShape.asInstanceOf[Rect3D]
+            rect3D.switchProject()
         }
     }
 }

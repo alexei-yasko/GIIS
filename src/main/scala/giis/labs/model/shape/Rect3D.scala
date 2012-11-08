@@ -2,9 +2,9 @@ package giis.labs.model.shape
 
 import giis.labs.model.{Axis, AxisType, Point, Point3D}
 import xml.XML
-import giis.labs.graphics.DrawingContext
 import giis.labs.utils.Utils3D
 import giis.labs.graphics.render.Rect3DRender
+import giis.labs.graphics.DrawingContext
 
 /**
  * @author Q-YAA
@@ -18,6 +18,16 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
     private var rotateAngleY = 0d
     private var rotateAngleZ = 0d
 
+    private var offsetX = 0
+    private var offsetY = 0
+    private var offsetZ = 0
+
+    private var scaleX = 1d
+    private var scaleY = 1d
+    private var scaleZ = 1d
+
+    private var project = false
+
     private val vertexes = vertexList.toArray
 
     private val edges = edgeList.toArray
@@ -28,14 +38,29 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
      * @return List[Point] point list
      */
     def getPointList = (for (vertex <- vertexes) yield {
+//        var point = Utils3D.movePoint(vertex, offsetX, offsetY, offsetZ)
+//
+//        point = Utils3D.rotatePoint(point, rotateAngleX, Axis.Ox)
+//        point = Utils3D.rotatePoint(point, rotateAngleY, Axis.Oy)
+//        point = Utils3D.rotatePoint(point, rotateAngleZ, Axis.Oz)
 
         var point = Utils3D.rotatePoint(vertex, rotateAngleX, Axis.Ox)
         point = Utils3D.rotatePoint(point, rotateAngleY, Axis.Oy)
         point = Utils3D.rotatePoint(point, rotateAngleZ, Axis.Oz)
 
-        val projectPoint = Utils3D.projectPoint(point)
+        point = Utils3D.movePoint(point, offsetX, offsetY, offsetZ)
 
-        new Point(projectPoint.x + x, projectPoint.y + y)
+        point = Utils3D.scalePoint(point, scaleX, scaleY, scaleZ)
+
+        var resultPoint: Point = null
+        if (project) {
+            resultPoint = Utils3D.projectPoint(point)
+        }
+        else {
+            resultPoint = Utils3D.displayFlatPoint(point)
+        }
+
+        new Point(resultPoint.x + x, resultPoint.y + y)
     }).toList
 
     /**
@@ -71,10 +96,26 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
 
     def rotate(angle: Double, axis: AxisType) {
         axis match {
-            case Axis.Ox => rotateAngleX = rotateAngleX + angle
+            case Axis.Ox => rotateAngleX += angle
             case Axis.Oy => rotateAngleY += angle
             case Axis.Oz => rotateAngleZ += angle
         }
+    }
+
+    def move(dx: Int, dy: Int, dz: Int) {
+        offsetX += dx
+        offsetY += dy
+        offsetZ += dz
+    }
+
+    def scale(scaleDx: Double, scaleDy: Double, scaleDz: Double) {
+        scaleX += scaleDx
+        scaleY += scaleDy
+        scaleZ += scaleDz
+    }
+
+    def switchProject() {
+        project = !project
     }
 }
 
