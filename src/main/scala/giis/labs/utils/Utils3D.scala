@@ -1,6 +1,6 @@
 package giis.labs.utils
 
-import giis.labs.model.{Point, Point3D, Matrix}
+import giis.labs.model._
 import scala.Array
 
 /**
@@ -31,32 +31,32 @@ object Utils3D {
         pointTest
     }
 
-    def rotatePoint(point: Point3D, angle: Double, rotateType: String): Point3D = {
+    def rotatePoint(point: Point3D, angle: Double, axis: AxisType): Point3D = {
         val radAngle = angle * math.Pi / 180.0
 
-        val xRotationMatrix = rotateType match {
-            case "Ox" => new Matrix(
+        val xRotationMatrix = axis match {
+            case Axis.Ox => new Matrix(
                 Array[Array[Double]](
                     Array[Double](1d, 0, 0, 0),
                     Array[Double](0, math.cos(radAngle), math.sin(radAngle), 0),
                     Array[Double](0, -math.sin(radAngle), math.cos(radAngle), 0),
-                    Array[Double](0, 0, 0, 1)
+                    Array[Double](0, 0, 0, 1d)
                 )
             )
-            case "Oy" => new Matrix(
+            case Axis.Oy => new Matrix(
                 Array[Array[Double]](
                     Array[Double](math.cos(radAngle), 0, -math.sin(radAngle), 0),
-                    Array[Double](0, 1, 0, 0),
+                    Array[Double](0, 1d, 0, 0),
                     Array[Double](math.sin(radAngle), 0, math.cos(radAngle), 0),
-                    Array[Double](0, 0, 0, 1)
+                    Array[Double](0, 0, 0, 1d)
                 )
             )
-            case "Oz" => new Matrix(
+            case Axis.Oz => new Matrix(
                 Array[Array[Double]](
                     Array[Double](math.cos(radAngle), math.sin(radAngle), 0, 0),
                     Array[Double](-math.sin(radAngle), math.cos(radAngle), 0, 0),
-                    Array[Double](0, 0, 1, 0),
-                    Array[Double](0, 0, 0, 1)
+                    Array[Double](0, 0, 1d, 0),
+                    Array[Double](0, 0, 0, 1d)
                 )
             )
         }

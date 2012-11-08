@@ -2,7 +2,7 @@ package giis.labs.graphics
 
 import custom.ToolBar
 import java.awt.Dimension
-import giis.labs.model.ShapeType
+import giis.labs.model.{Axis, AxisType, ShapeType}
 import swing._
 import event.{Key, KeyPressed, ButtonClicked}
 import javax.swing.{ImageIcon, JColorChooser}
@@ -183,9 +183,9 @@ class GraphicsMainFrame extends MainFrame {
     listenTo(gridPanelComponent.keys)
 
     reactions += {
-        case KeyPressed(_, Key.X, _, _) => executeAndRepaint(rotateRect3D("Ox"))
-        case KeyPressed(_, Key.Y, _, _) => executeAndRepaint(rotateRect3D("Oy"))
-        case KeyPressed(_, Key.Z, _, _) => executeAndRepaint(rotateRect3D("Oz"))
+        case KeyPressed(_, Key.X, _, _) => executeAndRepaint(rotateRect3D(Axis.Ox))
+        case KeyPressed(_, Key.Y, _, _) => executeAndRepaint(rotateRect3D(Axis.Oy))
+        case KeyPressed(_, Key.Z, _, _) => executeAndRepaint(rotateRect3D(Axis.Oz))
     }
 
     def changeDebugMode() {
@@ -260,12 +260,12 @@ class GraphicsMainFrame extends MainFrame {
         graphicsScene.addShapeRender(rect3D.createRender(DrawingContext.createDrawingContext))
     }
 
-    private def rotateRect3D(rotateType: String)() {
+    private def rotateRect3D(axis: AxisType)() {
         val lastShape = graphicsScene.getLastShape
 
         if (lastShape != null && lastShape.isInstanceOf[Rect3D]) {
             val rect3D = lastShape.asInstanceOf[Rect3D]
-            rect3D.rotate(15, rotateType)
+            rect3D.rotate(10, axis)
         }
     }
 }

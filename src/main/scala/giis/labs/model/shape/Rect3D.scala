@@ -1,6 +1,6 @@
 package giis.labs.model.shape
 
-import giis.labs.model.{Point, Point3D}
+import giis.labs.model.{Axis, AxisType, Point, Point3D}
 import xml.XML
 import giis.labs.graphics.DrawingContext
 import giis.labs.utils.Utils3D
@@ -14,6 +14,10 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
     private val x = centerX
     private val y = centerY
 
+    private var rotateAngleX = 0d
+    private var rotateAngleY = 0d
+    private var rotateAngleZ = 0d
+
     private val vertexes = vertexList.toArray
 
     private val edges = edgeList.toArray
@@ -24,7 +28,13 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
      * @return List[Point] point list
      */
     def getPointList = (for (vertex <- vertexes) yield {
-        val projectPoint = Utils3D.projectPoint(vertex)
+
+        var point = Utils3D.rotatePoint(vertex, rotateAngleX, Axis.Ox)
+        point = Utils3D.rotatePoint(point, rotateAngleY, Axis.Oy)
+        point = Utils3D.rotatePoint(point, rotateAngleZ, Axis.Oz)
+
+        val projectPoint = Utils3D.projectPoint(point)
+
         new Point(projectPoint.x + x, projectPoint.y + y)
     }).toList
 
@@ -44,12 +54,12 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
     def createRender(drawingContext: DrawingContext) = new Rect3DRender(this, drawingContext)
 
     def getEdgeList: List[Line] = {
-        val projectVertexes = getPointList
+        val pointList = getPointList
         var lineList = List[Line]()
 
         for (edge <- edges) {
 
-            val line = new Line(projectVertexes(edge._1), projectVertexes(edge._2)) {
+            val line = new Line(pointList(edge._1), pointList(edge._2)) {
                 def shapeType = Shape.LineBrezenhem
             }
 
@@ -59,10 +69,16 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
         lineList.reverse
     }
 
-    def rotate(angle: Double, rotateType: String) {
-        for (i <- 0 until vertexes.length) {
-            vertexes(i) = Utils3D.rotatePoint(vertexes(i), angle, rotateType)
+    def rotate(angle: Double, axis: AxisType) {
+//        for (i <- 0 until vertexes.length) {
+//            vertexes(i) = Utils3D.rotatePoint(vertexes(i), angle, axis)
+//        }
+        axis match {
+            case Axis.Ox => rotateAngleX = rotateAngleX + angle
+            case Axis.Oy => rotateAngleY += angle
+            case Axis.Oz => rotateAngleZ += angle
         }
+
     }
 }
 
