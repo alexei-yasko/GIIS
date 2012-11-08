@@ -151,8 +151,4 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
     private def getSelectedPoints: List[Point] = for (pixel <- scene.getSelectedPixels) yield {
         pixel.point
     }
-
-    def cut(){
-
-    }
 }

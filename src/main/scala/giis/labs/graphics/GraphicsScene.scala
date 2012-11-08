@@ -105,6 +105,15 @@ class GraphicsScene {
         }
     }
 
+    def getLastShape: Shape = {
+        if (shapeRenderList.size > 0) {
+           shapeRenderList.head.shape
+        }
+        else {
+            null
+        }
+    }
+
     /**
      * Move point on the scene from one given position to another.
      *

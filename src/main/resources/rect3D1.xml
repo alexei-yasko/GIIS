@@ -5,11 +5,11 @@
         <vertex x="8" y="-8" z="0"/>
         <vertex x="8" y="8" z="0"/>
         <vertex x="-8" y="8" z="0"/>
-
-        <vertex x="-4" y="-4" z="8"/>
-        <vertex x="12" y="-4" z="8"/>
-        <vertex x="12" y="12" z="8"/>
-        <vertex x="-4" y="12" z="8"/>
+        
+        <vertex x="-8" y="-8" z="8"/>
+        <vertex x="8" y="-8" z="8"/>
+        <vertex x="8" y="8" z="8"/>
+        <vertex x="-8" y="8" z="8"/>
     </vertexes>
     <edges>
         <edge first="0" second="1"/>

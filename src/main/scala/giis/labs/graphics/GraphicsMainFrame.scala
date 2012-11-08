@@ -24,9 +24,11 @@ class GraphicsMainFrame extends MainFrame {
     private val previousIcon = new ImageIcon(getClass.getClassLoader.getResource("previous.png"))
 
     private val startDebugButton = new Button("Debug")
+
     private val nextDebugStepButton = new Button()
     nextDebugStepButton.icon_=(nextIcon)
     nextDebugStepButton.preferredSize_=(new Dimension(38, 25))
+
     private val previousDebugStepButton = new Button()
     previousDebugStepButton.icon_=(previousIcon)
     previousDebugStepButton.preferredSize_=(new Dimension(38, 25))
@@ -35,17 +37,17 @@ class GraphicsMainFrame extends MainFrame {
     startStopDebugAnimationButton.icon_=(startIcon)
     startStopDebugAnimationButton.preferredSize_=(new Dimension(35, 35))
 
-    private val nothingButton = new Button("Pointer")
     private val clearButton = new Button("Clear")
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
     private val fillColorChooseButton = new Button("Choose fill color")
-    private val cutButton = new Button("Cut")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
+
     private val gridPanelComponent: GridPanelComponent =
         new GridPanelComponent(graphicsScene, graphicsSceneController)
+    gridPanelComponent.focusable_=(b = true)
 
     private val lineBrezenhemMenuItem = new RadioMenuItem("Brezenhem")
     private val lineDdaMenuItem = new RadioMenuItem("Dda")
@@ -93,13 +95,11 @@ class GraphicsMainFrame extends MainFrame {
             case ButtonClicked(`polygonMenuItem`) => setShapeType(Shape.Polygon)
             case ButtonClicked(`fillPolygonByLineMenuItem`) => setShapeType(Shape.FillPolygonByLine)
             case ButtonClicked(`floodFillPolygonMenuItem`) => setShapeType(Shape.FloodFillPolygon)
-            case ButtonClicked(`rect3DMenuItem`) => load3DRectOnScene("rect3D.xml")
+            case ButtonClicked(`rect3DMenuItem`) => executeAndRepaint(load3DRectOnScene("rect3D.xml"))
         }
     }
 
     private val buttonPanel = new FlowPanel() {
-        contents += nothingButton
-
         contents += fillColorChooseButton
         contents += colorChooseButton
         contents += clearButton
@@ -110,8 +110,6 @@ class GraphicsMainFrame extends MainFrame {
 
         contents += previousDebugStepButton
         contents += nextDebugStepButton
-
-        contents += cutButton
     }
 
     private val toolBar = new ToolBar {
@@ -157,8 +155,6 @@ class GraphicsMainFrame extends MainFrame {
     }
 
     listenTo(
-        nothingButton,
-
         clearButton,
         startDebugButton,
 
@@ -168,14 +164,10 @@ class GraphicsMainFrame extends MainFrame {
         previousDebugStepButton,
         cancelButton,
         colorChooseButton,
-        fillColorChooseButton,
-
-        cutButton
+        fillColorChooseButton
     )
 
     reactions += {
-        case ButtonClicked(`nothingButton`) => setShapeType(Shape.Nothing)
-
         case ButtonClicked(`clearButton`) => executeAndRepaint(clearScene)
         case ButtonClicked(`startDebugButton`) => changeDebugMode()
 
@@ -186,8 +178,14 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
         case ButtonClicked(`colorChooseButton`) => executeAndRepaint(chooseColor)
         case ButtonClicked(`fillColorChooseButton`) => executeAndRepaint(chooseFillColor)
+    }
 
-        case ButtonClicked(`cutButton`) => executeAndRepaint(chooseFillColor)
+    listenTo(gridPanelComponent.keys)
+
+    reactions += {
+        case KeyPressed(_, Key.X, _, _) => executeAndRepaint(rotateRect3D("Ox"))
+        case KeyPressed(_, Key.Y, _, _) => executeAndRepaint(rotateRect3D("Oy"))
+        case KeyPressed(_, Key.Z, _, _) => executeAndRepaint(rotateRect3D("Oz"))
     }
 
     def changeDebugMode() {
@@ -257,11 +255,17 @@ class GraphicsMainFrame extends MainFrame {
         }
     }
 
-    private def cut() {
-        graphicsSceneController.cut
+    private def load3DRectOnScene(fileName: String)() {
+        val rect3D = Rect3D.load(fileName)
+        graphicsScene.addShapeRender(rect3D.createRender(DrawingContext.createDrawingContext))
     }
 
-    private def load3DRectOnScene(fileName: String) {
-        val rect3D = Rect3D.load(fileName)
+    private def rotateRect3D(rotateType: String)() {
+        val lastShape = graphicsScene.getLastShape
+
+        if (lastShape != null && lastShape.isInstanceOf[Rect3D]) {
+            val rect3D = lastShape.asInstanceOf[Rect3D]
+            rect3D.rotate(15, rotateType)
+        }
     }
 }
