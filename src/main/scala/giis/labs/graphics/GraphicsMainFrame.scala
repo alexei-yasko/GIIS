@@ -7,7 +7,6 @@ import swing._
 import event.{Key, KeyPressed, ButtonClicked}
 import javax.swing.{ImageIcon, JColorChooser}
 import giis.labs.model.shape.{Rect3D, Shape}
-import sys.process.processInternal
 
 /**
  * Main frame of the application.
