@@ -44,23 +44,23 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
 //        point = Utils3D.rotatePoint(point, rotateAngleY, Axis.Oy)
 //        point = Utils3D.rotatePoint(point, rotateAngleZ, Axis.Oz)
 
-        var point = Utils3D.rotatePoint(vertex, rotateAngleX, Axis.Ox)
+        var point = Utils3D.scalePoint(vertex, scaleX, scaleY, scaleZ)
+
+        point = Utils3D.rotatePoint(point, rotateAngleX, Axis.Ox)
         point = Utils3D.rotatePoint(point, rotateAngleY, Axis.Oy)
         point = Utils3D.rotatePoint(point, rotateAngleZ, Axis.Oz)
 
         point = Utils3D.movePoint(point, offsetX, offsetY, offsetZ)
 
-        point = Utils3D.scalePoint(point, scaleX, scaleY, scaleZ)
-
         var resultPoint: Point = null
         if (project) {
-            resultPoint = Utils3D.projectPoint(point)
+            resultPoint = Utils3D.projectPoint(new Point3D(point.x + x, point.y + y, point.z))
         }
         else {
-            resultPoint = Utils3D.displayFlatPoint(point)
+            resultPoint = Utils3D.displayFlatPoint(new Point3D(point.x + x, point.y + y, point.z))
         }
 
-        new Point(resultPoint.x + x, resultPoint.y + y)
+        resultPoint
     }).toList
 
     /**

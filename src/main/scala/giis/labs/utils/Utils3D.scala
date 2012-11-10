@@ -37,7 +37,7 @@ object Utils3D {
             Array[Array[Double]](
                 Array[Double](1d, 0, 0, 0),
                 Array[Double](0, 1d, 0, 0),
-                Array[Double](0, 0, 1d, 1d / 10d),
+                Array[Double](0, 0, 1d, 1d / 50d),
                 Array[Double](0, 0, 0, 0)
             )
         )
