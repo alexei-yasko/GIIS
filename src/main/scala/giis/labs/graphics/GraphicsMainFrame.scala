@@ -272,6 +272,7 @@ class GraphicsMainFrame extends MainFrame {
     private def load3DRectOnScene(fileName: String)() {
         val rect3D = Rect3D.load(fileName)
         graphicsScene.addShapeRender(rect3D.createRender(DrawingContext.createDrawingContext))
+        gridPanelComponent.requestFocusInWindow()
     }
 
     private def rotateRect3D(axis: AxisType)() {
