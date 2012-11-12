@@ -1,9 +1,8 @@
 package giis.labs.graphics
 
-import render.{LineRender, Render}
-import giis.labs.model.{Matrix, Point}
-import giis.labs.model.shape.{ShapeFactory, Shape}
-import java.awt.Color
+import render.Render
+import giis.labs.model.Point
+import giis.labs.model.shape.Shape
 
 /**
  * Class that represent graphic scene for shape dawning.
@@ -107,11 +106,42 @@ class GraphicsScene {
 
     def getLastShape: Shape = {
         if (shapeRenderList.size > 0) {
-           shapeRenderList.head.shape
+            shapeRenderList.head.shape
         }
         else {
             null
         }
+    }
+
+    def getLastPolygon: Shape = {
+        if (shapeRenderList.size > 0) {
+            shapeRenderList.foreach {
+                render =>
+                    if (render.shape.shapeType.equals(Shape.Polygon)) {
+                        return render.shape
+                    }
+            }
+            null
+        }
+        else {
+            null
+        }
+    }
+
+    def getLines: List[Shape] = {
+
+        var lines = List[Shape]()
+
+        if (shapeRenderList.size > 0) {
+            shapeRenderList.foreach {
+                render =>
+                    if (render.shape.shapeType.equals(Shape.LineBrezenhem) ||
+                            render.shape.shapeType.equals(Shape.LineDda)) {
+                        lines = render.shape :: lines
+                    }
+            }
+        }
+        lines
     }
 
     /**

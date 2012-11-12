@@ -1,12 +1,13 @@
 package giis.labs.graphics
 
 import custom.ToolBar
-import java.awt.Dimension
+import java.awt.{Color, Dimension}
 import giis.labs.model.{Axis, AxisType, ShapeType}
 import swing._
 import event.{Key, KeyPressed, ButtonClicked}
 import javax.swing.{ImageIcon, JColorChooser}
-import giis.labs.model.shape.{Rect3D, Shape}
+import giis.labs.model.shape.{ShapeFactory, Rect3D, Shape}
+import giis.labs.utils.Clipping
 
 /**
  * Main frame of the application.
@@ -41,6 +42,7 @@ class GraphicsMainFrame extends MainFrame {
     private val cancelButton = new Button("Cancel")
     private val colorChooseButton = new Button("Choose color")
     private val fillColorChooseButton = new Button("Choose fill color")
+    private val cutButton = new Button("Cut")
 
     private val graphicsScene = new GraphicsScene
     private val graphicsSceneController = new GraphicsSceneController(graphicsScene)
@@ -110,6 +112,8 @@ class GraphicsMainFrame extends MainFrame {
 
         contents += previousDebugStepButton
         contents += nextDebugStepButton
+
+        contents += cutButton
     }
 
     private val toolBar = new ToolBar {
@@ -164,7 +168,9 @@ class GraphicsMainFrame extends MainFrame {
         previousDebugStepButton,
         cancelButton,
         colorChooseButton,
-        fillColorChooseButton
+        fillColorChooseButton,
+
+        cutButton
     )
 
     reactions += {
@@ -178,6 +184,8 @@ class GraphicsMainFrame extends MainFrame {
         case ButtonClicked(`cancelButton`) => executeAndRepaint(cancelShapeDrawing)
         case ButtonClicked(`colorChooseButton`) => executeAndRepaint(chooseColor)
         case ButtonClicked(`fillColorChooseButton`) => executeAndRepaint(chooseFillColor)
+
+        case ButtonClicked(`cutButton`) => executeAndRepaint(cut)
     }
 
     listenTo(gridPanelComponent.keys)
@@ -310,4 +318,27 @@ class GraphicsMainFrame extends MainFrame {
             rect3D.switchProject()
         }
     }
+
+    private def cut() {
+        var clipping = new Clipping(graphicsScene)
+
+        var polygon = graphicsScene.getLastPolygon
+        var lines = graphicsScene.getLines
+
+        graphicsScene.clear()
+
+        if (polygon != null) {
+            var list = polygon.getPointList
+            list = polygon.getPointList.reverse.head :: list
+            var shapePolygon = ShapeFactory.createShape(list.reverse, Shape.Polygon)
+            graphicsScene.addShapeRender(shapePolygon.createRender(DrawingContext.createDrawingContext))
+            if (!lines.isEmpty) {
+                lines.foreach {
+                    line =>
+                        clipping.clip(polygon.getPointList, line.getPointList)
+                }
+            }
+        }
+    }
+
 }
