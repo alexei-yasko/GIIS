@@ -23,8 +23,8 @@ class Clipping(graphicsScene: GraphicsScene) {
         DrawingContext.color_=(Color.LIGHT_GRAY)
         graphicsScene.addShapeRender(shapeLine.createRender(DrawingContext.createDrawingContext))
 
-        var normals = getNormals(polygonList.toArray)
-        var polygonArray = polygonList.toArray
+        val normals = getNormals(polygonList.toArray)
+        val polygonArray = polygonList.toArray
 
         var t1: Float = 0
         var t2: Float = 1
