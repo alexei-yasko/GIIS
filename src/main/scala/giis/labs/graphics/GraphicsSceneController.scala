@@ -1,10 +1,9 @@
 package giis.labs.graphics
 
 import giis.labs.model.shape.{Shape, ShapeFactory}
-import giis.labs.model.{Matrix, FillShapeType, ShapeType, Point}
+import giis.labs.model.{FillShapeType, ShapeType, Point}
 import render.DebugRender
 import actors.Actor
-import java.awt.Color
 
 /**
  * Controller for the {@link GraphicsScene}.
@@ -89,9 +88,12 @@ class GraphicsSceneController(graphicsScene: GraphicsScene) {
      * Method that finish debug for shape.
      */
     def finishDebug() {
-        scene.clearSelectedPixels()
-        debugRender.finishDebug()
-        debugAnimator = null
+
+        if (debugRender != null) {
+            scene.clearSelectedPixels()
+            debugRender.finishDebug()
+            debugAnimator = null
+        }
     }
 
     /**

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rect3D x="10" y="10" z="4">
+<rect3D x="10" y="10" z="8">
     <vertexes>
-        <vertex x="-8" y="-8" z="-4"/>
-        <vertex x="8" y="-8" z="-4"/>
-        <vertex x="8" y="8" z="-4"/>
-        <vertex x="-8" y="8" z="-4"/>
+        <vertex x="-8" y="-8" z="-8"/>
+        <vertex x="8" y="-8" z="-8"/>
+        <vertex x="8" y="8" z="-8"/>
+        <vertex x="-8" y="8" z="-8"/>
 
-        <vertex x="-4" y="-4" z="4"/>
-        <vertex x="12" y="-4" z="4"/>
-        <vertex x="12" y="12" z="4"/>
-        <vertex x="-4" y="12" z="4"/>
+        <vertex x="-4" y="-4" z="8"/>
+        <vertex x="12" y="-4" z="8"/>
+        <vertex x="12" y="12" z="8"/>
+        <vertex x="-4" y="12" z="8"/>
     </vertexes>
     <edges>
         <edge first="0" second="1"/>

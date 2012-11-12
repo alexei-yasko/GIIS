@@ -7,18 +7,9 @@ package giis.labs.graphics.render
  */
 class DebugRender(render: Render) extends Render(render.shape, render.drawingContext) {
 
-    //private var pixels = render.draw
-
     private var stepNumber = 0
 
     private var isDebugFinished = false
-
-    /**
-     * Override, because we don't draw the main points of the shape in debug mode.
-     *
-     * @return List[Pixel] result of drawing
-     */
-    //override def draw = drawShape
 
     /**
      * Signals that debug finished.

@@ -14,7 +14,7 @@ class DebugAnimator(controller: GraphicsSceneController, mainFrame: GraphicsMain
                 case _ =>
             }
 
-            Thread.sleep(100)
+            Thread.sleep(50)
             controller.nextDebugStep()
             mainFrame.repaint()
         }
