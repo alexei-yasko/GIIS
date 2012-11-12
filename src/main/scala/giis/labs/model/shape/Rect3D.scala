@@ -9,10 +9,11 @@ import giis.labs.graphics.DrawingContext
 /**
  * @author Q-YAA
  */
-class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int, centerY: Int) extends Shape {
+class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int, centerY: Int, centerZ: Int) extends Shape {
 
     private val x = centerX
     private val y = centerY
+    private val z = centerZ
 
     private var rotateAngleX = 0d
     private var rotateAngleY = 0d
@@ -54,10 +55,10 @@ class Rect3D(vertexList: List[Point3D], edgeList: List[(Int, Int)], centerX: Int
 
         var resultPoint: Point = null
         if (project) {
-            resultPoint = Utils3D.projectPoint(new Point3D(point.x + x, point.y + y, point.z))
+            resultPoint = Utils3D.projectPoint(new Point3D(point.x + x, point.y + y, point.z + z))
         }
         else {
-            resultPoint = Utils3D.displayFlatPoint(new Point3D(point.x + x, point.y + y, point.z))
+            resultPoint = Utils3D.displayFlatPoint(new Point3D(point.x + x, point.y + y, point.z + z))
         }
 
         resultPoint
@@ -128,6 +129,7 @@ object Rect3D {
 
         val centerX = (rootNode \ "@x").text.toInt
         val centerY = (rootNode \ "@y").text.toInt
+        val centralZ = (rootNode \ "@z").text.toInt
 
         val vertexListNode = rootNode \ "vertexes"
         val edgeListNode = rootNode \ "edges"
@@ -149,6 +151,6 @@ object Rect3D {
             edgeList = (first, second) :: edgeList
         }
 
-        new Rect3D(vertexList.reverse, edgeList, centerX, centerY)
+        new Rect3D(vertexList.reverse, edgeList, centerX, centerY, centralZ)
     }
 }
