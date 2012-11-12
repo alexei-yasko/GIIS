@@ -12,8 +12,8 @@ import giis.labs.model.Point
 class CircleRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
     def drawShape: List[Pixel] = {
-        val end = shape.getPointList.toArray.apply(1)
-        val center = shape.getPointList.toArray.apply(0)
+        val end = shape.getPointList.toArray(1)
+        val center = shape.getPointList.toArray(0)
 
         drawMichner(center, end)
     }

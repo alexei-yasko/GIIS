@@ -35,9 +35,9 @@ class Clipping(graphicsScene: GraphicsScene) {
 
         while (i < polygonList.size && visible) {
 
-            val q0 = new PointFloat(point1.x - polygonArray.apply(i).x, point1.y - polygonArray.apply(i).y)
-            val qi = dotProduct(normals.apply(i), q0)
-            val pi = dotProduct(normals.apply(i), dirV)
+            val q0 = new PointFloat(point1.x - polygonArray(i).x, point1.y - polygonArray(i).y)
+            val qi = dotProduct(normals(i), q0)
+            val pi = dotProduct(normals(i), dirV)
 
             if (pi == 0) {
                 // Parallel or Point
@@ -90,11 +90,11 @@ class Clipping(graphicsScene: GraphicsScene) {
             val j = (i + 1) % polygonList.length
             val k = (i + 2) % polygonList.length
 
-            val p1 = new PointFloat(-(polygonList.apply(j).y.toFloat - polygonList.apply(i).y.toFloat) /
-                (polygonList.apply(j).x.toFloat - polygonList.apply(i).x.toFloat), 1)
+            val p1 = new PointFloat(
+                -(polygonList(j).y.toFloat - polygonList(i).y.toFloat)/(polygonList(j).x.toFloat - polygonList(i).x.toFloat), 1)
 
-            val v1 = new PointFloat(polygonList.apply(k).x.toFloat - polygonList.apply(i).x.toFloat,
-                polygonList.apply(k).y.toFloat - polygonList.apply(i).y.toFloat)
+            val v1 = new PointFloat(
+                polygonList(k).x.toFloat - polygonList(i).x.toFloat, polygonList(k).y.toFloat - polygonList(i).y.toFloat)
 
             // inner normal
             var koef: Float = 0
