@@ -12,8 +12,8 @@ import giis.labs.model.Point
 class LineRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
     def drawShape: List[Pixel] = {
-        val begin = shape.getPointList.toArray(0)
-        val end = shape.getPointList.toArray(1)
+        val begin = shape.getPointList.toArray.apply(0)
+        val end = shape.getPointList.toArray.apply(1)
 
         val pixelList = shape.shapeType match {
             case Shape.LineDda => ddaRender(begin, end)

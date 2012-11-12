@@ -12,9 +12,9 @@ import giis.labs.model.Point
 class HyperbolaRender(shape: Shape, drawingContext: DrawingContext) extends Render(shape, drawingContext) {
 
     def drawShape: List[Pixel] = {
-        val start = shape.getPointList.toArray(0)
-        val end = shape.getPointList.toArray(1)
-        val height = shape.getPointList.toArray(2)
+        val start = shape.getPointList.toArray.apply(0)
+        val end = shape.getPointList.toArray.apply(1)
+        val height = shape.getPointList.toArray.apply(2)
 
         drawHyperbola(start, end, height)
     }
