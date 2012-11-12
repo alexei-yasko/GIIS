@@ -20,8 +20,7 @@ class Clipping(graphicsScene: GraphicsScene) {
         listLine = point2 :: listLine
 
         val shapeLine = ShapeFactory.createShape(listLine, Shape.LineBrezenhem)
-        DrawingContext.color_=(Color.LIGHT_GRAY)
-        graphicsScene.addShapeRender(shapeLine.createRender(DrawingContext.createDrawingContext))
+        graphicsScene.addShapeRender(shapeLine.createRender(DrawingContext.createDrawingContext(Color.LIGHT_GRAY)))
 
         val normals = getNormals(polygonList.toArray)
         val polygonArray = polygonList.toArray
@@ -78,7 +77,6 @@ class Clipping(graphicsScene: GraphicsScene) {
             listLine = p22 :: listLine
 
             val shapeLine = ShapeFactory.createShape(listLine, Shape.LineBrezenhem)
-            DrawingContext.color_=(Color.BLACK)
             graphicsScene.addShapeRender(shapeLine.createRender(DrawingContext.createDrawingContext))
         } else {
             visible = false
